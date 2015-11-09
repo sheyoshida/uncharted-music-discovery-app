@@ -43,8 +43,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zkW-o5-R2X" userLabel="View Search Container">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="110"/>
                                 <subviews>
-                                    <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="eWg-Q6-UOy">
-                                        <rect key="frame" x="20" y="66" width="560" height="44"/>
+                                    <searchBar contentMode="redraw" placeholder="Search " translatesAutoresizingMaskIntoConstraints="NO" id="eWg-Q6-UOy">
+                                        <rect key="frame" x="0.0" y="66" width="600" height="44"/>
                                         <animations/>
                                         <textInputTraits key="textInputTraits"/>
                                     </searchBar>
@@ -54,8 +54,8 @@
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="eWg-Q6-UOy" secondAttribute="bottom" id="GWE-us-PQ8"/>
                                     <constraint firstAttribute="height" constant="110" id="Uy8-28-WHN"/>
-                                    <constraint firstAttribute="trailing" secondItem="eWg-Q6-UOy" secondAttribute="trailing" constant="20" id="liV-lH-xWW"/>
-                                    <constraint firstItem="eWg-Q6-UOy" firstAttribute="leading" secondItem="zkW-o5-R2X" secondAttribute="leading" constant="20" id="v9l-DP-hv1"/>
+                                    <constraint firstAttribute="trailing" secondItem="eWg-Q6-UOy" secondAttribute="trailing" id="liV-lH-xWW"/>
+                                    <constraint firstItem="eWg-Q6-UOy" firstAttribute="leading" secondItem="zkW-o5-R2X" secondAttribute="leading" id="v9l-DP-hv1"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cqn-xD-RHd" userLabel="View Segment Bar Container">
@@ -104,7 +104,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="e5S-3l-aSN">
-                                                <rect key="frame" x="0.0" y="7.5" width="130" height="145"/>
+                                                <rect key="frame" x="0.0" y="8" width="130" height="145"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="130" height="145"/>
@@ -135,11 +135,21 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1qS-Xt-ORZ" userLabel="View Map Container">
                                 <rect key="frame" x="0.0" y="110" width="600" height="295"/>
+                                <subviews>
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="77m-pW-K1k">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="295"/>
+                                        <animations/>
+                                    </mapView>
+                                </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="350" id="BAQ-8s-5LJ"/>
+                                    <constraint firstItem="77m-pW-K1k" firstAttribute="leading" secondItem="1qS-Xt-ORZ" secondAttribute="leading" id="FIy-1C-hLZ"/>
+                                    <constraint firstItem="77m-pW-K1k" firstAttribute="top" secondItem="1qS-Xt-ORZ" secondAttribute="top" id="HzV-Pz-Rnj"/>
                                     <constraint firstAttribute="height" constant="350" id="bAx-Xw-c7s"/>
+                                    <constraint firstAttribute="trailing" secondItem="77m-pW-K1k" secondAttribute="trailing" id="i12-9e-qYw"/>
+                                    <constraint firstAttribute="bottom" secondItem="77m-pW-K1k" secondAttribute="bottom" id="yhq-Eg-vVU"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -176,6 +186,7 @@
                     <navigationItem key="navigationItem" id="FLV-CB-htS"/>
                     <connections>
                         <outlet property="collectionView" destination="2Cr-Lc-oxo" id="vCF-bN-utd"/>
+                        <outlet property="mapView" destination="77m-pW-K1k" id="KXH-cW-W1R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t9k-Gn-Cxk" userLabel="First Responder" sceneMemberID="firstResponder"/>

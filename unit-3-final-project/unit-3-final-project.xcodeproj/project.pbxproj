@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BE4DCB71BF10C3F0097B34C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BE4DCB61BF10C3F0097B34C /* MapKit.framework */; };
+		0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4DCB91BF1108E0097B34C /* CustomPin.m */; };
 		4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58DC1BEFF1BD00668D63 /* main.m */; };
 		4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58DF1BEFF1BD00668D63 /* AppDelegate.m */; };
 		4DBA58E61BEFF1BD00668D63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DBA58E41BEFF1BD00668D63 /* Main.storyboard */; };
@@ -18,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0BE4DCB61BF10C3F0097B34C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0BE4DCB81BF1108E0097B34C /* CustomPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPin.h; sourceTree = "<group>"; };
+		0BE4DCB91BF1108E0097B34C /* CustomPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPin.m; sourceTree = "<group>"; };
 		4DBA58D81BEFF1BD00668D63 /* unit-3-final-project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "unit-3-final-project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DBA58DC1BEFF1BD00668D63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4DBA58DE1BEFF1BD00668D63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -38,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BE4DCB71BF10C3F0097B34C /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +53,7 @@
 		4DBA58CF1BEFF1BD00668D63 = {
 			isa = PBXGroup;
 			children = (
+				0BE4DCB61BF10C3F0097B34C /* MapKit.framework */,
 				4DBA58DA1BEFF1BD00668D63 /* unit-3-final-project */,
 				4DBA58D91BEFF1BD00668D63 /* Products */,
 			);
@@ -69,6 +76,8 @@
 				4DBA58F61BEFF34200668D63 /* InitialViewController.m */,
 				4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */,
 				4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */,
+				0BE4DCB81BF1108E0097B34C /* CustomPin.h */,
+				0BE4DCB91BF1108E0097B34C /* CustomPin.m */,
 				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
 				4DBA58EA1BEFF1BD00668D63 /* Assets.xcassets */,
 				4DBA58EC1BEFF1BD00668D63 /* LaunchScreen.storyboard */,
@@ -118,6 +127,7 @@
 				TargetAttributes = {
 					4DBA58D71BEFF1BD00668D63 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 3J8TK6N9FY;
 					};
 				};
 			};
@@ -161,6 +171,7 @@
 				4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */,
 				4DBA58E91BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld in Sources */,
 				4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */,
+				0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */,
 				4DBA58F71BEFF34200668D63 /* InitialViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,10 +282,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "unit-3-final-project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "shenayoshida.unit-3-final-project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -282,10 +296,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "unit-3-final-project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "shenayoshida.unit-3-final-project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

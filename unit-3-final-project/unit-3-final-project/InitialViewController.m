@@ -7,14 +7,15 @@
 //
 
 #import "InitialViewController.h"
-
-@interface InitialViewController ()
+#import "CustomPin.h"
+@interface InitialViewController () <MKMapViewDelegate>
 
 // for collection view
 @property (nonatomic) NSMutableArray *array;
 @property (nonatomic) NSArray *dataArray;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
+@property (nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation InitialViewController
@@ -44,6 +45,10 @@
     
     // make cells stick in view
     [self.collectionView setPagingEnabled:YES];
+    
+    
+    //current location
+    [self getCurrentLocation];
 
 }
 
@@ -76,7 +81,7 @@
 
 #pragma mark - infinite scrolling: 
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
     // calculate where the collection view should be at the right-hand end item
     float contentOffsetWhenFullyScrolledRight = self.collectionView.frame.size.width * ([self.dataArray count] -1);
@@ -99,6 +104,56 @@
         [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         
     }
+}
+//current location
+- (void)getCurrentLocation {
+    self.mapView.delegate = self;
+    
+    self.mapView.showsUserLocation = YES;
+    self.mapView.showsBuildings = YES;
+    
+    self.locationManager = [CLLocationManager new];
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+}
+// zoom in
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate:userLocation.coordinate fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude) eyeAltitude:10000];
+    [mapView setCamera:camera animated:YES];
+    
+}
+//annimated pin
+-(MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    MKAnnotationView *pinView = nil;
+    CLLocationCoordinate2D location;
+    location.latitude = 40.744731;
+    location.longitude = -73.933547;
+    
+    CustomPin *pin = [CustomPin alloc];
+    pin.coordinate = location;
+    pin.title = @"Long Island City, NY";
+    [self.mapView addAnnotation:pin];
+    if(annotation != self.mapView.userLocation)
+    {
+        static NSString *defaultPinID = @"com.invasivecode.pin";
+        pinView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
+        if ( pinView == nil )
+            pinView = [[MKAnnotationView alloc]
+                       initWithAnnotation:annotation reuseIdentifier:defaultPinID];
+        
+        pinView.canShowCallout = YES;
+        //        [self.customView setBackgroundColor:[UIColor redColor]];
+        //        [pinView addSubview:self.customView];
+        pinView.image = [UIImage imageNamed:@"Icon30.png"];
+    }
+    else {
+        [self.mapView.userLocation setTitle:@"I am here"];
+    }
+    return pinView;
+    
+    
 }
 
 /*
