@@ -10,6 +10,9 @@
 
 @interface DetailViewController ()
 
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UITableViewCell *tableCell;
+
 @end
 
 @implementation DetailViewController

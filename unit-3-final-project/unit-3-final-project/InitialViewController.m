@@ -8,6 +8,7 @@
 
 #import "InitialViewController.h"
 #import "CustomPin.h"
+
 @interface InitialViewController () <MKMapViewDelegate>
 
 // for collection view
@@ -15,7 +16,11 @@
 @property (nonatomic) NSArray *dataArray;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
+// for maps
 @property (nonatomic) CLLocationManager *locationManager;
+
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+
 @end
 
 @implementation InitialViewController
@@ -105,6 +110,9 @@
         
     }
 }
+
+#pragma mark - Maps:
+
 //current location
 - (void)getCurrentLocation {
     self.mapView.delegate = self;
