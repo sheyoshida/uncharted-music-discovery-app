@@ -12,6 +12,10 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UITableViewCell *tableCell;
+@property (weak, nonatomic) IBOutlet UILabel *bandNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *cityStateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *yearsActiveLabel;
+@property (weak, nonatomic) IBOutlet UILabel *bioLabel;
 
 @end
 
