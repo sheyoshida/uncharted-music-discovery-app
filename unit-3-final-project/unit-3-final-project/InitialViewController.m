@@ -11,6 +11,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "ArtistInfoData.h"
 
+
 @interface InitialViewController () <MKMapViewDelegate, UISearchBarDelegate>
 
 // for collection view
@@ -23,6 +24,8 @@
 
 //for API search results
 @property (nonatomic) NSMutableArray *searchResults;
+@property (nonatomic) NSString *spotifyAlbumID;
+
 
 //search bar/colleciton view
 @property (nonatomic,strong) NSArray *dataSource;
@@ -39,38 +42,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // dummy data for collection view:
-     self.array = [[NSMutableArray alloc] initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
-    
-    // for carousel
-    // grab references to first and last items
-    id firstItem = [self.array firstObject];
-    id lastItem = [self.array lastObject];
-    
-    NSMutableArray *workingArray = [self.array mutableCopy];
-    
-    // add the copy of the last item to the beginning
-    [workingArray insertObject:lastItem atIndex:0];
-    
-    // add the copy of the first item to the end
-    [workingArray addObject:firstItem];
-    //[workingArray insertObject:firstItem atIndex:self.array.count];
-    
-    // update the collection view's data source property
-    self.dataArray = [NSArray arrayWithArray:workingArray];
-    
-    // make cells stick in view
-    [self.collectionView setPagingEnabled:YES];
+
+    [self setupCollectionView];
+    [self artistInfo]; // call echonest api
+    [self passArtistNameToSpotify]; // call first spotify api
     
     
     //current location
     [self pin];
     [self getCurrentLocation];
     
-    self.searchBar.delegate = self; 
+    self.searchBar.delegate = self;
+    
+    
 }
-
 
 #pragma mark - search bar
 //- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
@@ -128,14 +113,16 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
-     [self.view endEditing:YES];
+    [self.view endEditing:YES];
     
-    [self artistInfo];
+    [self artistInfo]; // trigger echonest api witih location
+    [self passArtistNameToSpotify];
 }
+
 
 #pragma mark- Echonest API Request
 
-- (void)artistInfo{
+- (void)artistInfo {
     
     NSMutableArray *cities = [[NSMutableArray alloc] init];
     [cities addObject:@"New York"];
@@ -152,10 +139,15 @@
     
     //   http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:washington&bucket=artist_location
     
-    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active", self.searchBar.text];
+    //    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active", self.searchBar.text];
+    
+    NSString *city = @"seattle"; // test city
+    
+    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active", city];
     
     NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
+    // NSLog(@"encoded string: %@", encodedString);
     
     AFHTTPRequestOperationManager *manager =[[AFHTTPRequestOperationManager alloc] init];
     
@@ -174,18 +166,17 @@
             // create new post from json
             artistInfoData *data = [[artistInfoData alloc] initWithJSON:results];
             
-       
             // add post to array
             [self.searchResults  addObject:data];
             
-            //            self.albumImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:data.imageURL]]];
+            // self.albumImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:data.imageURL]]];
             
-            NSLog(@"This is the artist data: %@",data);
+            //    NSLog(@"This is the artist data: %@",data);
         }
         
         
         // [self.tableView reloadData];
-        NSLog(@"%@", results);
+      // NSLog(@"%@", results);
         
     } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
         NSLog(@"Error: %@", error.localizedDescription);
@@ -193,8 +184,92 @@
     }];
 }
 
+#pragma mark - spotify api call #1
 
-#pragma mark - collection view methods: 
+// we will have to loop through the echonest artist name results
+
+- (void)passArtistNameToSpotify {
+    // goal: pass in artist name - get artwork, album name, album number
+
+    NSString *name = @"The Beach Boys"; // dummy info that we're passing this into the url
+    
+    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", name];
+    
+    NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    AFHTTPRequestOperationManager *manager =[[AFHTTPRequestOperationManager alloc] init];
+    
+    [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        
+        NSString *albumName = responseObject[@"albums"][@"items"][0][@"name"]; // grab first album name
+        self.spotifyAlbumID = responseObject[@"albums"][@"items"][0][@"id"]; // grab first album id
+        NSString *albumImage = responseObject[@"albums"][@"items"][0][@"images"][0][@"url"]; // grab first image
+        
+        NSLog(@"\n album name: %@\n album ID: %@\n album image: %@", albumName, self.spotifyAlbumID, albumImage); // test it!
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"Error - Spotify #1 API Call: %@", error.localizedDescription);
+    }];
+}
+
+#pragma mark - spotify api call #2
+    
+    - (void)passAlbumIDToSpotify {
+    
+// pass in album number - get song preview(url) + song name
+// https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
+
+        if (self.spotifyAlbumID != nil) {
+        
+        NSLog(@"spotify album id: %@", self.spotifyAlbumID); // this property was defined in above method but isn't available here. :(
+
+    NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
+    
+    NSLog(@"URL2: %@", url2);
+    
+    NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+
+    AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
+    
+    [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        
+          NSLog(@"hello hello!"); // parse through results to get song preview url and song title
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+          NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
+    }];
+    
+}
+    }
+
+#pragma mark - collection view methods:
+
+- (void)setupCollectionView {
+    
+    // dummy data for collection view:
+    self.array = [[NSMutableArray alloc] initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
+    
+    // for carousel
+    // grab references to first and last items
+    id firstItem = [self.array firstObject];
+    id lastItem = [self.array lastObject];
+    
+    NSMutableArray *workingArray = [self.array mutableCopy];
+    
+    // add the copy of the last item to the beginning
+    [workingArray insertObject:lastItem atIndex:0];
+    
+    // add the copy of the first item to the end
+    [workingArray addObject:firstItem];
+    //[workingArray insertObject:firstItem atIndex:self.array.count];
+    
+    // update the collection view's data source property
+    self.dataArray = [NSArray arrayWithArray:workingArray];
+    
+    // make cells stick in view
+    [self.collectionView setPagingEnabled:YES];
+    
+}
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -221,7 +296,7 @@
     return cell;
 }
 
-#pragma mark - infinite scrolling: 
+#pragma mark - collection view's infinite scrolling:
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
