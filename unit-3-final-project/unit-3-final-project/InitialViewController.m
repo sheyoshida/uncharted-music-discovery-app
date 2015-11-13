@@ -8,8 +8,10 @@
 
 #import "InitialViewController.h"
 #import "CustomPin.h"
+#import <AFNetworking/AFNetworking.h>
+#import "ArtistInfoData.h"
 
-@interface InitialViewController () <MKMapViewDelegate>
+@interface InitialViewController () <MKMapViewDelegate, UISearchBarDelegate>
 
 // for collection view
 @property (nonatomic) NSMutableArray *array;
@@ -19,9 +21,19 @@
 // for maps
 @property (nonatomic) CLLocationManager *locationManager;
 
+//for API search results
+@property (nonatomic) NSMutableArray *searchResults;
+
+//search bar/colleciton view
+@property (nonatomic,strong) NSArray *dataSource;
+@property (nonatomic,strong) NSArray *dataSourceForSearchResult;
+@property (nonatomic) BOOL searchBarActive;
+
+@property (nonatomic,strong) UIRefreshControl   *refreshControl;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
+
 
 @implementation InitialViewController
 
@@ -54,8 +66,132 @@
     
     //current location
     [self getCurrentLocation];
-
+    
+    self.searchBar.delegate = self; 
 }
+
+
+#pragma mark - search bar
+//- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
+//    NSPredicate *resultPredicate    = [NSPredicate predicateWithFormat:@"self contains[c] %@", searchText];
+//    self.dataSourceForSearchResult  = [self.dataSource filteredArrayUsingPredicate:resultPredicate];
+//}
+//
+//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+//    // user did type something, check our datasource for text that looks the same
+//    if (searchText.length>0) {
+//        // search and reload data source
+//        self.searchBarActive = YES;
+//        [self filterContentForSearchText:searchText
+//                                   scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
+//                                          objectAtIndex:[self.searchDisplayController.searchBar
+//                                                         selectedScopeButtonIndex]]];
+//        [self.collectionView reloadData];
+//    }else{
+//        // if text lenght == 0
+//        // we will consider the searchbar is not active
+//        self.searchBarActive = NO;
+//    }
+//}
+//
+//- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+//    [self cancelSearching];
+//    [self.collectionView reloadData];
+//}
+//
+//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+//    self.searchBarActive = YES;
+//    [self.view endEditing:YES];
+//}
+//- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+//    // we used here to set self.searchBarActive = YES
+//    // but we'll not do that any more... it made problems
+//    // it's better to set self.searchBarActive = YES when user typed something
+//    [self.searchBar setShowsCancelButton:YES animated:YES];
+//}
+//- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar{
+//    // this method is being called when search btn in the keyboard tapped
+//    // we set searchBarActive = NO
+//    // but no need to reloadCollectionView
+//    self.searchBarActive = NO;
+//    [self.searchBar setShowsCancelButton:NO animated:YES];
+//    
+//    [self artistInfo];
+//}
+//
+//-(void)cancelSearching{
+//    self.searchBarActive = NO;
+//    [self.searchBar resignFirstResponder];
+//    self.searchBar.text  = @"";
+//}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
+     [self.view endEditing:YES];
+    
+    [self artistInfo];
+}
+
+#pragma mark- Echonest API Request
+
+- (void)artistInfo{
+    
+    NSMutableArray *cities = [[NSMutableArray alloc] init];
+    [cities addObject:@"New York"];
+    [cities addObject:@"Brooklyn"];
+    [cities addObject:@"Queens"];
+    [cities addObject:@"Holbrook"];
+    [cities addObject:@"Fort Greene"];
+    [cities addObject:@"Ozone Park"];
+    [cities addObject:@"Holbrook"];
+    [cities addObject:@"Hoboken"];
+    [cities addObject:@"Harlem"];
+    [cities addObject:@"Flushing"];
+    
+    
+    //   http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:washington&bucket=artist_location
+    
+    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active", self.searchBar.text];
+    
+    NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    
+    AFHTTPRequestOperationManager *manager =[[AFHTTPRequestOperationManager alloc] init];
+    
+    [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        
+        
+        NSDictionary *results = responseObject[@"response"];
+        NSArray *artists = results[@"artists"];
+        
+        // reset my array
+        self.searchResults = [[NSMutableArray alloc] init];
+        
+        // loop through all json posts
+        for (NSDictionary *results in artists) {
+            
+            // create new post from json
+            artistInfoData *data = [[artistInfoData alloc] initWithJSON:results];
+            
+       
+            // add post to array
+            [self.searchResults  addObject:data];
+            
+            //            self.albumImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:data.imageURL]]];
+            
+            NSLog(@"This is the artist data: %@",data);
+        }
+        
+        
+        // [self.tableView reloadData];
+        NSLog(@"%@", results);
+        
+    } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+        NSLog(@"Error: %@", error.localizedDescription);
+        // block();
+    }];
+}
+
 
 #pragma mark - collection view methods: 
 
