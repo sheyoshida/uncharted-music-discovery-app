@@ -53,6 +53,7 @@
     
     
     //current location
+    [self pin];
     [self getCurrentLocation];
 
 }
@@ -132,9 +133,7 @@
     
 }
 //annimated pin
--(MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
-{
-    MKAnnotationView *pinView = nil;
+- (void)pin {
     CLLocationCoordinate2D location;
     location.latitude = 40.744731;
     location.longitude = -73.933547;
@@ -143,6 +142,11 @@
     pin.coordinate = location;
     pin.title = @"Long Island City, NY";
     [self.mapView addAnnotation:pin];
+}
+- (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    MKAnnotationView *pinView = nil;
+
     if(annotation != self.mapView.userLocation)
     {
         static NSString *defaultPinID = @"com.invasivecode.pin";
@@ -154,7 +158,7 @@
         pinView.canShowCallout = YES;
         //        [self.customView setBackgroundColor:[UIColor redColor]];
         //        [pinView addSubview:self.customView];
-        pinView.image = [UIImage imageNamed:@"Icon30.png"];
+        pinView.image = [UIImage imageNamed:@"Pin.png"];
     }
     else {
         [self.mapView.userLocation setTitle:@"I am here"];
