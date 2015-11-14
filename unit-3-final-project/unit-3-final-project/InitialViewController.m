@@ -55,7 +55,7 @@ CLLocationManagerDelegate>
 
     [self setupCollectionView];
     [self artistInfo]; // call echonest api
-    [self passArtistNameToSpotify]; // call first spotify api
+    [self passArtistNameToSpotifyWithName:@"The Beach Boys"]; // call first spotify api
     
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
@@ -207,7 +207,7 @@ CLLocationManagerDelegate>
     [self.view endEditing:YES];
     
     [self artistInfo]; // trigger echonest api witih location
-    [self passArtistNameToSpotify];
+    [self passArtistNameToSpotifyWithName:@"The Beach Boys"];
 }
 
 
@@ -226,15 +226,13 @@ CLLocationManagerDelegate>
     [cities addObject:@"Hoboken"];
     [cities addObject:@"Harlem"];
     [cities addObject:@"Flushing"];
+
+    // http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=brooklyn+ny&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank
     
+    NSString *city = @"brooklyn"; // test city
+    NSString *region = @"ny"; // test state/province/territory/etc
     
-    //   http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:washington&bucket=artist_location
-    
-    //    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active", self.searchBar.text];
-    
-    NSString *city = @"seattle"; // test city
-    
-    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=city:%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active", city];
+    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=%@+%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank", city, region];
     
     NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
@@ -244,6 +242,19 @@ CLLocationManagerDelegate>
     
     [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
+       // NSLog(@"response object: %@", responseObject);
+        
+        // artistName
+        // artistYearsActive
+        // artistHometown
+        // artistBio
+        // artistImageURL
+        // artistGenre
+        // ratingDiscovery
+        // ratingFamiliarity
+        // ratingHotttness
+
+
         
         NSDictionary *results = responseObject[@"response"];
         NSArray *artists = results[@"artists"];
@@ -259,6 +270,8 @@ CLLocationManagerDelegate>
             
             // add post to array
             [self.searchResults  addObject:data];
+            
+           // NSLog(@"search results: %@", self.searchResults); // test it!
             
             // self.albumImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:data.imageURL]]];
             
@@ -277,12 +290,18 @@ CLLocationManagerDelegate>
 
 #pragma mark - spotify api call #1
 
+- (void) getSpotifyData{
+//loop through searchResults
+  //  [self passArtistNameToSpotifyWithName:name]
+    
+}
+
 // we will have to loop through the echonest artist name results
 
-- (void)passArtistNameToSpotify {
+- (void)passArtistNameToSpotifyWithName: (NSString *) name {
     // goal: pass in artist name - get artwork, album name, album number
 
-    NSString *name = @"The Beach Boys"; // dummy info that we're passing this into the url
+    //NSString *name = @"The Beach Boys"; // dummy info that we're passing this into the url
     
     NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", name];
     
@@ -292,11 +311,13 @@ CLLocationManagerDelegate>
     
     [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
+        //NSLog(@"response object: %@", responseObject);
+        
         NSString *albumName = responseObject[@"albums"][@"items"][0][@"name"]; // grab first album name
         self.spotifyAlbumID = responseObject[@"albums"][@"items"][0][@"id"]; // grab first album id
         NSString *albumImage = responseObject[@"albums"][@"items"][0][@"images"][0][@"url"]; // grab first image
         
-        NSLog(@"\n album name: %@\n album ID: %@\n album image: %@", albumName, self.spotifyAlbumID, albumImage); // test it!
+  //      NSLog(@"\n album name: %@\n album ID: %@\n album image: %@", albumName, self.spotifyAlbumID, albumImage); // test it!
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"Error - Spotify #1 API Call: %@", error.localizedDescription);

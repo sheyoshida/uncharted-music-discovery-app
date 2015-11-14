@@ -20,7 +20,7 @@
 
 @property (nonatomic) NSString *ratingDiscovery; // measure how unexpectedly artist is
 @property (nonatomic) NSString *ratingFamiliarity; // measure how familiar artist is
-@property (nonatomic) NSString *ratingHotttness; // measure how popular artist is
+@property (nonatomic) NSString *ratingHotttnesss; // measure how popular artist is
 
 // spotify api call #1
 @property (nonatomic) NSString *albumArtURL;
