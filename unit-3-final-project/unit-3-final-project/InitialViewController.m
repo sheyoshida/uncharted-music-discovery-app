@@ -24,6 +24,7 @@ CLLocationManagerDelegate>
 @property (nonatomic) NSArray *dataArray;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
+
 // for maps
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) NSMutableArray *nearbyCities;
@@ -65,6 +66,7 @@ CLLocationManagerDelegate>
         [self.locationManager requestWhenInUseAuthorization];
     }
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = 500;
     [self.locationManager startUpdatingLocation];
 
 
@@ -80,6 +82,7 @@ CLLocationManagerDelegate>
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
+    
     [self setUpMapViewAndPin:newLocation];
     [self.locationManager stopUpdatingLocation];
 }
@@ -109,30 +112,31 @@ CLLocationManagerDelegate>
 -(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
     
     double latitude = userLocation.coordinate.latitude;
-    double latitudeMin = latitude - 3.0;
-    double latMax = latitude + 3.0;
+    double latitudeMin = latitude - 0.2;
+    double latMax = latitude + 0.2;
     
     double longitude = userLocation.coordinate.longitude;
-    double longitudeMin = longitude - 3.0;
-    double longitudeMax = longitude + 3.0;
-    int count = 0;
+    double longitudeMin = longitude - 0.2;
+    double longitudeMax = longitude + 0.2;
+
+    BOOL doneLocations = NO;
     
-    while (latitudeMin<latMax) {
+    while(!doneLocations) {
         
-        while (longitudeMin<longitudeMax) {
-            
-            CLLocation * currLocation = [[CLLocation alloc]initWithLatitude:latitudeMin longitude:longitudeMin];
+        CLLocation * currLocation = [[CLLocation alloc]initWithLatitude:latitudeMin longitude:longitudeMin];
+        if([currLocation distanceFromLocation:userLocation]<16093.4){
             [self addReverseGeoCodedLocation:currLocation];
-            longitudeMin = longitudeMin + 0.1;
-            count++;
-            NSLog(@"%d", count);
-
+            
         }
-
-        latitudeMin = latitudeMin + 0.1;
+        longitudeMin = longitudeMin + 0.005;
+        latitudeMin = latitudeMin + 0.005;
+        
+        if (latitudeMin >= latMax && longitudeMin >= longitudeMax) {
+            doneLocations = YES;
+        }
+        
     }
 
-    NSLog(@"finished loop");
 
     
 }
@@ -145,17 +149,27 @@ CLLocationManagerDelegate>
                        
                        dispatch_async(dispatch_get_main_queue(),^ {
                            // do stuff with placemarks on the main thread
+                           BOOL objectExists = NO;
                            CLPlacemark *place = [placemarks firstObject];
-                           LocationInfoObject * locObject = [[LocationInfoObject alloc] init];
-                           if ([place.addressDictionary objectForKey:@"State"]) {
-                               locObject.State =[place.addressDictionary objectForKey:@"State"];
-                               locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
-                               locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
-                               NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
-                               [self.nearbyCities addObject: locObject];
-                               
+                           
+                           for(LocationInfoObject* object in self.nearbyCities){
+                               if ([[place.addressDictionary objectForKey:@"SubAdministrativeArea"] isEqualToString:object.SubAdministrativeArea]) {
+                                   objectExists = YES;
+                               }
                            }
                            
+                           if (!objectExists) {
+                               LocationInfoObject * locObject = [[LocationInfoObject alloc] init];
+                               if ([place.addressDictionary objectForKey:@"State"]) {
+                                   locObject.State =[place.addressDictionary objectForKey:@"State"];
+                                   locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
+                                   locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
+                                   NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
+                                   [self.nearbyCities addObject: locObject];
+                                   
+                               }
+                           }
+
                        });
                        
                    }];
