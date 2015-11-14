@@ -10,6 +10,7 @@
 #import "CustomPin.h"
 #import <AFNetworking/AFNetworking.h>
 #import "ArtistInfoData.h"
+#import "LocationInfoObject.h"
 
 
 @interface InitialViewController ()
@@ -25,6 +26,7 @@ CLLocationManagerDelegate>
 
 // for maps
 @property (nonatomic) CLLocationManager *locationManager;
+@property (nonatomic) NSMutableArray *nearbyCities;
 
 //for API search results
 @property (nonatomic) NSMutableArray *searchResults;
@@ -47,7 +49,7 @@ CLLocationManagerDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
+    self.nearbyCities = [[NSMutableArray alloc]init];
     self.locationManager = [[CLLocationManager alloc] init];
     
     self.searchBar.delegate = self;
@@ -60,7 +62,6 @@ CLLocationManagerDelegate>
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
     }
-    
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
 
@@ -82,8 +83,8 @@ CLLocationManagerDelegate>
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
-    [self.locationManager stopUpdatingLocation];
     [self setUpMapViewAndPin:newLocation];
+    [self.locationManager stopUpdatingLocation];
 }
 
 #pragma mark - Maps:
@@ -110,7 +111,58 @@ CLLocationManagerDelegate>
 
 -(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
     
-    NSLog(@"%@", userLocation);
+    double latitude = userLocation.coordinate.latitude;
+    double latitudeMin = latitude - 3.0;
+    double latMax = latitude + 3.0;
+    
+    double longitude = userLocation.coordinate.longitude;
+    double longitudeMin = longitude - 3.0;
+    double longitudeMax = longitude + 3.0;
+    int count = 0;
+    
+    while (latitudeMin<latMax) {
+        
+        while (longitudeMin<longitudeMax) {
+            
+            CLLocation * currLocation = [[CLLocation alloc]initWithLatitude:latitudeMin longitude:longitudeMin];
+            [self addReverseGeoCodedLocation:currLocation];
+            longitudeMin = longitudeMin + 0.1;
+            count++;
+            NSLog(@"%d", count);
+
+        }
+
+        latitudeMin = latitudeMin + 0.1;
+    }
+
+    NSLog(@"finished loop");
+
+    
+}
+
+- (void) addReverseGeoCodedLocation:(CLLocation*)location{
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:location // You can pass aLocation here instead
+                   completionHandler:^(NSArray *placemarks, NSError *error) {
+                       
+                       dispatch_async(dispatch_get_main_queue(),^ {
+                           // do stuff with placemarks on the main thread
+                           CLPlacemark *place = [placemarks firstObject];
+                           LocationInfoObject * locObject = [[LocationInfoObject alloc] init];
+                           if ([place.addressDictionary objectForKey:@"State"]) {
+                               locObject.State =[place.addressDictionary objectForKey:@"State"];
+                               locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
+                               locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
+                               NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
+                               [self.nearbyCities addObject: locObject];
+                               
+                           }
+                           
+                       });
+                       
+                   }];
+
     
 }
 //annimated pin
@@ -118,7 +170,17 @@ CLLocationManagerDelegate>
     CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
     CustomPin *pin = [CustomPin alloc];
     pin.coordinate = location2D;
-    pin.title = @"Long Island City, NY";
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+                       
+                       dispatch_async(dispatch_get_main_queue(),^ {
+                           CLPlacemark *place = [placemarks firstObject];
+                           pin.title = [place.addressDictionary objectForKey:@"SubLocality"];
+                       });
+                       
+                   }];
+    
     [self.mapView addAnnotation:pin];
 }
 - (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
@@ -433,6 +495,24 @@ CLLocationManagerDelegate>
         [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         
     }
+}
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    UIView *rootView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
+    UIView *containerView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] lastObject];
+    [rootView addSubview:containerView];
+    
+    [view addSubview:containerView];
+    
+}
+
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    UIView *rootView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
+    UIView *containerView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] lastObject];
+    [rootView addSubview:containerView];
+    
+    
+    [view willRemoveSubview:containerView];
 }
 
 /*
