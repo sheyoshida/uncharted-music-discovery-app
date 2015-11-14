@@ -42,14 +42,14 @@
         
         // spotify api call #1
         
-        // self.albumArtURL
-        // self.albumTitle
-        // self.albumID
+        self.albumTitle = json[@"name"];
+        self.albumID = json[@"id"];
+        self.albumArtURL = [[json[@"images"]objectAtIndex:1] objectForKey:@"url"];
         
+    
         // self.songPreview
         // self.songTitle
         
-        // echonest api call
 
         return self;
     }
