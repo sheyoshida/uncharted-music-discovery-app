@@ -433,7 +433,7 @@ CLLocationManagerDelegate>
     
     NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
             
-    NSLog(@"URL2: %@", url2);
+   // NSLog(@"URL2: %@", url2);
     
     NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 
@@ -452,7 +452,7 @@ CLLocationManagerDelegate>
         }
       
         
-        NSLog(@"results second call: %@", resultsSpotifySecondCall);
+     //   NSLog(@"results second call: %@", resultsSpotifySecondCall);
         
        //   NSLog(@"hello hello!"); // parse through results to get song preview url and song title
         
