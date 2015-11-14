@@ -14,14 +14,31 @@
     
     if (self = [super init]) {
         
-        NSArray *images = json[@"images"];
-        self.imageURL = [images[0] objectForKey:@"url"];
+        // echonest api call
+        NSArray *artistImages = json[@"images"];
+        self.artistImageURL = [artistImages[0] objectForKey:@"url"];
+    
+        self.artistName = json[@"name"];
+        self.artistYearsActive = json[@"years_active"];
+        self.artistHometown = json[@"artist_location"][@"city"];
+        self.artistBio = json[@"biographies"][0][@"text"];
         
-        self.artist = json[@"name"];
-        self.yearsActive = json[@"years_active"];
-        self.hometown = json[@"artist_location"][@"city"];
-        self.bio = json[@"biographies"][0][@"text"];
-       
+        // self.artistGenre
+        // self.ratingDiscovery
+        // self.ratingFamiliarity
+        // self.ratingHotttness
+        
+        // spotify api call #1
+        
+        // self.albumArtURL
+        // self.albumTitle
+        // self.albumID
+        
+        // self.songPreview
+        // self.songTitle
+        
+        // echonest api call
+
         return self;
     }
     return nil;

@@ -10,11 +10,27 @@
 
 @interface artistInfoData : NSObject
 
-@property (nonatomic) NSString *artist;
-@property (nonatomic) NSString *yearsActive;
-@property (nonatomic) NSString *hometown;
-@property (nonatomic) NSString *bio;
-@property (nonatomic) NSString *imageURL;
+// echonest api call
+@property (nonatomic) NSString *artistName;
+@property (nonatomic) NSString *artistYearsActive;
+@property (nonatomic) NSString *artistHometown;
+@property (nonatomic) NSString *artistBio;
+@property (nonatomic) NSString *artistImageURL;
+@property (nonatomic) NSString *artistGenre;
+
+@property (nonatomic) NSString *ratingDiscovery; // measure how unexpectedly artist is
+@property (nonatomic) NSString *ratingFamiliarity; // measure how familiar artist is
+@property (nonatomic) NSString *ratingHotttness; // measure how popular artist is
+
+// spotify api call #1
+@property (nonatomic) NSString *albumArtURL;
+@property (nonatomic) NSString *albumTitle;
+@property (nonatomic) NSString *albumID;
+
+// spotify api call #2
+@property (nonatomic) NSString *songPreview; // url
+@property (nonatomic) NSString *songTitle;
+
 
 - (instancetype)initWithJSON:(NSDictionary *)json;
 
