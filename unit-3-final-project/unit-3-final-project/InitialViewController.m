@@ -31,6 +31,7 @@ CLLocationManagerDelegate>
 @property (nonatomic) NSMutableArray *nearbyCities;
 @property (nonatomic) BOOL pinSelected;
 @property (nonatomic) InfoWindow * annotation;
+@property (nonatomic) int foundCities;
 
 //for API search results
 @property (nonatomic) NSMutableArray *searchResults;
@@ -64,16 +65,21 @@ CLLocationManagerDelegate>
     self.locationManager.delegate = self;
 
     [self setupCollectionView];
-    [self artistInfo]; // call echonest api
-    [self passArtistNameToSpotifyWithName:@"Backstreet Boys"]; // call first spotify api
-    [self passAlbumIDToSpotify]; // call second spotify api
     
+    //Location manager Stuff
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
     }
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 500;
     [self.locationManager startUpdatingLocation];
+    
+    
+//    [self artistInfo]; // call echonest api
+//    [self passArtistNameToSpotifyWithName:@"Backstreet Boys"]; // call first spotify api
+//    [self passAlbumIDToSpotify]; // call second spotify api
+    
+    
 
 
     
@@ -121,7 +127,7 @@ CLLocationManagerDelegate>
 }
 
 -(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
-    
+    self.foundCities = 0;
     double latitude = userLocation.coordinate.latitude;
     double latitudeMin = latitude - 0.2;
     double latMax = latitude + 0.2;
@@ -175,8 +181,18 @@ CLLocationManagerDelegate>
                                    locObject.State =[place.addressDictionary objectForKey:@"State"];
                                    locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
                                    locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
-                                   NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
+                                   //NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
                                    [self.nearbyCities addObject: locObject];
+                                   self.foundCities++;
+                                   
+                                   if (self.foundCities >= 3) {
+                                       
+                                       for(LocationInfoObject *city in self.nearbyCities){
+                                           NSLog(@"----------- %@, %@ ----------", city.SubAdministrativeArea, city.State);
+                                           [self artistInfoWithCity:city.SubAdministrativeArea andRegion:city.State];
+                                       }
+                                       
+                                   }
                                    
                                }
                            }
@@ -187,21 +203,12 @@ CLLocationManagerDelegate>
 
     
 }
-//annimated pin
+
+//animated pin
 - (void)pinWithCoordinate:(CLLocation*)location {
     CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
     CustomPin *pin = [CustomPin alloc];
     pin.coordinate = location2D;
-//    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-//    
-//    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-//                       
-//                       dispatch_async(dispatch_get_main_queue(),^ {
-//                           CLPlacemark *place = [placemarks firstObject];
-//                           pin.title = [place.addressDictionary objectForKey:@"SubLocality"];
-//                       });
-//                       
-//                   }];
     
     [self.mapView addAnnotation:pin];
 }
@@ -235,23 +242,6 @@ CLLocationManagerDelegate>
         return annotationView;
     }
     return nil;
-    
-    
-//    MKAnnotationView *pinView = nil;
-//    pinView.canShowCallout = NO;
-//    if(annotation != self.mapView.userLocation)
-//    {
-//        static NSString *defaultPinID = @"com.invasivecode.pin";
-//        pinView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
-//        if ( pinView == nil )
-//            pinView = [[MKAnnotationView alloc]
-//                       initWithAnnotation:annotation reuseIdentifier:defaultPinID];
-//        
-//        pinView.canShowCallout = YES;
-//        pinView.image = [UIImage imageNamed:@"Pin.png"];
-//    }
-//    return pinView;
-    
     
 }
 
@@ -315,31 +305,31 @@ CLLocationManagerDelegate>
     
     [self.view endEditing:YES];
     
-    [self artistInfo]; // trigger echonest api witih location
-    [self passArtistNameToSpotifyWithName:@"The Beach Boys"];
+//    [self artistInfo]; // trigger echonest api witih location
+//    [self passArtistNameToSpotifyWithName:@"The Beach Boys"];
 }
 
 
 #pragma mark- Echonest API Request
 
-- (void)artistInfo {
+- (void)artistInfoWithCity:(NSString*) city andRegion:(NSString*) region {
     
-    NSMutableArray *cities = [[NSMutableArray alloc] init];
-    [cities addObject:@"New York"];
-    [cities addObject:@"Brooklyn"];
-    [cities addObject:@"Queens"];
-    [cities addObject:@"Holbrook"];
-    [cities addObject:@"Fort Greene"];
-    [cities addObject:@"Ozone Park"];
-    [cities addObject:@"Holbrook"];
-    [cities addObject:@"Hoboken"];
-    [cities addObject:@"Harlem"];
-    [cities addObject:@"Flushing"];
-
-    // http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=brooklyn+ny&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank
-    
-    NSString *city = @"brooklyn"; // test city
-    NSString *region = @"ny"; // test state/province/territory/etc
+//    NSMutableArray *cities = [[NSMutableArray alloc] init];
+//    [cities addObject:@"New York"];
+//    [cities addObject:@"Brooklyn"];
+//    [cities addObject:@"Queens"];
+//    [cities addObject:@"Holbrook"];
+//    [cities addObject:@"Fort Greene"];
+//    [cities addObject:@"Ozone Park"];
+//    [cities addObject:@"Holbrook"];
+//    [cities addObject:@"Hoboken"];
+//    [cities addObject:@"Harlem"];
+//    [cities addObject:@"Flushing"];
+//
+//    // http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=brooklyn+ny&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank
+//    
+//    NSString *city = @"brooklyn"; // test city
+//    NSString *region = @"ny"; // test state/province/territory/etc
     
     NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=%@+%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank", city, region];
     
