@@ -11,6 +11,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "ArtistInfoData.h"
 #import "LocationInfoObject.h"
+#import "InfoWindow.h"
 
 
 @interface InitialViewController ()
@@ -28,6 +29,8 @@ CLLocationManagerDelegate>
 // for maps
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) NSMutableArray *nearbyCities;
+@property (nonatomic) BOOL pinSelected;
+@property (nonatomic) InfoWindow * annotation;
 
 //for API search results
 @property (nonatomic) NSMutableArray *searchResults;
@@ -49,6 +52,8 @@ CLLocationManagerDelegate>
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.pinSelected = NO;
+    self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
     self.searchResults = [[NSMutableArray alloc] init]; // to store api data
     
@@ -90,7 +95,11 @@ CLLocationManagerDelegate>
 
 #pragma mark - Maps:
 
-//current location
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    userLocation.title = @"Music";
+}
+
 - (void)setUpMapViewAndPin:(CLLocation *)location {
     
     CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
@@ -98,6 +107,7 @@ CLLocationManagerDelegate>
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
     self.mapView.showsBuildings = YES;
+    
     
     
     //zoom in
@@ -182,40 +192,65 @@ CLLocationManagerDelegate>
     CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
     CustomPin *pin = [CustomPin alloc];
     pin.coordinate = location2D;
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-                       
-                       dispatch_async(dispatch_get_main_queue(),^ {
-                           CLPlacemark *place = [placemarks firstObject];
-                           pin.title = [place.addressDictionary objectForKey:@"SubLocality"];
-                       });
-                       
-                   }];
+//    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+//    
+//    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+//                       
+//                       dispatch_async(dispatch_get_main_queue(),^ {
+//                           CLPlacemark *place = [placemarks firstObject];
+//                           pin.title = [place.addressDictionary objectForKey:@"SubLocality"];
+//                       });
+//                       
+//                   }];
     
     [self.mapView addAnnotation:pin];
 }
+
 - (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
 {
-    MKAnnotationView *pinView = nil;
     
-    if(annotation != self.mapView.userLocation)
+    if ([annotation isKindOfClass:[MKUserLocation class]])
     {
-        static NSString *defaultPinID = @"com.invasivecode.pin";
-        pinView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
-        if ( pinView == nil )
-            pinView = [[MKAnnotationView alloc]
-                       initWithAnnotation:annotation reuseIdentifier:defaultPinID];
+        return nil;
+    }
+    else if ([annotation isKindOfClass:[CustomPin class]]) // use whatever annotation class you used when creating the annotation
+    {
+        static NSString * const defaultPinID = @"com.invasivecode.pin";
         
-        pinView.canShowCallout = YES;
-        //        [self.customView setBackgroundColor:[UIColor redColor]];
-        //        [pinView addSubview:self.customView];
-        pinView.image = [UIImage imageNamed:@"Pin.png"];
+        MKAnnotationView* annotationView = [self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
+        
+        if (annotationView)
+        {
+            annotationView.annotation = annotation;
+        }
+        else
+        {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation
+                                                          reuseIdentifier:defaultPinID];
+        }
+        annotationView.centerOffset = CGPointMake(0, -18.0);
+        annotationView.canShowCallout = NO;
+        annotationView.image = [UIImage imageNamed:@"Pin.png"];
+        
+        return annotationView;
     }
-    else {
-        [self.mapView.userLocation setTitle:@"I am here"];
-    }
-    return pinView;
+    return nil;
+    
+    
+//    MKAnnotationView *pinView = nil;
+//    pinView.canShowCallout = NO;
+//    if(annotation != self.mapView.userLocation)
+//    {
+//        static NSString *defaultPinID = @"com.invasivecode.pin";
+//        pinView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
+//        if ( pinView == nil )
+//            pinView = [[MKAnnotationView alloc]
+//                       initWithAnnotation:annotation reuseIdentifier:defaultPinID];
+//        
+//        pinView.canShowCallout = YES;
+//        pinView.image = [UIImage imageNamed:@"Pin.png"];
+//    }
+//    return pinView;
     
     
 }
@@ -509,23 +544,27 @@ CLLocationManagerDelegate>
     }
 }
 
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    UIView *rootView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
-    UIView *containerView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] lastObject];
-    [rootView addSubview:containerView];
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
+{
+    if (!self.pinSelected) {
+
+        [mapView deselectAnnotation:view.annotation animated:YES];
+        LocationInfoObject *obj = [self.nearbyCities firstObject];
+        self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
+        [self.annotation setFrame:CGRectMake(view.bounds.origin.x+view.bounds.size.width, view.bounds.origin.y - self.annotation.bounds.size.height, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
+        [view addSubview:self.annotation];
+        self.pinSelected = YES;
+        
+    }
+    else{
+        [self.annotation removeFromSuperview];
+        self.pinSelected = NO;
     
-    [view addSubview:containerView];
+    }
     
+   
 }
 
-- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
-    UIView *rootView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
-    UIView *containerView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] lastObject];
-    [rootView addSubview:containerView];
-    
-    
-    [view willRemoveSubview:containerView];
-}
 
 /*
 #pragma mark - Navigation
