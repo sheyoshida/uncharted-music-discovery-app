@@ -350,6 +350,7 @@ CLLocationManagerDelegate>
             
             // add post to array
             [self.searchResults  addObject:data];
+            NSLog(@"%@, %@", city, data.artistName);
             
            // NSLog(@"search results: %@", self.searchResults); // test it!
             
