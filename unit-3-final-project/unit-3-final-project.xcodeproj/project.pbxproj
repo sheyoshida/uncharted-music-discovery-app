@@ -19,6 +19,7 @@
 		4DBA58F71BEFF34200668D63 /* InitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58F61BEFF34200668D63 /* InitialViewController.m */; };
 		4DBA58FA1BEFF3BA00668D63 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */; };
 		5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */; };
+		F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,8 @@
 		5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArtistInfoData.m; sourceTree = "<group>"; };
 		E1CA228851D4E7F9BFEC256D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		E381A40FE22BDEDA1E0296EB /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		F0610A941BF7AA7B0011BE01 /* LocationInfoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationInfoObject.h; sourceTree = "<group>"; };
+		F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationInfoObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +98,8 @@
 				5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */,
 				4DBA58F51BEFF34200668D63 /* InitialViewController.h */,
 				4DBA58F61BEFF34200668D63 /* InitialViewController.m */,
+				F0610A941BF7AA7B0011BE01 /* LocationInfoObject.h */,
+				F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */,
 				4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */,
 				4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */,
 				0BE4DCB81BF1108E0097B34C /* CustomPin.h */,
@@ -234,6 +239,7 @@
 				4DBA58FA1BEFF3BA00668D63 /* DetailViewController.m in Sources */,
 				4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */,
 				4DBA58E91BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld in Sources */,
+				F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */,
 				4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */,
 				5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */,
 				0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */,
