@@ -476,6 +476,24 @@ CLLocationManagerDelegate>
     }
 }
 
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    UIView *rootView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
+    UIView *containerView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] lastObject];
+    [rootView addSubview:containerView];
+    
+    [view addSubview:containerView];
+    
+}
+
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    UIView *rootView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
+    UIView *containerView = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] lastObject];
+    [rootView addSubview:containerView];
+    
+    
+    [view willRemoveSubview:containerView];
+}
+
 /*
 #pragma mark - Navigation
 

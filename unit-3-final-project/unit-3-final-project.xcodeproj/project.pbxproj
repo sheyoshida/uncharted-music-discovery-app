@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B4779B91BF7CA8100D23273 /* InfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B4779B81BF7CA8100D23273 /* InfoWindow.m */; };
+		0B4779BD1BF7CAB600D23273 /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */; };
 		0BE4DCB71BF10C3F0097B34C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BE4DCB61BF10C3F0097B34C /* MapKit.framework */; };
 		0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4DCB91BF1108E0097B34C /* CustomPin.m */; };
 		2C52F1D779145021059FA925 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C56A4FC2699A23DCDC70018 /* libPods.a */; };
@@ -23,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B4779B71BF7CA8100D23273 /* InfoWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoWindow.h; sourceTree = "<group>"; };
+		0B4779B81BF7CA8100D23273 /* InfoWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoWindow.m; sourceTree = "<group>"; };
+		0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoWindow.xib; sourceTree = "<group>"; };
 		0BE4DCB61BF10C3F0097B34C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0BE4DCB81BF1108E0097B34C /* CustomPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPin.h; sourceTree = "<group>"; };
 		0BE4DCB91BF1108E0097B34C /* CustomPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPin.m; sourceTree = "<group>"; };
@@ -104,6 +109,9 @@
 				4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */,
 				0BE4DCB81BF1108E0097B34C /* CustomPin.h */,
 				0BE4DCB91BF1108E0097B34C /* CustomPin.m */,
+				0B4779B71BF7CA8100D23273 /* InfoWindow.h */,
+				0B4779B81BF7CA8100D23273 /* InfoWindow.m */,
+				0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */,
 				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
 				4DBA58EA1BEFF1BD00668D63 /* Assets.xcassets */,
 				4DBA58EC1BEFF1BD00668D63 /* LaunchScreen.storyboard */,
@@ -193,6 +201,7 @@
 				4DBA58EE1BEFF1BD00668D63 /* LaunchScreen.storyboard in Resources */,
 				4DBA58EB1BEFF1BD00668D63 /* Assets.xcassets in Resources */,
 				4DBA58E61BEFF1BD00668D63 /* Main.storyboard in Resources */,
+				0B4779BD1BF7CAB600D23273 /* InfoWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +249,7 @@
 				4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */,
 				4DBA58E91BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld in Sources */,
 				F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */,
+				0B4779B91BF7CA8100D23273 /* InfoWindow.m in Sources */,
 				4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */,
 				5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */,
 				0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */,
