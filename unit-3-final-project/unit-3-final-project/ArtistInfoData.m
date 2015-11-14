@@ -41,12 +41,17 @@
         self.ratingHotttnesss = json[@"hotttnesss_rank"];
         
         // spotify api call #1
-        
         self.albumTitle = json[@"name"];
         self.albumID = json[@"id"];
         self.albumArtURL = [[json[@"images"]objectAtIndex:1] objectForKey:@"url"];
         
-    
+        NSLog(@"\n album title: %@\n album ID: %@\n album art: %@", self.albumTitle, self.albumID, self.albumArtURL);
+        
+        // spotify api call #2
+        self.songPreview = json[@"preview_url"];
+        self.songTitle = json[@"name"];
+        
+      //  NSLog(@"song preview url: %@, song title: %@", self.songPreview, self.songTitle);
         // self.songPreview
         // self.songTitle
         

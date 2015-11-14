@@ -60,7 +60,8 @@ CLLocationManagerDelegate>
 
     [self setupCollectionView];
     [self artistInfo]; // call echonest api
-    [self passArtistNameToSpotifyWithName:@"The Beach Boys"]; // call first spotify api
+    [self passArtistNameToSpotifyWithName:@"Backstreet Boys"]; // call first spotify api
+    [self passAlbumIDToSpotify]; // call second spotify api
     
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
@@ -374,20 +375,10 @@ CLLocationManagerDelegate>
         
          for (NSDictionary *resultsSpotify in artistsSpotify) {
               artistInfoData *dataSpotify = [[artistInfoData alloc] initWithJSON:resultsSpotify];
-           //  NSLog(@"data spotify: %@", dataSpotify);
-             
+    
               [self.searchResults  addObject:dataSpotify];
              
          }
-        
-        
-        //NSLog(@"response object: %@", responseObject);
-        
-//        NSString *albumName = responseObject[@"albums"][@"items"][0][@"name"]; // grab first album name
-//        self.spotifyAlbumID = responseObject[@"albums"][@"items"][0][@"id"]; // grab first album id
-//        NSString *albumImage = responseObject[@"albums"][@"items"][0][@"images"][0][@"url"]; // grab first image
-        
-  //      NSLog(@"\n album name: %@\n album ID: %@\n album image: %@", albumName, self.spotifyAlbumID, albumImage); // test it!
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"Error - Spotify #1 API Call: %@", error.localizedDescription);
@@ -401,12 +392,12 @@ CLLocationManagerDelegate>
 // pass in album number - get song preview(url) + song name
 // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
 
-        if (self.spotifyAlbumID != nil) {
+   self.spotifyAlbumID = @"4NnBDxnxiiXiMlssBi9Bsq";
         
-        NSLog(@"spotify album id: %@", self.spotifyAlbumID); // this property was defined in above method but isn't available here. :(
-
-    NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
+        if (self.spotifyAlbumID != nil) {
     
+    NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
+            
     NSLog(@"URL2: %@", url2);
     
     NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
@@ -415,7 +406,20 @@ CLLocationManagerDelegate>
     
     [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
-          NSLog(@"hello hello!"); // parse through results to get song preview url and song title
+        NSArray *resultsSpotifySecondCall = responseObject[@"items"];
+        
+        for (NSDictionary *result in resultsSpotifySecondCall) {
+            //NSLog(@"%@", [result objectForKey:@"preview_url"]);
+            artistInfoData *dataSpotifySecondCall = [[artistInfoData alloc] initWithJSON:result];
+            
+            [self.searchResults  addObject:dataSpotifySecondCall];
+
+        }
+      
+        
+        NSLog(@"results second call: %@", resultsSpotifySecondCall);
+        
+       //   NSLog(@"hello hello!"); // parse through results to get song preview url and song title
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
           NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
