@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface InfoWindow : UIView
+@property (weak, nonatomic) IBOutlet UILabel *cityStateLabel;
 
 @end
