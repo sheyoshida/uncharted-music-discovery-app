@@ -349,8 +349,9 @@ CLLocationManagerDelegate>
             artistInfoData *data = [[artistInfoData alloc] initWithJSON:results];
             
             // add post to array
-            [self.searchResults  addObject:data];
             NSLog(@"%@, %@", city, data.artistName);
+            [self.searchResults  addObject:data];
+            
             
            // NSLog(@"search results: %@", self.searchResults); // test it!
             

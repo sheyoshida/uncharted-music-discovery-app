@@ -15,12 +15,12 @@
     if (self = [super init]) {
         
         // echonest api call
-        NSArray *artistImages = json[@"images"];
-        self.artistImageURL = [[artistImages objectAtIndex:0] objectForKey:@"url"]; // many of the returned urls don't work :(
+        NSArray *artistImages = [json objectForKey:@"images"];
+        self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"]; // many of the returned urls don't work :(
     
-        self.artistName = json[@"name"];
-        self.artistYearsActive = json[@"years_active"];
-        self.artistHometown = json[@"artist_location"][@"city"];
+        self.artistName = [json objectForKey:@"name"];
+        self.artistYearsActive = [json objectForKey:@"years_active"];
+        self.artistHometown = [[json objectForKey:@"artist_location"]objectForKey:@"city"];
         
         if ([[json objectForKey:@"biographies"]firstObject])
         {
@@ -36,14 +36,22 @@
             self.artistGenre = [NSString stringWithFormat:@"n/a"];
         }
         
-        self.ratingDiscovery = json[@"discovery_rank"];
-        self.ratingFamiliarity = json[@"familiarity_rank"];
-        self.ratingHotttnesss = json[@"hotttnesss_rank"];
+        self.ratingDiscovery = [json objectForKey:@"discovery_rank"];
+        self.ratingFamiliarity = [json objectForKey:@"familiarity_rank"];
+        self.ratingHotttnesss = [json objectForKey:@"hotttnesss_rank"];
         
         // spotify api call #1
-        self.albumTitle = json[@"name"];
-        self.albumID = json[@"id"];
-        self.albumArtURL = [[json[@"images"]objectAtIndex:1] objectForKey:@"url"];
+        self.albumTitle = [json objectForKey:@"name"];
+        self.albumID = [json objectForKey: @"id"];
+        
+        if ([[json objectForKey: @"images"] count]>2) {
+            self.albumArtURL = [[[json objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
+        }
+        else{
+            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
+        }
+        
+        
         
        // NSLog(@"\n album title: %@\n album ID: %@\n album art: %@", self.albumTitle, self.albumID, self.albumArtURL);
         
