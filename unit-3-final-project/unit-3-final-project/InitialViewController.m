@@ -12,7 +12,11 @@
 #import "ArtistInfoData.h"
 
 
-@interface InitialViewController () <MKMapViewDelegate, UISearchBarDelegate>
+@interface InitialViewController ()
+<
+MKMapViewDelegate,
+UISearchBarDelegate,
+CLLocationManagerDelegate>
 
 // for collection view
 @property (nonatomic) NSMutableArray *array;
@@ -42,20 +46,107 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    
+    self.searchBar.delegate = self;
+    self.locationManager.delegate = self;
 
     [self setupCollectionView];
     [self artistInfo]; // call echonest api
     [self passArtistNameToSpotify]; // call first spotify api
     
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
     
-    //current location
-    [self pin];
-    [self getCurrentLocation];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
+
+
     
-    self.searchBar.delegate = self;
+
+    
+    
     
     
 }
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"didFailWithError: %@", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    [self.locationManager stopUpdatingLocation];
+    [self setUpMapViewAndPin:newLocation];
+}
+
+#pragma mark - Maps:
+
+//current location
+- (void)setUpMapViewAndPin:(CLLocation *)location {
+    
+    CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+    
+    self.mapView.delegate = self;
+    self.mapView.showsUserLocation = YES;
+    self.mapView.showsBuildings = YES;
+    
+    
+    //zoom in
+    MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate:location2D fromEyeCoordinate:location2D eyeAltitude:10000];
+    [self.mapView setCamera:camera animated:YES];
+    [self getNearbyCitiesWithCoordinate:location];
+    
+    //add Pin
+    [self pinWithCoordinate:location];
+    
+}
+
+-(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
+    
+    NSLog(@"%@", userLocation);
+    
+}
+//annimated pin
+- (void)pinWithCoordinate:(CLLocation*)location {
+    CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+    CustomPin *pin = [CustomPin alloc];
+    pin.coordinate = location2D;
+    pin.title = @"Long Island City, NY";
+    [self.mapView addAnnotation:pin];
+}
+- (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    MKAnnotationView *pinView = nil;
+    
+    if(annotation != self.mapView.userLocation)
+    {
+        static NSString *defaultPinID = @"com.invasivecode.pin";
+        pinView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
+        if ( pinView == nil )
+            pinView = [[MKAnnotationView alloc]
+                       initWithAnnotation:annotation reuseIdentifier:defaultPinID];
+        
+        pinView.canShowCallout = YES;
+        //        [self.customView setBackgroundColor:[UIColor redColor]];
+        //        [pinView addSubview:self.customView];
+        pinView.image = [UIImage imageNamed:@"Pin.png"];
+    }
+    else {
+        [self.mapView.userLocation setTitle:@"I am here"];
+    }
+    return pinView;
+    
+    
+}
+
+
 
 #pragma mark - search bar
 //- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
@@ -321,62 +412,6 @@
         [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         
     }
-}
-
-#pragma mark - Maps:
-
-//current location
-- (void)getCurrentLocation {
-    self.mapView.delegate = self;
-    
-    self.mapView.showsUserLocation = YES;
-    self.mapView.showsBuildings = YES;
-    
-    self.locationManager = [CLLocationManager new];
-    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
-    }
-}
-// zoom in
--(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate:userLocation.coordinate fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude) eyeAltitude:10000];
-    [mapView setCamera:camera animated:YES];
-    
-}
-//annimated pin
-- (void)pin {
-    CLLocationCoordinate2D location;
-    location.latitude = 40.744731;
-    location.longitude = -73.933547;
-    
-    CustomPin *pin = [CustomPin alloc];
-    pin.coordinate = location;
-    pin.title = @"Long Island City, NY";
-    [self.mapView addAnnotation:pin];
-}
-- (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
-{
-    MKAnnotationView *pinView = nil;
-
-    if(annotation != self.mapView.userLocation)
-    {
-        static NSString *defaultPinID = @"com.invasivecode.pin";
-        pinView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
-        if ( pinView == nil )
-            pinView = [[MKAnnotationView alloc]
-                       initWithAnnotation:annotation reuseIdentifier:defaultPinID];
-        
-        pinView.canShowCallout = YES;
-        //        [self.customView setBackgroundColor:[UIColor redColor]];
-        //        [pinView addSubview:self.customView];
-        pinView.image = [UIImage imageNamed:@"Pin.png"];
-    }
-    else {
-        [self.mapView.userLocation setTitle:@"I am here"];
-    }
-    return pinView;
-    
-    
 }
 
 /*
