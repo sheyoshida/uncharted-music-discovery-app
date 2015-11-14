@@ -55,6 +55,8 @@ CLLocationManagerDelegate>
     self.pinSelected = NO;
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
+    self.searchResults = [[NSMutableArray alloc] init]; // to store api data
+    
     self.nearbyCities = [[NSMutableArray alloc]init];
     self.locationManager = [[CLLocationManager alloc] init];
     
@@ -73,11 +75,6 @@ CLLocationManagerDelegate>
     [self.locationManager startUpdatingLocation];
 
 
-    
-
-    
-    
-    
     
 }
 
@@ -347,31 +344,12 @@ CLLocationManagerDelegate>
     
     NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
-    // NSLog(@"encoded string: %@", encodedString);
-    
     AFHTTPRequestOperationManager *manager =[[AFHTTPRequestOperationManager alloc] init];
     
     [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
-       // NSLog(@"response object: %@", responseObject);
-        
-        // artistName
-        // artistYearsActive
-        // artistHometown
-        // artistBio
-        // artistImageURL
-        // artistGenre
-        // ratingDiscovery
-        // ratingFamiliarity
-        // ratingHotttness
-
-
-        
         NSDictionary *results = responseObject[@"response"];
         NSArray *artists = results[@"artists"];
-        
-        // reset my array
-        self.searchResults = [[NSMutableArray alloc] init];
         
         // loop through all json posts
         for (NSDictionary *results in artists) {
@@ -403,18 +381,20 @@ CLLocationManagerDelegate>
 
 - (void) getSpotifyData{
 //loop through searchResults
-  //  [self passArtistNameToSpotifyWithName:name]
+//  [self passArtistNameToSpotifyWithName:name]
     
 }
 
 // we will have to loop through the echonest artist name results
 
-- (void)passArtistNameToSpotifyWithName: (NSString *) name {
+- (void)passArtistNameToSpotifyWithName:(NSString *) name  {
     // goal: pass in artist name - get artwork, album name, album number
 
-    //NSString *name = @"The Beach Boys"; // dummy info that we're passing this into the url
+  //  NSString *name = @"The Beach Boys"; // dummy info that we're passing this into the url
     
     NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", name];
+    
+  
     
     NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
@@ -422,11 +402,25 @@ CLLocationManagerDelegate>
     
     [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
+      //  NSLog(@"response object: %@", responseObject);
+        
+        NSDictionary *resultsSpotify = responseObject[@"albums"];
+        NSArray *artistsSpotify = resultsSpotify[@"items"];
+        
+         for (NSDictionary *resultsSpotify in artistsSpotify) {
+              artistInfoData *dataSpotify = [[artistInfoData alloc] initWithJSON:resultsSpotify];
+           //  NSLog(@"data spotify: %@", dataSpotify);
+             
+              [self.searchResults  addObject:dataSpotify];
+             
+         }
+        
+        
         //NSLog(@"response object: %@", responseObject);
         
-        NSString *albumName = responseObject[@"albums"][@"items"][0][@"name"]; // grab first album name
-        self.spotifyAlbumID = responseObject[@"albums"][@"items"][0][@"id"]; // grab first album id
-        NSString *albumImage = responseObject[@"albums"][@"items"][0][@"images"][0][@"url"]; // grab first image
+//        NSString *albumName = responseObject[@"albums"][@"items"][0][@"name"]; // grab first album name
+//        self.spotifyAlbumID = responseObject[@"albums"][@"items"][0][@"id"]; // grab first album id
+//        NSString *albumImage = responseObject[@"albums"][@"items"][0][@"images"][0][@"url"]; // grab first image
         
   //      NSLog(@"\n album name: %@\n album ID: %@\n album image: %@", albumName, self.spotifyAlbumID, albumImage); // test it!
         
