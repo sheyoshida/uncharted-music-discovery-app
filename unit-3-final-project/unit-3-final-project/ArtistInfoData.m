@@ -8,10 +8,11 @@
 
 #import "artistInfoData.h"
 
-@implementation artistInfoData
+@implementation ArtistInfoData
 
-- (void) initWithJSON:(NSDictionary *)json {
-        
+- (instancetype) initWithJSON:(NSDictionary *)json {
+    
+    if (self = [super init]) {
         // echonest api call
         NSArray *artistImages = [json objectForKey:@"images"];
         self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"]; // many of the returned urls don't work :(
@@ -52,11 +53,12 @@
 //        // spotify api call #2
 //        self.songPreview = json[@"preview_url"];
 //        self.songTitle = json[@"name"];
-    
-
         
-
-
+        return self;
+    
+    }
+    
+    return nil;
     
 }
 

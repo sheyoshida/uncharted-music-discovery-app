@@ -7,9 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ArtistInfoData.h"
 
 @interface LocationInfoObject : NSObject
     @property (nonatomic) NSString * SubAdministrativeArea ;
     @property (nonatomic) NSString * State;
     @property (nonatomic) NSString * Sublocality;
+    @property (nonatomic) NSArray <ArtistInfoData*> *artists;
 @end

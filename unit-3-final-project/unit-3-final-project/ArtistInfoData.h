@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface artistInfoData : NSObject
+@interface ArtistInfoData : NSObject
 
 // echonest api call
 @property (nonatomic) NSString *artistName;
@@ -32,7 +32,7 @@
 @property (nonatomic) NSString *songTitle;
 
 
-- (void)initWithJSON:(NSDictionary *)json;
+- (instancetype)initWithJSON:(NSDictionary *)json;
 
 
 @end
