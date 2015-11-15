@@ -23,7 +23,9 @@ MKMapViewDelegate,
 UISearchBarDelegate,
 CLLocationManagerDelegate,
 UICollectionViewDelegate,
-UICollectionViewDataSource
+UICollectionViewDataSource,
+UITableViewDataSource,
+UITableViewDelegate
 >
 
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
@@ -33,10 +35,14 @@ UICollectionViewDataSource
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic) NSArray *collectionImages; // dummy images
 
+//for Table View Cell
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+
+
 
 // for maps
 @property (nonatomic) CLLocationManager *locationManager;
-@property (nonatomic) NSMutableArray *nearbyCities;
 @property (nonatomic) BOOL pinSelected;
 @property (nonatomic) InfoWindow * annotation;
 @property (nonatomic) int foundCities;
@@ -61,13 +67,14 @@ UICollectionViewDataSource
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.modelData = [[NSMutableArray alloc]init];
     self.pinSelected = NO;
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
     self.searchResults = [[NSMutableArray alloc] init]; // to store api data
     
-    self.nearbyCities = [[NSMutableArray alloc]init];
     self.locationManager = [[CLLocationManager alloc] init];
     
     self.searchBar.delegate = self;
@@ -87,6 +94,34 @@ UICollectionViewDataSource
     self.locationManager.distanceFilter = 500;
     [self.locationManager startUpdatingLocation];
     
+}
+
+#pragma mark - TableView Stuff
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    LocationInfoObject * location = [self.modelData objectAtIndex:section];
+    return [NSString stringWithFormat:@"%@, %@", location.SubAdministrativeArea, location.State];
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return self.modelData.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+
+    return [[[self.modelData objectAtIndex: section] artists] count];
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ArtistCell" forIndexPath:indexPath];
+    
+    LocationInfoObject *location = [self.modelData objectAtIndex:indexPath.section];
+    ArtistInfoData *artist = [location.artists objectAtIndex:indexPath.row];
+    cell.textLabel.text = artist.artistName;
+    cell.detailTextLabel.text = artist.albumTitle;
+    return cell;
+
 }
 
 #pragma mark - CLLocationManagerDelegate
@@ -145,6 +180,8 @@ UICollectionViewDataSource
 - (void)setModelAndReloadCollectionView:(NSArray <LocationInfoObject *> *)cities {
     [self.modelData removeAllObjects];
     self.modelData = [cities mutableCopy];
+    
+    [self.tableView reloadData];
     
     //NSLog(@"%@", self.modelData[0].artists[0].albumArtURL);
 }
@@ -398,7 +435,7 @@ UICollectionViewDataSource
     if (!self.pinSelected) {
         
         [mapView deselectAnnotation:view.annotation animated:YES];
-        LocationInfoObject *obj = [self.nearbyCities firstObject];
+        LocationInfoObject *obj = [self.modelData firstObject];
         self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
         [self.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 100, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
         [view addSubview:self.annotation];
@@ -413,25 +450,25 @@ UICollectionViewDataSource
 }
 //shake function
 
-- (BOOL)canBecomeFirstResponder
-{
-    return YES;
-}
-
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
-{
-    if (motion == UIEventSubtypeMotionShake)
-    {
-        [self showAlert];
-    }
-}
-
--(void)showAlert
-{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hello World" message:@"This is my first app!" delegate:nil cancelButtonTitle:@"Awesome" otherButtonTitles:nil];
-    
-    [alertView show];
-}
+//- (BOOL)canBecomeFirstResponder
+//{
+//    return YES;
+//}
+//
+//- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+//{
+//    if (motion == UIEventSubtypeMotionShake)
+//    {
+//        [self showAlert];
+//    }
+//}
+//
+//-(void)showAlert
+//{
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hello World" message:@"This is my first app!" delegate:nil cancelButtonTitle:@"Awesome" otherButtonTitles:nil];
+//    
+//    [alertView show];
+//}
 
 
 
