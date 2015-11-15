@@ -18,12 +18,16 @@
 <
 MKMapViewDelegate,
 UISearchBarDelegate,
-CLLocationManagerDelegate>
+CLLocationManagerDelegate,
+UICollectionViewDelegate,
+UICollectionViewDataSource
+>
 
 // for collection view
 @property (nonatomic) NSMutableArray *array;
 @property (nonatomic) NSArray *dataArray;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (nonatomic) NSArray *collectionImages; // dummy images
 
 
 // for maps
@@ -63,6 +67,8 @@ CLLocationManagerDelegate>
     
     self.searchBar.delegate = self;
     self.locationManager.delegate = self;
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
 
     [self setupCollectionView];
     
@@ -79,7 +85,7 @@ CLLocationManagerDelegate>
 //    [self passArtistNameToSpotifyWithName:@"Backstreet Boys"]; // call first spotify api
 //    [self passAlbumIDToSpotify]; // call second spotify api
     
-    
+
 
 
     
@@ -427,28 +433,39 @@ CLLocationManagerDelegate>
 - (void)setupCollectionView {
     
     // dummy data for collection view:
-    self.array = [[NSMutableArray alloc] initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
+    //self.array = [[NSMutableArray alloc] initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
+    
+    // collection view dummy info:
+    self.collectionImages = [NSArray arrayWithObjects:@"destroyer.png", @"drake.png", @"talking_heads.png", @"sleater_kinney.png", @"run_the_jewels.png", nil];
     
     // for carousel
     // grab references to first and last items
-    id firstItem = [self.array firstObject];
-    id lastItem = [self.array lastObject];
+    id firstItem = [self.collectionImages firstObject];
+    id secondItem = [self.collectionImages objectAtIndex:1];
+    id thirdItem = [self.collectionImages objectAtIndex:2];
     
-    NSMutableArray *workingArray = [self.array mutableCopy];
+    id nextToNextToLastItem = [self.collectionImages objectAtIndex: [self.collectionImages count] - 3];
+    id nextToLastItem = [self.collectionImages objectAtIndex: [self.collectionImages count] - 2];
+    id lastItem = [self.collectionImages lastObject];
+    
+    NSMutableArray *workingArray = [self.collectionImages mutableCopy];
     
     // add the copy of the last item to the beginning
     [workingArray insertObject:lastItem atIndex:0];
+    [workingArray insertObject:nextToLastItem atIndex:0];
+    [workingArray insertObject:nextToNextToLastItem atIndex:0];
     
     // add the copy of the first item to the end
     [workingArray addObject:firstItem];
+    [workingArray addObject:secondItem];
+    [workingArray addObject:thirdItem];
     //[workingArray insertObject:firstItem atIndex:self.array.count];
     
     // update the collection view's data source property
-    self.dataArray = [NSArray arrayWithArray:workingArray];
+    self.collectionImages = [NSArray arrayWithArray:workingArray];
     
     // make cells stick in view
     [self.collectionView setPagingEnabled:YES];
-    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -456,7 +473,7 @@ CLLocationManagerDelegate>
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.dataArray.count;
+    return self.collectionImages.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -465,8 +482,11 @@ CLLocationManagerDelegate>
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     
-   // UIImageView *collectionImageView = (UIImageView *)[cell viewWithTag:100];
- 
+    cell.layer.shouldRasterize = YES;
+    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    
+    UIImageView *collectionImageView = (UIImageView *)[cell viewWithTag:100];
+    collectionImageView.image = [UIImage imageNamed:[self.collectionImages objectAtIndex:indexPath.row]];
     
     // round corners
     cell.layer.borderWidth = 1.0;
@@ -475,20 +495,25 @@ CLLocationManagerDelegate>
     
     return cell;
 }
+    
+- (void)viewWillAppear:(BOOL)animated {
+    [self.view layoutIfNeeded];
+    
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:3 inSection:0];
+    
+    [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+}
 
 #pragma mark - collection view's infinite scrolling:
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    // calculate where the collection view should be at the right-hand end item
-    float contentOffsetWhenFullyScrolledRight = self.collectionView.frame.size.width * ([self.dataArray count] -1);
-    
-    if (scrollView.contentOffset.x == contentOffsetWhenFullyScrolledRight) {
+    if (scrollView.contentOffset.x + scrollView.frame.size.width >= scrollView.contentSize.width - 15) {
         
         // user is scrolling to the right from the last item to the 'fake' item 1.
         // reposition offset to show the 'real' item 1 at the left-hand end of the collection view
         
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:1 inSection:0];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:3 inSection:0];
         
         [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         
@@ -497,7 +522,7 @@ CLLocationManagerDelegate>
         // user is scrolling to the left from the first item to the fake item
         // reposition offset to show the "real" item at the right end of the collection
         
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:([self.dataArray count] -2) inSection:0];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:([self.collectionImages count] - 6) inSection:0];
         [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         
     }
