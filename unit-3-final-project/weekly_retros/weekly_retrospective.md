@@ -22,8 +22,8 @@ If you did not meet your goals, how will this affect the progression of the prod
 - Did you meet your goals/responsibilities last week? Why or why not? Partially. Found a nonelegant solution by looping through nearby coordinates. Still working on merging API calls
 - Goals/Responsibilities This Week: Force Touch song preview feature
 *  Team Member: **Artur** 
-- Goals/Responsibilities Last Week: 
-- Did you meet your goals/responsibilities last week? Why or why not?
+- Goals/Responsibilities Last Week:Worked on maps, custom pins and custom infoWindows.
+- Did you meet your goals/responsibilities last week? Why or why not?Got the working version.
 - Goals/Responsibilities This Week:
 * Team Member: **Zouf**
 - Goals/Responsibilities Last Week: Worked on EchoNest API to access artist name, biography and years active, etc. 
