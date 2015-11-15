@@ -26,8 +26,8 @@ If you did not meet your goals, how will this affect the progression of the prod
 - Did you meet your goals/responsibilities last week? Why or why not?
 - Goals/Responsibilities This Week:
 * Team Member: **Zouf**
-- Goals/Responsibilities Last Week: 
-- Did you meet your goals/responsibilities last week? Why or why not?
+- Goals/Responsibilities Last Week: Worked on EchoNest API to access artist name, biography and years active, etc. 
+- Did you meet your goals/responsibilities last week? Why or why not? While I added the API call, we still need to merge the API calls in order to get the data we need for the detailVC. 
 - Goals/Responsibilities This Week:
 * Team Member: **Shena**
 - Goals/Responsibilities Last Week: 
