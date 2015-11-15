@@ -14,9 +14,9 @@
 **Team Member Analysis**:
 If you did not meet your goals, how will this affect the progression of the product? What will you do differently to meet your goals this week?
 
-*  Team Member #1
-* Goals/Responsibilities Last Week:
-* Did you meet your goals/responsibilities last week? Why or why not?
+*  Henna
+* Goals/Responsibilities Last Week: Figure out a way to find nearby cities from a CLLocation point. Combine API calls to display desired results
+* Did you meet your goals/responsibilities last week? Why or why not? Partially. Found a nonelegant solution by looping through nearby coordinates. Still working on merging API calls
 * Goals/Responsibilities This Week:
 *  Team Member #2    
 * Goals/Responsibilities Last Week:
