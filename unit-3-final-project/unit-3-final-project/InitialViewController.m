@@ -150,6 +150,15 @@ CLLocationManagerDelegate>
         
         if (latitudeMin >= latMax && longitudeMin >= longitudeMax) {
             doneLocations = YES;
+            for(LocationInfoObject *city in self.nearbyCities){
+                [self artistInfoWithCity:city.SubAdministrativeArea andRegion:city.State];
+            }
+            
+            for (artistInfoData *artist in self.searchResults) {
+                [self passArtistNameToSpotifyWithArtistObject:artist];
+                
+                
+            }
         }
         
     }
@@ -183,16 +192,6 @@ CLLocationManagerDelegate>
                                    locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
                                    //NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
                                    [self.nearbyCities addObject: locObject];
-                                   self.foundCities++;
-                                   
-                                   if (self.foundCities >= 3) {
-                                       
-                                       for(LocationInfoObject *city in self.nearbyCities){
-                                           NSLog(@"----------- %@, %@ ----------", city.SubAdministrativeArea, city.State);
-                                           [self artistInfoWithCity:city.SubAdministrativeArea andRegion:city.State];
-                                       }
-                                       
-                                   }
                                    
                                }
                            }
@@ -314,23 +313,6 @@ CLLocationManagerDelegate>
 
 - (void)artistInfoWithCity:(NSString*) city andRegion:(NSString*) region {
     
-//    NSMutableArray *cities = [[NSMutableArray alloc] init];
-//    [cities addObject:@"New York"];
-//    [cities addObject:@"Brooklyn"];
-//    [cities addObject:@"Queens"];
-//    [cities addObject:@"Holbrook"];
-//    [cities addObject:@"Fort Greene"];
-//    [cities addObject:@"Ozone Park"];
-//    [cities addObject:@"Holbrook"];
-//    [cities addObject:@"Hoboken"];
-//    [cities addObject:@"Harlem"];
-//    [cities addObject:@"Flushing"];
-//
-//    // http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=brooklyn+ny&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank
-//    
-//    NSString *city = @"brooklyn"; // test city
-//    NSString *region = @"ny"; // test state/province/territory/etc
-    
     NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=%@+%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank", city, region];
     
     NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
@@ -346,23 +328,11 @@ CLLocationManagerDelegate>
         for (NSDictionary *results in artists) {
             
             // create new post from json
-            artistInfoData *data = [[artistInfoData alloc] initWithJSON:results];
             
-            // add post to array
-            NSLog(@"%@, %@", city, data.artistName);
+            artistInfoData *data = [[artistInfoData alloc] init];
+            [data initWithJSON:results];
             [self.searchResults  addObject:data];
-            
-            
-           // NSLog(@"search results: %@", self.searchResults); // test it!
-            
-            // self.albumImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:data.imageURL]]];
-            
-            //    NSLog(@"This is the artist data: %@",data);
         }
-        
-        
-        // [self.tableView reloadData];
-      // NSLog(@"%@", results);
         
     } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
         NSLog(@"Error: %@", error.localizedDescription);
@@ -372,20 +342,12 @@ CLLocationManagerDelegate>
 
 #pragma mark - spotify api call #1
 
-- (void) getSpotifyData{
-//loop through searchResults
-//  [self passArtistNameToSpotifyWithName:name]
-    
-}
-
 // we will have to loop through the echonest artist name results
 
-- (void)passArtistNameToSpotifyWithName:(NSString *) name  {
+- (void)passArtistNameToSpotifyWithArtistObject:(artistInfoData*)artistObject {
     // goal: pass in artist name - get artwork, album name, album number
-
-  //  NSString *name = @"The Beach Boys"; // dummy info that we're passing this into the url
     
-    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", name];
+    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", artistObject.artistName];
     
   
     
@@ -401,11 +363,20 @@ CLLocationManagerDelegate>
         NSArray *artistsSpotify = resultsSpotify[@"items"];
         
          for (NSDictionary *resultsSpotify in artistsSpotify) {
-              artistInfoData *dataSpotify = [[artistInfoData alloc] initWithJSON:resultsSpotify];
-    
-              [self.searchResults  addObject:dataSpotify];
+             
+            artistObject.albumTitle = [resultsSpotify objectForKey:@"name"];
+            artistObject.albumID = [resultsSpotify objectForKey: @"id"];
+             
+             if ([[resultsSpotify objectForKey: @"images"] count]>2) {
+                 artistObject.albumArtURL = [[[resultsSpotify objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
+             }
+             else{
+                 artistObject.albumArtURL = [[[resultsSpotify objectForKey: @"images"]firstObject] objectForKey:@"url"];
+             }
              
          }
+        
+        [self passAlbumIDToSpotifyWithArtistObject:artistObject];
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"Error - Spotify #1 API Call: %@", error.localizedDescription);
@@ -413,13 +384,15 @@ CLLocationManagerDelegate>
 }
 
 #pragma mark - spotify api call #2
-    
-    - (void)passAlbumIDToSpotify {
+
+- (void)passAlbumIDToSpotifyWithArtistObject:(artistInfoData*)artistObject {
     
 // pass in album number - get song preview(url) + song name
 // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
 
-   self.spotifyAlbumID = @"4NnBDxnxiiXiMlssBi9Bsq";
+    
+
+   self.spotifyAlbumID = artistObject.albumID;
         
         if (self.spotifyAlbumID != nil) {
     
@@ -436,17 +409,11 @@ CLLocationManagerDelegate>
         NSArray *resultsSpotifySecondCall = responseObject[@"items"];
         
         for (NSDictionary *result in resultsSpotifySecondCall) {
-            //NSLog(@"%@", [result objectForKey:@"preview_url"]);
-            artistInfoData *dataSpotifySecondCall = [[artistInfoData alloc] initWithJSON:result];
             
-            [self.searchResults  addObject:dataSpotifySecondCall];
+                    artistObject.songPreview = [result objectForKey:@"preview_url"];
+                    artistObject.songTitle = [result objectForKey:@"name"];
 
         }
-      
-        
-     //   NSLog(@"results second call: %@", resultsSpotifySecondCall);
-        
-       //   NSLog(@"hello hello!"); // parse through results to get song preview url and song title
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
           NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);

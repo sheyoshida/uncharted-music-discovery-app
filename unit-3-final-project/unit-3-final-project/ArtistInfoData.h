@@ -32,7 +32,7 @@
 @property (nonatomic) NSString *songTitle;
 
 
-- (instancetype)initWithJSON:(NSDictionary *)json;
+- (void)initWithJSON:(NSDictionary *)json;
 
 
 @end

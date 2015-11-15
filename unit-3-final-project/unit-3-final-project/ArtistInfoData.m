@@ -10,9 +10,7 @@
 
 @implementation artistInfoData
 
-- (instancetype) initWithJSON:(NSDictionary *)json {
-    
-    if (self = [super init]) {
+- (void) initWithJSON:(NSDictionary *)json {
         
         // echonest api call
         NSArray *artistImages = [json objectForKey:@"images"];
@@ -40,33 +38,26 @@
         self.ratingFamiliarity = [json objectForKey:@"familiarity_rank"];
         self.ratingHotttnesss = [json objectForKey:@"hotttnesss_rank"];
         
-        // spotify api call #1
-        self.albumTitle = [json objectForKey:@"name"];
-        self.albumID = [json objectForKey: @"id"];
-        
-        if ([[json objectForKey: @"images"] count]>2) {
-            self.albumArtURL = [[[json objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
-        }
-        else{
-            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
-        }
-        
-        
-        
-       // NSLog(@"\n album title: %@\n album ID: %@\n album art: %@", self.albumTitle, self.albumID, self.albumArtURL);
-        
-        // spotify api call #2
-        self.songPreview = json[@"preview_url"];
-        self.songTitle = json[@"name"];
-        
-      //  NSLog(@"song preview url: %@, song title: %@", self.songPreview, self.songTitle);
-        // self.songPreview
-        // self.songTitle
+//        // spotify api call #1
+//        self.albumTitle = [json objectForKey:@"name"];
+//        self.albumID = [json objectForKey: @"id"];
+//        
+//        if ([[json objectForKey: @"images"] count]>2) {
+//            self.albumArtURL = [[[json objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
+//        }
+//        else{
+//            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
+//        }
+//        
+//        // spotify api call #2
+//        self.songPreview = json[@"preview_url"];
+//        self.songTitle = json[@"name"];
+    
+
         
 
-        return self;
-    }
-    return nil;
+
+    
 }
 
 
