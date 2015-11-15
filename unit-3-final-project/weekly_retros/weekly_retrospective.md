@@ -20,7 +20,7 @@ If you did not meet your goals, how will this affect the progression of the prod
 * Team Member: **Henna**
 - Goals/Responsibilities Last Week: Figure out a way to find nearby cities from a CLLocation point. Combine API calls to display desired results
 - Did you meet your goals/responsibilities last week? Why or why not? Partially. Found a nonelegant solution by looping through nearby coordinates. Still working on merging API calls
-- Goals/Responsibilities This Week:
+- Goals/Responsibilities This Week: Force Touch song preview feature
 *  Team Member: **Artur** 
 - Goals/Responsibilities Last Week: 
 - Did you meet your goals/responsibilities last week? Why or why not?
