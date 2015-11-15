@@ -15,6 +15,7 @@
 #import "NearbyLocationProcessor.h"
 #import "EchonestAPIManager.h"
 #import "SpotifyApiManager.h"
+#import "DetailViewController.h"
 
 
 @interface InitialViewController ()
@@ -122,6 +123,17 @@ UITableViewDelegate
     cell.detailTextLabel.text = artist.albumTitle;
     return cell;
 
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    DetailViewController *vc = segue.destinationViewController;
+    
+    LocationInfoObject * location = [self.modelData objectAtIndex:indexPath.section];
+    
+    vc.artist = [location.artists objectAtIndex:indexPath.row];
+
+    
 }
 
 #pragma mark - CLLocationManagerDelegate

@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ArtistInfoData.h"
 
 @interface DetailViewController : UIViewController
 
+@property (nonatomic) ArtistInfoData * artist;
 
 @end

@@ -23,6 +23,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.bandNameLabel.text = self.artist.artistName;
+    
+    
+    
     // Do any additional setup after loading the view.
 }
 
