@@ -19,9 +19,7 @@
     __block int recievedCities = 0;
 
     for (LocationInfoObject* city in cities) {
-        NSLog(@"%@", city.SubAdministrativeArea);
         [self getAlbumInfoForCity:city completion:^{
-            
             recievedCities++;
             if (recievedCities == cities.count) {
                 completion();
@@ -43,11 +41,7 @@
             
             receivedArtists++;
             
-            NSLog(@"received: %d, total: %lu", receivedArtists, (unsigned long) city.artists.count);
-            
             if (receivedArtists == city.artists.count) {
-                
-                NSLog(@"added %d artists to %@", receivedArtists, city.SubAdministrativeArea);
                 
                 completion();
             }

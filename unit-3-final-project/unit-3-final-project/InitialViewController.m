@@ -23,6 +23,7 @@ MKMapViewDelegate,
 UISearchBarDelegate,
 CLLocationManagerDelegate>
 
+@property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
 // for collection view
 @property (nonatomic) NSMutableArray *array;
 @property (nonatomic) NSArray *dataArray;
@@ -56,6 +57,7 @@ CLLocationManagerDelegate>
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.modelData = [[NSMutableArray alloc]init];
     self.pinSelected = NO;
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
@@ -66,7 +68,7 @@ CLLocationManagerDelegate>
     
     self.searchBar.delegate = self;
     self.locationManager.delegate = self;
-
+    
     [self setupCollectionView];
     
     //Location manager Stuff
@@ -76,15 +78,6 @@ CLLocationManagerDelegate>
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 500;
     [self.locationManager startUpdatingLocation];
-    
-    
-//    [self artistInfo]; // call echonest api
-//    [self passArtistNameToSpotifyWithName:@"Backstreet Boys"]; // call first spotify api
-//    [self passAlbumIDToSpotify]; // call second spotify api
-    
-    
-
-
     
 }
 
@@ -130,28 +123,26 @@ CLLocationManagerDelegate>
 }
 
 -(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
-
-    [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray <LocationInfoObject *> *cities) {
-        
+    
+    [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         [EchonestAPIManager getArtistInfoForCities:cities completion:^{
-            
             [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
-                NSLog(@"display artists on screen");
+                [self setModelAndReloadCollectionView:cities];
             }];
         }];
-        //
-        //            for (artistInfoData *artist in self.searchResults) {
-        //                [self passArtistNameToSpotifyWithArtistObject:artist];
-        //
-        //
-        //            }
-        //        }
     }];
     
 }
 
+- (void)setModelAndReloadCollectionView:(NSArray <LocationInfoObject *> *)cities {
+    [self.modelData removeAllObjects];
+    self.modelData = [cities mutableCopy];
+    
+    //NSLog(@"%@", self.modelData[0].artists[0].albumArtURL);
+}
 
-//animated pin
+
+
 - (void)pinWithCoordinate:(CLLocation*)location {
     CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
     CustomPin *pin = [CustomPin alloc];
@@ -238,7 +229,7 @@ CLLocationManagerDelegate>
 //    // but no need to reloadCollectionView
 //    self.searchBarActive = NO;
 //    [self.searchBar setShowsCancelButton:NO animated:YES];
-//    
+//
 //    [self artistInfo];
 //}
 //
@@ -251,55 +242,46 @@ CLLocationManagerDelegate>
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
     [self.view endEditing:YES];
-    
-//    [self artistInfo]; // trigger echonest api witih location
-//    [self passArtistNameToSpotifyWithName:@"The Beach Boys"];
 }
 
-
-#pragma mark - spotify api call #1
-
-// we will have to loop through the echonest artist name results
 
 
 #pragma mark - spotify api call #2
 
 - (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject {
     
-// pass in album number - get song preview(url) + song name
-// https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
-
+    // pass in album number - get song preview(url) + song name
+    // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
     
-
-   self.spotifyAlbumID = artistObject.albumID;
+    
+    
+    self.spotifyAlbumID = artistObject.albumID;
+    
+    if (self.spotifyAlbumID != nil) {
         
-        if (self.spotifyAlbumID != nil) {
-    
-    NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
+        NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
+        
+        NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
+        
+        [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
             
-   // NSLog(@"URL2: %@", url2);
-    
-    NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-
-    AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
-    
-    [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        
-        NSArray *resultsSpotifySecondCall = responseObject[@"items"];
-        
-        for (NSDictionary *result in resultsSpotifySecondCall) {
+            NSArray *resultsSpotifySecondCall = responseObject[@"items"];
             
-                    artistObject.songPreview = [result objectForKey:@"preview_url"];
-                    artistObject.songTitle = [result objectForKey:@"name"];
-
-        }
+            for (NSDictionary *result in resultsSpotifySecondCall) {
+                
+                artistObject.songPreview = [result objectForKey:@"preview_url"];
+                artistObject.songTitle = [result objectForKey:@"name"];
+                
+            }
+            
+        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+            NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
+        }];
         
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-          NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
-    }];
-    
-}
     }
+}
 
 #pragma mark - collection view methods:
 
@@ -344,8 +326,8 @@ CLLocationManagerDelegate>
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     
-   // UIImageView *collectionImageView = (UIImageView *)[cell viewWithTag:100];
- 
+    // UIImageView *collectionImageView = (UIImageView *)[cell viewWithTag:100];
+    
     
     // round corners
     cell.layer.borderWidth = 1.0;
@@ -385,7 +367,7 @@ CLLocationManagerDelegate>
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
     if (!self.pinSelected) {
-
+        
         [mapView deselectAnnotation:view.annotation animated:YES];
         LocationInfoObject *obj = [self.nearbyCities firstObject];
         self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
@@ -397,21 +379,21 @@ CLLocationManagerDelegate>
     else{
         [self.annotation removeFromSuperview];
         self.pinSelected = NO;
-    
+        
     }
     
-   
+    
 }
 
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
