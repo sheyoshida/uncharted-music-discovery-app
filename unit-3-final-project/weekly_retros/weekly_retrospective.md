@@ -33,7 +33,7 @@ If you did not meet your goals, how will this affect the progression of the prod
 - Goals/Responsibilities Last Week: Complete wireframing, build collection carousel view, work on accessing Spotify API data to collect albums, songs and song previews. 
 - Did you meet your goals/responsibilities last week? Why or why not? The carousel only scrolls in one direction. Spotify API calls work nicely but sometimes returned data is inconsistent.
 - Goals/Responsibilities This Week: populate api data, work on presentation, get carousel workign properly
-* **Team goal for this week**: Get MVP, first screen working smoothly and have presentation for Tuesday. Name app. 
+* **Team goal for this week**: Get base features working smoothly and have presentation for Tuesday. Name app. 
 
 **Additional Discussion Topics**:
 
