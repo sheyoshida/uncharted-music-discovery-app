@@ -400,7 +400,7 @@ UICollectionViewDataSource
         [mapView deselectAnnotation:view.annotation animated:YES];
         LocationInfoObject *obj = [self.nearbyCities firstObject];
         self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
-        [self.annotation setFrame:CGRectMake(view.bounds.origin.x+view.bounds.size.width, view.bounds.origin.y - self.annotation.bounds.size.height, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
+        [self.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 100, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
         [view addSubview:self.annotation];
         self.pinSelected = YES;
         
@@ -410,9 +410,29 @@ UICollectionViewDataSource
         self.pinSelected = NO;
         
     }
-    
-    
 }
+//shake function
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (motion == UIEventSubtypeMotionShake)
+    {
+        [self showAlert];
+    }
+}
+
+-(void)showAlert
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hello World" message:@"This is my first app!" delegate:nil cancelButtonTitle:@"Awesome" otherButtonTitles:nil];
+    
+    [alertView show];
+}
+
 
 
 /*
