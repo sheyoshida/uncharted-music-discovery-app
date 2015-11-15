@@ -12,6 +12,9 @@
 #import "ArtistInfoData.h"
 #import "LocationInfoObject.h"
 #import "InfoWindow.h"
+#import "NearbyLocationProcessor.h"
+#import "EchonestAPIManager.h"
+#import "SpotifyApiManager.h"
 
 
 @interface InitialViewController ()
@@ -23,6 +26,7 @@ UICollectionViewDelegate,
 UICollectionViewDataSource
 >
 
+@property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
 // for collection view
 @property (nonatomic) NSMutableArray *array;
 @property (nonatomic) NSArray *dataArray;
@@ -57,6 +61,7 @@ UICollectionViewDataSource
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.modelData = [[NSMutableArray alloc]init];
     self.pinSelected = NO;
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
@@ -67,8 +72,10 @@ UICollectionViewDataSource
     
     self.searchBar.delegate = self;
     self.locationManager.delegate = self;
+    
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
+
 
     [self setupCollectionView];
     
@@ -79,15 +86,6 @@ UICollectionViewDataSource
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 500;
     [self.locationManager startUpdatingLocation];
-    
-    
-//    [self artistInfo]; // call echonest api
-//    [self passArtistNameToSpotifyWithName:@"Backstreet Boys"]; // call first spotify api
-//    [self passAlbumIDToSpotify]; // call second spotify api
-    
-
-
-
     
 }
 
@@ -133,83 +131,26 @@ UICollectionViewDataSource
 }
 
 -(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
-    self.foundCities = 0;
-    double latitude = userLocation.coordinate.latitude;
-    double latitudeMin = latitude - 0.2;
-    double latMax = latitude + 0.2;
     
-    double longitude = userLocation.coordinate.longitude;
-    double longitudeMin = longitude - 0.2;
-    double longitudeMax = longitude + 0.2;
-
-    BOOL doneLocations = NO;
-    
-    while(!doneLocations) {
-        
-        CLLocation * currLocation = [[CLLocation alloc]initWithLatitude:latitudeMin longitude:longitudeMin];
-        if([currLocation distanceFromLocation:userLocation]<16093.4){
-            [self addReverseGeoCodedLocation:currLocation];
-            
-        }
-        longitudeMin = longitudeMin + 0.005;
-        latitudeMin = latitudeMin + 0.005;
-        
-        if (latitudeMin >= latMax && longitudeMin >= longitudeMax) {
-            doneLocations = YES;
-            for(LocationInfoObject *city in self.nearbyCities){
-                [self artistInfoWithCity:city.SubAdministrativeArea andRegion:city.State];
-            }
-            
-            for (artistInfoData *artist in self.searchResults) {
-                [self passArtistNameToSpotifyWithArtistObject:artist];
-                
-                
-            }
-        }
-        
-    }
-
-
+    [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
+        [EchonestAPIManager getArtistInfoForCities:cities completion:^{
+            [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
+                [self setModelAndReloadCollectionView:cities];
+            }];
+        }];
+    }];
     
 }
 
-- (void) addReverseGeoCodedLocation:(CLLocation*)location{
+- (void)setModelAndReloadCollectionView:(NSArray <LocationInfoObject *> *)cities {
+    [self.modelData removeAllObjects];
+    self.modelData = [cities mutableCopy];
     
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    [geocoder reverseGeocodeLocation:location // You can pass aLocation here instead
-                   completionHandler:^(NSArray *placemarks, NSError *error) {
-                       
-                       dispatch_async(dispatch_get_main_queue(),^ {
-                           // do stuff with placemarks on the main thread
-                           BOOL objectExists = NO;
-                           CLPlacemark *place = [placemarks firstObject];
-                           
-                           for(LocationInfoObject* object in self.nearbyCities){
-                               if ([[place.addressDictionary objectForKey:@"SubAdministrativeArea"] isEqualToString:object.SubAdministrativeArea]) {
-                                   objectExists = YES;
-                               }
-                           }
-                           
-                           if (!objectExists) {
-                               LocationInfoObject * locObject = [[LocationInfoObject alloc] init];
-                               if ([place.addressDictionary objectForKey:@"State"]) {
-                                   locObject.State =[place.addressDictionary objectForKey:@"State"];
-                                   locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
-                                   locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
-                                   //NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
-                                   [self.nearbyCities addObject: locObject];
-                                   
-                               }
-                           }
-
-                       });
-                       
-                   }];
-
-    
+    //NSLog(@"%@", self.modelData[0].artists[0].albumArtURL);
 }
 
-//animated pin
+
+
 - (void)pinWithCoordinate:(CLLocation*)location {
     CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
     CustomPin *pin = [CustomPin alloc];
@@ -296,7 +237,7 @@ UICollectionViewDataSource
 //    // but no need to reloadCollectionView
 //    self.searchBarActive = NO;
 //    [self.searchBar setShowsCancelButton:NO animated:YES];
-//    
+//
 //    [self artistInfo];
 //}
 //
@@ -309,124 +250,46 @@ UICollectionViewDataSource
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
     [self.view endEditing:YES];
-    
-//    [self artistInfo]; // trigger echonest api witih location
-//    [self passArtistNameToSpotifyWithName:@"The Beach Boys"];
 }
 
 
-#pragma mark- Echonest API Request
-
-- (void)artistInfoWithCity:(NSString*) city andRegion:(NSString*) region {
-    
-    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=%@+%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank", city, region];
-    
-    NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    AFHTTPRequestOperationManager *manager =[[AFHTTPRequestOperationManager alloc] init];
-    
-    [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        
-        NSDictionary *results = responseObject[@"response"];
-        NSArray *artists = results[@"artists"];
-        
-        // loop through all json posts
-        for (NSDictionary *results in artists) {
-            
-            // create new post from json
-            
-            artistInfoData *data = [[artistInfoData alloc] init];
-            [data initWithJSON:results];
-            [self.searchResults  addObject:data];
-        }
-        
-    } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-        NSLog(@"Error: %@", error.localizedDescription);
-        // block();
-    }];
-}
-
-#pragma mark - spotify api call #1
-
-// we will have to loop through the echonest artist name results
-
-- (void)passArtistNameToSpotifyWithArtistObject:(artistInfoData*)artistObject {
-    // goal: pass in artist name - get artwork, album name, album number
-    
-    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", artistObject.artistName];
-    
-  
-    
-    NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    AFHTTPRequestOperationManager *manager =[[AFHTTPRequestOperationManager alloc] init];
-    
-    [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        
-      //  NSLog(@"response object: %@", responseObject);
-        
-        NSDictionary *resultsSpotify = responseObject[@"albums"];
-        NSArray *artistsSpotify = resultsSpotify[@"items"];
-        
-         for (NSDictionary *resultsSpotify in artistsSpotify) {
-             
-            artistObject.albumTitle = [resultsSpotify objectForKey:@"name"];
-            artistObject.albumID = [resultsSpotify objectForKey: @"id"];
-             
-             if ([[resultsSpotify objectForKey: @"images"] count]>2) {
-                 artistObject.albumArtURL = [[[resultsSpotify objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
-             }
-             else{
-                 artistObject.albumArtURL = [[[resultsSpotify objectForKey: @"images"]firstObject] objectForKey:@"url"];
-             }
-             
-         }
-        
-        [self passAlbumIDToSpotifyWithArtistObject:artistObject];
-        
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        NSLog(@"Error - Spotify #1 API Call: %@", error.localizedDescription);
-    }];
-}
 
 #pragma mark - spotify api call #2
 
-- (void)passAlbumIDToSpotifyWithArtistObject:(artistInfoData*)artistObject {
+- (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject {
     
-// pass in album number - get song preview(url) + song name
-// https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
-
+    // pass in album number - get song preview(url) + song name
+    // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
     
-
-   self.spotifyAlbumID = artistObject.albumID;
+    
+    
+    self.spotifyAlbumID = artistObject.albumID;
+    
+    if (self.spotifyAlbumID != nil) {
         
-        if (self.spotifyAlbumID != nil) {
-    
-    NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
+        NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
+        
+        NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
+        
+        [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
             
-   // NSLog(@"URL2: %@", url2);
-    
-    NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-
-    AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
-    
-    [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        
-        NSArray *resultsSpotifySecondCall = responseObject[@"items"];
-        
-        for (NSDictionary *result in resultsSpotifySecondCall) {
+            NSArray *resultsSpotifySecondCall = responseObject[@"items"];
             
-                    artistObject.songPreview = [result objectForKey:@"preview_url"];
-                    artistObject.songTitle = [result objectForKey:@"name"];
-
-        }
+            for (NSDictionary *result in resultsSpotifySecondCall) {
+                
+                artistObject.songPreview = [result objectForKey:@"preview_url"];
+                artistObject.songTitle = [result objectForKey:@"name"];
+                
+            }
+            
+        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+            NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
+        }];
         
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-          NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
-    }];
-    
-}
     }
+}
 
 #pragma mark - collection view methods:
 
@@ -482,11 +345,13 @@ UICollectionViewDataSource
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     
+
     cell.layer.shouldRasterize = YES;
     cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
     UIImageView *collectionImageView = (UIImageView *)[cell viewWithTag:100];
     collectionImageView.image = [UIImage imageNamed:[self.collectionImages objectAtIndex:indexPath.row]];
+
     
     // round corners
     cell.layer.borderWidth = 1.0;
@@ -531,7 +396,7 @@ UICollectionViewDataSource
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
     if (!self.pinSelected) {
-
+        
         [mapView deselectAnnotation:view.annotation animated:YES];
         LocationInfoObject *obj = [self.nearbyCities firstObject];
         self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
@@ -543,21 +408,21 @@ UICollectionViewDataSource
     else{
         [self.annotation removeFromSuperview];
         self.pinSelected = NO;
-    
+        
     }
     
-   
+    
 }
 
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
