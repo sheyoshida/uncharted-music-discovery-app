@@ -13,37 +13,46 @@
 
 @implementation SpotifyApiManager
 
+
+
 + (void)getAlbumInfoForCities:(NSArray *)cities completion:(void (^)())completion {
-    
-    __block int recievedCities = 1;
-    
+    __block int recievedCities = 0;
+
     for (LocationInfoObject* city in cities) {
-        
+        NSLog(@"%@", city.SubAdministrativeArea);
         [self getAlbumInfoForCity:city completion:^{
+            
             recievedCities++;
+            if (recievedCities == cities.count) {
+                completion();
+            }
         }];
         
-        if (recievedCities == cities.count) {
-            completion();
-        }
+        
     }
     
 }
 
 
 + (void)getAlbumInfoForCity:(LocationInfoObject*)city completion:(void(^)())completion {
-    __block int receivedArtists = 1;
+    __block int receivedArtists = 0;
+    
     for (ArtistInfoData* artist in city.artists) {
         
         [self passArtistNameToSpotifyWithArtistObject:artist completion:^{
+            
             receivedArtists++;
+            
+            NSLog(@"received: %d, total: %lu", receivedArtists, (unsigned long) city.artists.count);
+            
+            if (receivedArtists == city.artists.count) {
+                
+                NSLog(@"added %d artists to %@", receivedArtists, city.SubAdministrativeArea);
+                
+                completion();
+            }
         }];
-        
-        if (receivedArtists == city.artists.count) {
-            completion();
-        }
     }
-
 }
 
 + (void)passArtistNameToSpotifyWithArtistObject:(ArtistInfoData*)artistObject completion:(void(^)())completion {

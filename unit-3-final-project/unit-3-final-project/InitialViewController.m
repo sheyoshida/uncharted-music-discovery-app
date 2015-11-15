@@ -132,7 +132,9 @@ CLLocationManagerDelegate>
 -(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
 
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray <LocationInfoObject *> *cities) {
+        
         [EchonestAPIManager getArtistInfoForCities:cities completion:^{
+            
             [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
                 NSLog(@"display artists on screen");
             }];

@@ -11,6 +11,8 @@
 
 @interface SpotifyApiManager : NSObject
 
+
+
 + (void)getAlbumInfoForCities:(NSArray *)cities
                    completion:(void(^)())completion;
 

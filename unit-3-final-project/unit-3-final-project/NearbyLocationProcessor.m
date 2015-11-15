@@ -51,16 +51,31 @@
     // we know the total number of queries
     
     NSMutableArray *results = [[NSMutableArray alloc] init];
+    NSMutableArray *finalResults = [[NSMutableArray alloc] init];
     
     for (CLLocation *location in locations) {
         [self reverseGeoCodeLocation:location completion:^(LocationInfoObject *locationInfo) {
             [results addObject:locationInfo];
             if (results.count == locations.count - 1) {
                 
+                for (LocationInfoObject * tempLocation in results) {
+                    BOOL locationIsInFinalArray = NO;
+                    for (LocationInfoObject *finalLocation in finalResults) {
+                        if ( [tempLocation.SubAdministrativeArea isEqualToString:finalLocation.SubAdministrativeArea] ) {
+                            locationIsInFinalArray = YES;
+                        }
+                        if (!tempLocation.State) {
+                            locationIsInFinalArray = YES;
+                        }
+                    }
+                    if (!locationIsInFinalArray) {
+                        [finalResults addObject:tempLocation];
+                    }
+                }
                 // filter to make sure location has state
                 // uniq array to make sure there are no repeats
                 
-                completion(results);
+                completion(finalResults);
             }
         }];
     }
@@ -73,32 +88,14 @@
     [geocoder reverseGeocodeLocation:location // You can pass aLocation here instead
                    completionHandler:^(NSArray *placemarks, NSError *error) {
                        dispatch_async(dispatch_get_main_queue(),^ {
-//                           // do stuff with placemarks on the main thread
-//                           BOOL objectExists = NO;
-//
-//                           for(LocationInfoObject* object in self.nearbyCities){
-//                               if ([[place.addressDictionary objectForKey:@"SubAdministrativeArea"] isEqualToString:object.SubAdministrativeArea]) {
-//                                   objectExists = YES;
-//                               }
-//                           }
                            
-//                           if (!objectExists) {
                            CLPlacemark *place = [placemarks firstObject];
 
                            LocationInfoObject * locObject = [[LocationInfoObject alloc] init];
-//                           if ([place.addressDictionary objectForKey:@"State"]) {
                                locObject.State =[place.addressDictionary objectForKey:@"State"];
                                locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
                                locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
                                completion(locObject);
-                               //NSLog(@"%@, %@, %@", locObject.SubAdministrativeArea, locObject.State, locObject.Sublocality);
-//                               [self.nearbyCities addObject: locObject];
-//                               self.foundCities++;
-//                               NSLog(@"%@", self.nearbyCities);
-                               
-//                           }
-//                           }
-                           
                        });
                        
                    }];
