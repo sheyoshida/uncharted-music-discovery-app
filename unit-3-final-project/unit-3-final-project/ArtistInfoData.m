@@ -18,7 +18,22 @@
         self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"]; // many of the returned urls don't work :(
     
         self.artistName = [json objectForKey:@"name"];
-        self.artistYearsActive = [json objectForKey:@"years_active"];
+        
+        // years active start date
+        if ([[json objectForKey:@"years_active"]firstObject]) {
+            self.artistYearsActiveStartDate = [[[json objectForKey:@"years_active"]firstObject] objectForKey:@"start"];
+        } else {
+            self.artistYearsActiveStartDate = @"unknown";
+        }
+        
+        // years active end date
+        if ([[[json objectForKey:@"years_active"]lastObject] objectForKey:@"end"]) {
+            self.artistYearsActiveEndDate = [[[json objectForKey:@"years_active"]lastObject] objectForKey:@"end"];
+        } else {
+            self.artistYearsActiveEndDate = [NSString stringWithFormat:@"present"];
+        }
+        
+        self.artistLocation = [[json  objectForKey:@"artist_location"]objectForKey:@"location"];
         self.artistHometown = [[json objectForKey:@"artist_location"]objectForKey:@"city"];
         
         if ([[json objectForKey:@"biographies"]firstObject])

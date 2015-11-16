@@ -26,6 +26,14 @@
     
     self.bandNameLabel.text = self.artist.artistName;
     
+    self.cityStateLabel.text = self.artist.artistLocation;
+    
+    NSString *startDate = self.artist.artistYearsActiveStartDate;
+    NSString *endDate = self.artist.artistYearsActiveEndDate;
+    self.yearsActiveLabel.text = [NSString stringWithFormat:@"%@ - %@", startDate, endDate];
+    
+    self.bioLabel.text = self.artist.artistBio;
+    
     
     
     // Do any additional setup after loading the view.

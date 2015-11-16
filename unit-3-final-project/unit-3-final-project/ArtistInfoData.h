@@ -12,8 +12,10 @@
 
 // echonest api call
 @property (nonatomic) NSString *artistName;
-@property (nonatomic) NSString *artistYearsActive;
+@property (nonatomic) NSString *artistYearsActiveStartDate;
+@property (nonatomic) NSString *artistYearsActiveEndDate;
 @property (nonatomic) NSString *artistHometown;
+@property (nonatomic) NSString *artistLocation; 
 @property (nonatomic) NSString *artistBio;
 @property (nonatomic) NSString *artistImageURL;
 @property (nonatomic) NSString *artistGenre;
