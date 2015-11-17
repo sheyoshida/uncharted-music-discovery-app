@@ -39,12 +39,19 @@
     NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
     UIImage *artworkImage = [UIImage imageWithData:artworkData];
     self.imageView.image = artworkImage;
+    
+    UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swiperight:)];
+    swiperight.direction=UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swiperight];
 }
 
-- (IBAction)backButtonTapped:(id)sender {
+
+
+-(void)swiperight:(UISwipeGestureRecognizer*)gestureRecognizer
+{
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
-    
-    
+
 }
 
 @end
