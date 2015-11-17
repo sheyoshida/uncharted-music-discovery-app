@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *cityStateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *yearsActiveLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bioLabel;
+@property (strong, nonatomic) IBOutlet UIButton *backButton;
 
 @end
 
@@ -34,10 +35,16 @@
     
     self.bioLabel.text = self.artist.artistBio;
     
-    
-    
-    // Do any additional setup after loading the view.
+    NSURL *artworkURL = [NSURL URLWithString:self.artist.artistImageURL];
+    NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
+    UIImage *artworkImage = [UIImage imageWithData:artworkData];
+    self.imageView.image = artworkImage;
 }
 
+- (IBAction)backButtonTapped:(id)sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    
+}
 
 @end

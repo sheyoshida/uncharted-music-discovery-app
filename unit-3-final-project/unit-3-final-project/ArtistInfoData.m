@@ -13,11 +13,28 @@
 - (instancetype) initWithJSON:(NSDictionary *)json {
     
     if (self = [super init]) {
+        
         // echonest api call
         NSArray *artistImages = [json objectForKey:@"images"];
-        self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"]; // many of the returned urls don't work :(
-    
+        // self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"]; // the userserv-ak.last.fm urls crash our detail view. So the nested if statements replace those instances with a very cute kitten!!! 
+        
+        if ([[artistImages firstObject] objectForKey:@"url"]) {
+            if ([[[artistImages firstObject] objectForKey:@"url"]containsString:@"http://userserve-ak.last.fm"]) {
+                NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
+                self.artistImageURL = artworkURL;
+            } else if ([[[artistImages firstObject] objectForKey:@"url"]containsString:@"http://upload.wikimedia.org"]) {
+                self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"];
+            }
+        } else { // this doesn't fill in the null images as expected (ie: David Coffee)
+            NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
+            self.artistImageURL = artworkURL;
+        }
+        
+        
         self.artistName = [json objectForKey:@"name"];
+        
+       // NSLog(@"%@: %@", self.artistName, self.artistImageURL);
+        NSLog(@"%@: %@", self.artistName, artistImages);
         
         // years active start date
         if ([[json objectForKey:@"years_active"]firstObject]) {
