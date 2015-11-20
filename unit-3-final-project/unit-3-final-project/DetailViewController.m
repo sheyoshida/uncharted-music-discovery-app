@@ -35,7 +35,17 @@
     
     self.bioLabel.text = self.artist.artistBio;
     
-    NSURL *artworkURL = [NSURL URLWithString:self.artist.artistImageURL];
+    NSString *urlString = [[NSString alloc] init];
+
+    
+    if (self.artist.echonestImages.count > 1) {
+        urlString = [self.artist.echonestImages objectAtIndex:1];
+    }
+    else {
+        urlString = [self.artist.echonestImages firstObject];
+    }
+    
+    NSURL *artworkURL = [NSURL URLWithString: urlString];
     NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
     UIImage *artworkImage = [UIImage imageWithData:artworkData];
     self.imageView.image = artworkImage;

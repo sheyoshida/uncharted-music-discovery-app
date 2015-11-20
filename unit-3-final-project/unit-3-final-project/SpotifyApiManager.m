@@ -70,14 +70,53 @@
         NSDictionary *albumResult = [[[responseObject objectForKey:@"albums"] objectForKey:@"items"] firstObject];
         artistObject.albumTitle = [albumResult objectForKey:@"name"];
         artistObject.albumID = [albumResult objectForKey: @"id"];
-        if ([[albumResult objectForKey: @"images"] count]>2) {
-            artistObject.albumArtURL = [[[albumResult objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
-        }
-        else{
-            artistObject.albumArtURL = [[[albumResult objectForKey: @"images"]firstObject] objectForKey:@"url"];
+        
+        NSArray *artistImages = [albumResult objectForKey:@"images"];
+        
+        if (artistImages) {
+            for (int i = 0; i<artistImages.count; i++) {
+                
+                if ([[artistImages objectAtIndex:i] objectForKey:@"url"]) {
+                    
+                    NSString *urlString = [[artistImages objectAtIndex:i] objectForKey:@"url"];
+                    NSURL *url = [[NSURL alloc] initWithString: urlString];
+                    
+                    
+                    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+                    
+                    NSURLSession *session = [NSURLSession sharedSession];
+                    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                                            completionHandler:
+                                                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                      if (error) {
+                                                          
+                                                          
+                                                      }
+                                                      else{
+                                                          [ artistObject.spotifyImages addObject:urlString];
+                                                      }
+                                                      
+                                                  }];
+                    
+                    [task resume];
+                    
+                    
+                }
+                
+            }
+            
         }
         
-        NSLog(@"album title: %@, album id: %@, album art: %@", artistObject.albumTitle, artistObject.albumID, artistObject.albumArtURL);
+        else { // this doesn't fill in the null images as expected (ie: David Coffee)
+            
+            NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
+            [artistObject.spotifyImages addObject:artworkURL];
+        }
+
+        
+        
+        
+//        NSLog(@"album title: %@, album id: %@, album art: %@", artistObject.albumTitle, artistObject.albumID, artistObject.albumArtURL);
         
         completion();
         

@@ -7,6 +7,7 @@
 //
 
 #import "artistInfoData.h"
+#import "AppDelegate.h"
 
 @implementation ArtistInfoData
 
@@ -14,27 +15,53 @@
     
     if (self = [super init]) {
         
+        self.echonestImages = [[NSMutableArray alloc]init];
+        self.spotifyImages = [[NSMutableArray alloc]init];
         // echonest api call
         NSArray *artistImages = [json objectForKey:@"images"];
-        // self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"]; // the userserv-ak.last.fm urls crash our detail view. So the nested if statements replace those instances with a very cute kitten!!! 
         
-        if ([[artistImages firstObject] objectForKey:@"url"]) {
-            if ([[[artistImages firstObject] objectForKey:@"url"]containsString:@"http://userserve-ak.last.fm"]) {
-                NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
-                self.artistImageURL = artworkURL;
-            } else if ([[[artistImages firstObject] objectForKey:@"url"]containsString:@"http://upload.wikimedia.org"]) {
-                self.artistImageURL = [[artistImages firstObject] objectForKey:@"url"];
+        if (artistImages) {
+            for (int i = 0; i<artistImages.count; i++) {
+                
+                if ([[artistImages objectAtIndex:i] objectForKey:@"url"]) {
+                    
+                    NSString *urlString = [[artistImages objectAtIndex:i] objectForKey:@"url"];
+                    NSURL *url = [[NSURL alloc] initWithString: urlString];
+                    
+                    
+                    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+                    
+                    NSURLSession *session = [NSURLSession sharedSession];
+                    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                                            completionHandler:
+                                                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                      if (error) {
+                                                          
+                                                          
+                                                      }
+                                                      else{
+                                                          [ self.echonestImages addObject:urlString];
+                                                      }
+                                                      
+                                                  }];
+                    
+                    [task resume];
+                    
+                    
+                }
+                
             }
-        } else { // this doesn't fill in the null images as expected (ie: David Coffee)
+            
+        }
+        
+        else { // this doesn't fill in the null images as expected (ie: David Coffee)
+            
             NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
-            self.artistImageURL = artworkURL;
+            [self.echonestImages addObject:artworkURL];
         }
         
         
         self.artistName = [json objectForKey:@"name"];
-        
-       // NSLog(@"%@: %@", self.artistName, self.artistImageURL);
-        //NSLog(@"%@: %@", self.artistName, artistImages);
         
         // years active start date
         if ([[json objectForKey:@"years_active"]firstObject]) {
@@ -71,30 +98,31 @@
         self.ratingFamiliarity = [json objectForKey:@"familiarity_rank"];
         self.ratingHotttnesss = [json objectForKey:@"hotttnesss_rank"];
         
-        // spotify api call #1
-        self.albumTitle = [json objectForKey:@"name"];
-        self.albumID = [json objectForKey: @"id"];
-        
-        if ([[json objectForKey: @"images"] count]>2) {
-            self.albumArtURL = [[[json objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
-        }
-        else{
-            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
-        }
-        
-       // NSLog(@"%@ song title: %@", self.artistName, self.songTitle );
-        
-        // spotify api call #2
-        self.songPreview = json[@"preview_url"];
-        self.songTitle = json[@"name"];
+        //        // spotify api call #1
+        //        self.albumTitle = [json objectForKey:@"name"];
+        //        self.albumID = [json objectForKey: @"id"];
+        //
+        //        if ([[json objectForKey: @"images"] count]>2) {
+        //            self.albumArtURL = [[[json objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
+        //        }
+        //        else{
+        //            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
+        //        }
+        //
+        //       // NSLog(@"%@ song title: %@", self.artistName, self.songTitle );
+        //
+        //        // spotify api call #2
+        //        self.songPreview = json[@"preview_url"];
+        //        self.songTitle = json[@"name"];
         
         return self;
-    
+        
     }
     
     return nil;
     
 }
+
 
 
 @end

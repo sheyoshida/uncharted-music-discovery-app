@@ -99,7 +99,16 @@ UITableViewDelegate
     cell.artistNameLabel.text = artist.artistName;
     cell.artistDetailLabel.text = artist.albumTitle; // need spotify api call #1 to use
     
-    NSURL *artworkURL = [NSURL URLWithString:artist.artistImageURL]; // need spotify api call #1 to use
+    NSString *urlString = [[NSString alloc] init];
+    
+    if (artist.spotifyImages.count > 1) {
+        urlString = [artist.spotifyImages objectAtIndex:1];
+    }
+    else {
+        urlString = [artist.spotifyImages firstObject];
+    }
+    
+    NSURL *artworkURL = [NSURL URLWithString: urlString]; // need spotify api call #1 to use
     NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
     UIImage *artworkImage = [UIImage imageWithData:artworkData];
     cell.artistImageView.image = artworkImage;

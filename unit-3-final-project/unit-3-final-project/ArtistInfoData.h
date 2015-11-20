@@ -17,6 +17,9 @@
 @property (nonatomic) NSString *artistHometown;
 @property (nonatomic) NSString *artistLocation; 
 @property (nonatomic) NSString *artistBio;
+@property (nonatomic) NSMutableArray *echonestImages;
+@property (nonatomic) NSMutableArray *spotifyImages;
+
 @property (nonatomic) NSString *artistImageURL;
 @property (nonatomic) NSString *artistGenre;
 
