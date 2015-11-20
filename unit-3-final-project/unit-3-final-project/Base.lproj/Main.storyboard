@@ -40,45 +40,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zkW-o5-R2X" userLabel="View Search Container">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="65"/>
-                                <subviews>
-                                    <searchBar contentMode="redraw" placeholder="Search " translatesAutoresizingMaskIntoConstraints="NO" id="eWg-Q6-UOy">
-                                        <rect key="frame" x="0.0" y="21" width="600" height="44"/>
-                                        <animations/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </searchBar>
-                                </subviews>
-                                <animations/>
-                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="eWg-Q6-UOy" secondAttribute="bottom" id="GWE-us-PQ8"/>
-                                    <constraint firstAttribute="height" constant="65" id="Uy8-28-WHN"/>
-                                    <constraint firstAttribute="trailing" secondItem="eWg-Q6-UOy" secondAttribute="trailing" id="liV-lH-xWW"/>
-                                    <constraint firstItem="eWg-Q6-UOy" firstAttribute="leading" secondItem="zkW-o5-R2X" secondAttribute="leading" id="v9l-DP-hv1"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cqn-xD-RHd" userLabel="View Segment Bar Container">
                                 <rect key="frame" x="0.0" y="395" width="600" height="35"/>
-                                <subviews>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bfx-mB-n2Z">
-                                        <rect key="frame" x="10" y="4" width="580" height="29"/>
-                                        <animations/>
-                                        <segments>
-                                            <segment title="Local"/>
-                                            <segment title="Rising"/>
-                                            <segment title="Hits"/>
-                                        </segments>
-                                    </segmentedControl>
-                                </subviews>
                                 <animations/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="bfx-mB-n2Z" firstAttribute="centerY" secondItem="Cqn-xD-RHd" secondAttribute="centerY" id="JUj-lA-LSF"/>
                                     <constraint firstAttribute="height" constant="35" id="Nw6-vR-xg6"/>
-                                    <constraint firstItem="bfx-mB-n2Z" firstAttribute="leading" secondItem="Cqn-xD-RHd" secondAttribute="leading" constant="10" id="Pcb-Kq-8S8"/>
-                                    <constraint firstAttribute="trailing" secondItem="bfx-mB-n2Z" secondAttribute="trailing" constant="10" id="Wcr-NS-7PE"/>
-                                    <constraint firstItem="bfx-mB-n2Z" firstAttribute="centerX" secondItem="Cqn-xD-RHd" secondAttribute="centerX" id="bzK-z3-ogC"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="u2H-14-S85"/>
                                 </constraints>
                                 <variation key="default">
@@ -146,6 +113,14 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zkW-o5-R2X" userLabel="View Search Container">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="65"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="65" id="Uy8-28-WHN"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -174,7 +149,6 @@
                     <navigationItem key="navigationItem" id="FLV-CB-htS"/>
                     <connections>
                         <outlet property="mapView" destination="77m-pW-K1k" id="KXH-cW-W1R"/>
-                        <outlet property="searchBar" destination="eWg-Q6-UOy" id="5sv-83-mju"/>
                         <outlet property="tableView" destination="NfD-Tg-fzA" id="jMw-HY-Lch"/>
                     </connections>
                 </viewController>

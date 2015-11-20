@@ -21,46 +21,25 @@
 @interface InitialViewController ()
 <
 MKMapViewDelegate,
-UISearchBarDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
 UITableViewDelegate
 >
 
+// for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
-@property(nonatomic) LocationInfoObject * currentCity;
-
-// for collection view
-
-@property (nonatomic) NSMutableArray *array;
-@property (nonatomic) NSArray *dataArray;
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (nonatomic) NSArray *collectionImages; // dummy images
 
 //for Table View Cell
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-
-
-
-// for maps
+// for maps + location services
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) InfoWindow * annotation;
-
-
+@property(nonatomic) LocationInfoObject * currentCity;
 @property (nonatomic) int foundCities;
 
 //for API search results
 @property (nonatomic) NSString *spotifyAlbumID;
-
-
-//search bar/colleciton view
-@property (nonatomic,strong) NSArray *dataSource;
-@property (nonatomic,strong) NSArray *dataSourceForSearchResult;
-@property (nonatomic) BOOL searchBarActive;
-
-@property (nonatomic,strong) UIRefreshControl   *refreshControl;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
 
@@ -74,13 +53,8 @@ UITableViewDelegate
     self.tableView.dataSource = self;
     self.modelData = [[NSMutableArray alloc]init];
     
-    
-    self.searchBar.delegate = self;
-    
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
-  
-
-    
+   
     //Location manager Stuff
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -93,7 +67,6 @@ UITableViewDelegate
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
     self.mapView.showsBuildings = YES;
-    
 }
 
 #pragma mark - TableView Stuff
@@ -123,26 +96,21 @@ UITableViewDelegate
 
 }
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     DetailViewController *vc = segue.destinationViewController;
 
-    
     vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-
-    
 }
 
 #pragma mark - CLLocationManagerDelegate
 
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    
     NSLog(@"didFailWithError: %@", error);
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-{
-    
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
     
     [self.locationManager stopUpdatingLocation];
     [self zoomIntoLocation:newLocation andZoom:100000];
@@ -151,8 +119,8 @@ UITableViewDelegate
 
 #pragma mark - Maps:
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
-{
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    
     userLocation.title = @"Music";
 }
 
@@ -162,11 +130,9 @@ UITableViewDelegate
     //zoom in
     MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate:location2D fromEyeCoordinate:location2D eyeAltitude:distance];
     [self.mapView setCamera:camera animated:YES];
-    
-    
 }
 
--(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
+- (void)getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
     
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
@@ -178,7 +144,6 @@ UITableViewDelegate
             }];
         }];
     }];
-    
 }
 
 - (void)setModel:(NSArray <LocationInfoObject *> *)cities {
@@ -188,15 +153,14 @@ UITableViewDelegate
     //[self.tableView reloadData];
 }
 
-- (void) showDataForCity: (LocationInfoObject *) city{
+- (void) showDataForCity: (LocationInfoObject *) city {
     
     self.currentCity = city;
     [self.tableView reloadData];
-    
 }
 
-
 - (void)dropPinsForCities:(NSArray*)cities {
+    
     for (LocationInfoObject *city in cities) {
         CLLocation *location = city.location;
         CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
@@ -206,11 +170,9 @@ UITableViewDelegate
         
         [self.mapView addAnnotation:pin];
     }
-    
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
-{
+- (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation {
     
     if ([annotation isKindOfClass:[MKUserLocation class]])
     {
@@ -238,71 +200,7 @@ UITableViewDelegate
         return annotationView;
     }
     return nil;
-    
 }
-
-
-
-#pragma mark - search bar
-//- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
-//    NSPredicate *resultPredicate    = [NSPredicate predicateWithFormat:@"self contains[c] %@", searchText];
-//    self.dataSourceForSearchResult  = [self.dataSource filteredArrayUsingPredicate:resultPredicate];
-//}
-//
-//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-//    // user did type something, check our datasource for text that looks the same
-//    if (searchText.length>0) {
-//        // search and reload data source
-//        self.searchBarActive = YES;
-//        [self filterContentForSearchText:searchText
-//                                   scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
-//                                          objectAtIndex:[self.searchDisplayController.searchBar
-//                                                         selectedScopeButtonIndex]]];
-//        [self.collectionView reloadData];
-//    }else{
-//        // if text lenght == 0
-//        // we will consider the searchbar is not active
-//        self.searchBarActive = NO;
-//    }
-//}
-//
-//- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-//    [self cancelSearching];
-//    [self.collectionView reloadData];
-//}
-//
-//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
-//    self.searchBarActive = YES;
-//    [self.view endEditing:YES];
-//}
-//- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
-//    // we used here to set self.searchBarActive = YES
-//    // but we'll not do that any more... it made problems
-//    // it's better to set self.searchBarActive = YES when user typed something
-//    [self.searchBar setShowsCancelButton:YES animated:YES];
-//}
-//- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar{
-//    // this method is being called when search btn in the keyboard tapped
-//    // we set searchBarActive = NO
-//    // but no need to reloadCollectionView
-//    self.searchBarActive = NO;
-//    [self.searchBar setShowsCancelButton:NO animated:YES];
-//
-//    [self artistInfo];
-//}
-//
-//-(void)cancelSearching{
-//    self.searchBarActive = NO;
-//    [self.searchBar resignFirstResponder];
-//    self.searchBar.text  = @"";
-//}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    
-    [self.view endEditing:YES];
-}
-
-
 
 #pragma mark - spotify api call #2
 
@@ -310,8 +208,6 @@ UITableViewDelegate
     
     // pass in album number - get song preview(url) + song name
     // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
-    
-    
     
     self.spotifyAlbumID = artistObject.albumID;
     
@@ -342,13 +238,12 @@ UITableViewDelegate
 }
 
 
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
-{
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    
     if(![view isKindOfClass:[MKUserLocation class]]){
     [self.annotation removeFromSuperview];
     CustomPin * pin = view.annotation;
     LocationInfoObject *obj = pin.city;
-
 
     self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
     self.annotation.cityStateLabel.backgroundColor = [UIColor whiteColor];
@@ -358,9 +253,6 @@ UITableViewDelegate
     self.currentCity = pin.city;
     [self.tableView reloadData];
     }
-
-    
-
     
 //    if(![view isKindOfClass:[MKUserLocation class]])
 //    {
@@ -392,12 +284,10 @@ UITableViewDelegate
 //        }
 
 //    }
-
-    
-    
     
 }
-//shake function
+
+# pragma mark - shake feature
 
 //- (BOOL)canBecomeFirstResponder
 //{
@@ -418,17 +308,5 @@ UITableViewDelegate
 //    
 //    [alertView show];
 //}
-
-
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end
