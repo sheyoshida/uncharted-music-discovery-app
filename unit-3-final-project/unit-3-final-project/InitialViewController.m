@@ -4,7 +4,6 @@
 //
 //  Created by Shena Yoshida on 11/8/15.
 //  Copyright © 2015 Shena Yoshida. All rights reserved.
-//
 
 #import "InitialViewController.h"
 #import "CustomPin.h"
@@ -16,7 +15,7 @@
 #import "EchonestAPIManager.h"
 #import "SpotifyApiManager.h"
 #import "DetailViewController.h"
-
+#import "HomeScreenTableViewCell.h" // custom cells!
 
 @interface InitialViewController ()
 <
@@ -29,7 +28,7 @@ UITableViewDelegate
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
 
-//for Table View Cell
+// for table view
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 // for maps + location services
@@ -38,7 +37,7 @@ UITableViewDelegate
 @property(nonatomic) LocationInfoObject * currentCity;
 @property (nonatomic) int foundCities;
 
-//for API search results
+// for API search results
 @property (nonatomic) NSString *spotifyAlbumID;
 
 @end
@@ -48,14 +47,23 @@ UITableViewDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.currentCity = [[LocationInfoObject alloc]init];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.modelData = [[NSMutableArray alloc]init];
     
+    self.currentCity = [[LocationInfoObject alloc]init];
+    self.modelData = [[NSMutableArray alloc]init];
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
    
-    //Location manager Stuff
+    // custom cell setup
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+    UINib *nib = [UINib nibWithNibName:@"HomeScreenTableViewCell" bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:@"HomeScreenTableViewCellIdentifier"];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 35.0;
+    // [self.tableView setTableFooterView:[UIView new]]; // hide extra lines in empty tableview cells
+    
+    // Location manager Stuff
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
@@ -71,29 +79,32 @@ UITableViewDelegate
 
 #pragma mark - TableView Stuff
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return [NSString stringWithFormat:@"%@, %@", self.currentCity.SubAdministrativeArea, self.currentCity.State];
 }
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     return self.currentCity.artists.count;
 }
 
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ArtistCell" forIndexPath:indexPath];
-    
+    HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
 
     ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-    cell.textLabel.text = artist.artistName;
-    cell.detailTextLabel.text = artist.albumTitle;
+    cell.artistNameLabel.text = artist.artistName;
+    cell.artistDetailLabel.text = artist.albumTitle; // need spotify api call #1 to use
+    
+    NSURL *artworkURL = [NSURL URLWithString:artist.artistImageURL]; // need spotify api call #1 to use
+    NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
+    UIImage *artworkImage = [UIImage imageWithData:artworkData];
+    cell.artistImageView.image = artworkImage;
+    
     return cell;
-
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -132,7 +143,7 @@ UITableViewDelegate
     [self.mapView setCamera:camera animated:YES];
 }
 
-- (void)getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
+- (void)getNearbyCitiesWithCoordinate: (CLLocation *) userLocation {
     
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
@@ -153,7 +164,7 @@ UITableViewDelegate
     //[self.tableView reloadData];
 }
 
-- (void) showDataForCity: (LocationInfoObject *) city {
+- (void)showDataForCity: (LocationInfoObject *) city {
     
     self.currentCity = city;
     [self.tableView reloadData];

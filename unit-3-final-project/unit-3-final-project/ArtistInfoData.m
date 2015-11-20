@@ -81,7 +81,7 @@
 //        else{
 //            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
 //        }
-//        
+        
 //        // spotify api call #2
 //        self.songPreview = json[@"preview_url"];
 //        self.songTitle = json[@"name"];

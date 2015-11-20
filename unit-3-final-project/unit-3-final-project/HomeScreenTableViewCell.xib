@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HomeScreenTableViewCellIdentifier" rowHeight="132" id="KGk-i7-Jjw" customClass="HomeScreenTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="368" height="132"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="368" height="131.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pY-Op-Kzy">
+                        <rect key="frame" x="10" y="10" width="348" height="111.5"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="O3T-vN-MI9">
+                                <rect key="frame" x="10" y="5" width="101.5" height="101.5"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="O3T-vN-MI9" secondAttribute="height" multiplier="1:1" id="5F3-UD-deo"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
+                                <rect key="frame" x="121" y="10" width="216.5" height="21.5"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0FW-9c-856">
+                                <rect key="frame" x="121" y="36" width="217" height="20"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
+                                <rect key="frame" x="287" y="51.5" width="50" height="50"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="1J0-DQ-Ava"/>
+                                    <constraint firstAttribute="height" constant="50" id="lvF-he-GiU"/>
+                                </constraints>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="10" id="3x0-RM-hMD"/>
+                            <constraint firstItem="O3T-vN-MI9" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="5" id="4px-id-Hx5"/>
+                            <constraint firstAttribute="bottom" secondItem="Cm1-0Z-A8R" secondAttribute="bottom" constant="10" id="64Z-rB-LAx"/>
+                            <constraint firstAttribute="trailing" secondItem="Cm1-0Z-A8R" secondAttribute="trailing" constant="11" id="9QN-t6-yuX"/>
+                            <constraint firstAttribute="trailing" secondItem="0FW-9c-856" secondAttribute="trailing" constant="10" id="I0F-FN-642"/>
+                            <constraint firstItem="O3T-vN-MI9" firstAttribute="leading" secondItem="6pY-Op-Kzy" secondAttribute="leading" constant="10" id="LE0-4l-4KT"/>
+                            <constraint firstAttribute="bottom" secondItem="O3T-vN-MI9" secondAttribute="bottom" constant="5" id="SAK-1a-R95"/>
+                            <constraint firstItem="0FW-9c-856" firstAttribute="top" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="5" id="Zy4-pl-fDR"/>
+                            <constraint firstAttribute="trailing" secondItem="kfC-3E-VvA" secondAttribute="trailing" constant="10" id="ghf-sl-yEv"/>
+                            <constraint firstItem="kfC-3E-VvA" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="q7N-Eb-fdf"/>
+                            <constraint firstItem="0FW-9c-856" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="sif-SB-poT"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstItem="6pY-Op-Kzy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="J83-5y-ibM"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="6pY-Op-Kzy" secondAttribute="bottom" constant="2" id="VIp-MY-Bwt"/>
+                    <constraint firstItem="6pY-Op-Kzy" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="aEM-yA-y4Y"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="6pY-Op-Kzy" secondAttribute="trailing" constant="2" id="bSo-dd-CV3"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="artistContainerView" destination="6pY-Op-Kzy" id="oWA-Qy-wQW"/>
+                <outlet property="artistDetailLabel" destination="0FW-9c-856" id="2qv-kS-3aZ"/>
+                <outlet property="artistImageView" destination="O3T-vN-MI9" id="ZAu-0Y-brx"/>
+                <outlet property="artistNameLabel" destination="kfC-3E-VvA" id="VTs-yq-gPj"/>
+                <outlet property="buttonFavorite" destination="Cm1-0Z-A8R" id="bce-ya-WJn"/>
+            </connections>
+            <point key="canvasLocation" x="825" y="541"/>
+        </tableViewCell>
+    </objects>
+</document>
