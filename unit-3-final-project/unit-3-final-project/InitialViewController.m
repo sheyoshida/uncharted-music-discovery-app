@@ -107,11 +107,17 @@ UITableViewDelegate
     return cell;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    DetailViewController *vc = segue.destinationViewController;
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
+    DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
+    
     vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:vc animated:YES];
+
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
 }
 
 #pragma mark - CLLocationManagerDelegate
@@ -147,9 +153,9 @@ UITableViewDelegate
     
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
-        [self dropPinsForCities:cities];
         [EchonestAPIManager getArtistInfoForCities:cities completion:^{
             [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
+                [self dropPinsForCities:cities];
                 [self setModel:cities];
                 [self showDataForCity:[cities firstObject]];
             }];
@@ -173,13 +179,20 @@ UITableViewDelegate
 - (void)dropPinsForCities:(NSArray*)cities {
     
     for (LocationInfoObject *city in cities) {
-        CLLocation *location = city.location;
-        CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
-        CustomPin *pin = [CustomPin alloc];
-        pin.city = city;
-        pin.coordinate = location2D;
+        if (city.artists.count == 0) {
+            NSLog(@"%@, %@", city.SubAdministrativeArea, city.State);
+        }
+        else{
+            CLLocation *location = city.location;
+            CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+            CustomPin *pin = [CustomPin alloc];
+            pin.city = city;
+            pin.coordinate = location2D;
+            
+            [self.mapView addAnnotation:pin];
         
-        [self.mapView addAnnotation:pin];
+        }
+        
     }
 }
 

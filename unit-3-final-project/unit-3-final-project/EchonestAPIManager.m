@@ -18,6 +18,7 @@
     __block int received = 0;
     for (LocationInfoObject *city in cities) {
         [self getAristInfoForCity:city completion:^(NSArray *artists) {
+            
             city.artists = artists;
             received++;
             

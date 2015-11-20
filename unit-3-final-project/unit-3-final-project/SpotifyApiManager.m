@@ -17,10 +17,12 @@
 
 + (void)getAlbumInfoForCities:(NSArray *)cities completion:(void (^)())completion {
     __block int recievedCities = 0;
-
+    
     for (LocationInfoObject* city in cities) {
+
         [self getAlbumInfoForCity:city completion:^{
             recievedCities++;
+
             if (recievedCities == cities.count) {
                 completion();
             }
@@ -35,17 +37,22 @@
 + (void)getAlbumInfoForCity:(LocationInfoObject*)city completion:(void(^)())completion {
     __block int receivedArtists = 0;
     
-    for (ArtistInfoData* artist in city.artists) {
-        
-        [self passArtistNameToSpotifyWithArtistObject:artist completion:^{
+    if (city.artists.count == 0) {
+        completion();
+    }
+    
+    else{
+        for (ArtistInfoData* artist in city.artists) {
             
-            receivedArtists++;
-            
-            if (receivedArtists == city.artists.count) {
+            [self passArtistNameToSpotifyWithArtistObject:artist completion:^{
                 
-                completion();
-            }
-        }];
+                receivedArtists++;
+                
+                if (receivedArtists == city.artists.count) {
+                    completion();
+                }
+            }];
+        }
     }
 }
 
