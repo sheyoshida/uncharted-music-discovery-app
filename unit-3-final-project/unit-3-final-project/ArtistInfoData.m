@@ -71,20 +71,22 @@
         self.ratingFamiliarity = [json objectForKey:@"familiarity_rank"];
         self.ratingHotttnesss = [json objectForKey:@"hotttnesss_rank"];
         
-//        // spotify api call #1
-//        self.albumTitle = [json objectForKey:@"name"];
-//        self.albumID = [json objectForKey: @"id"];
-//        
-//        if ([[json objectForKey: @"images"] count]>2) {
-//            self.albumArtURL = [[[json objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
-//        }
-//        else{
-//            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
-//        }
+        // spotify api call #1
+        self.albumTitle = [json objectForKey:@"name"];
+        self.albumID = [json objectForKey: @"id"];
         
-//        // spotify api call #2
-//        self.songPreview = json[@"preview_url"];
-//        self.songTitle = json[@"name"];
+        if ([[json objectForKey: @"images"] count]>2) {
+            self.albumArtURL = [[[json objectForKey: @"images"]objectAtIndex:1] objectForKey:@"url"];
+        }
+        else{
+            self.albumArtURL = [[[json objectForKey: @"images"]firstObject] objectForKey:@"url"];
+        }
+        
+       // NSLog(@"%@ song title: %@", self.artistName, self.songTitle );
+        
+        // spotify api call #2
+        self.songPreview = json[@"preview_url"];
+        self.songTitle = json[@"name"];
         
         return self;
     
