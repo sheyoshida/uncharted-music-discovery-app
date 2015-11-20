@@ -77,7 +77,7 @@
             artistObject.albumArtURL = [[[albumResult objectForKey: @"images"]firstObject] objectForKey:@"url"];
         }
         
-        NSLog(@"album title: %@, album id: %@, album art: %@", artistObject.albumTitle, artistObject.albumID, artistObject.albumArtURL);
+       // NSLog(@"album title: %@, album id: %@, album art: %@", artistObject.albumTitle, artistObject.albumID, artistObject.albumArtURL);
         
         completion();
         
