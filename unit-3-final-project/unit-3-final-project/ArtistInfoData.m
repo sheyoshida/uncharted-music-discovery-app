@@ -34,7 +34,7 @@
         self.artistName = [json objectForKey:@"name"];
         
        // NSLog(@"%@: %@", self.artistName, self.artistImageURL);
-        NSLog(@"%@: %@", self.artistName, artistImages);
+        //NSLog(@"%@: %@", self.artistName, artistImages);
         
         // years active start date
         if ([[json objectForKey:@"years_active"]firstObject]) {

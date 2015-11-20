@@ -23,14 +23,15 @@
 MKMapViewDelegate,
 UISearchBarDelegate,
 CLLocationManagerDelegate,
-UICollectionViewDelegate,
-UICollectionViewDataSource,
 UITableViewDataSource,
 UITableViewDelegate
 >
 
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
+@property(nonatomic) LocationInfoObject * currentCity;
+
 // for collection view
+
 @property (nonatomic) NSMutableArray *array;
 @property (nonatomic) NSArray *dataArray;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -44,12 +45,12 @@ UITableViewDelegate
 
 // for maps
 @property (nonatomic) CLLocationManager *locationManager;
-@property (nonatomic) BOOL pinSelected;
 @property (nonatomic) InfoWindow * annotation;
+
+
 @property (nonatomic) int foundCities;
 
 //for API search results
-@property (nonatomic) NSMutableArray *searchResults;
 @property (nonatomic) NSString *spotifyAlbumID;
 
 
@@ -68,48 +69,45 @@ UITableViewDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.currentCity = [[LocationInfoObject alloc]init];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.modelData = [[NSMutableArray alloc]init];
-    self.pinSelected = NO;
-    self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
-    self.searchResults = [[NSMutableArray alloc] init]; // to store api data
-    
-    self.locationManager = [[CLLocationManager alloc] init];
     
     self.searchBar.delegate = self;
-    self.locationManager.delegate = self;
     
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
+    self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
+  
 
-
-    [self setupCollectionView];
     
     //Location manager Stuff
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
     }
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 500;
     [self.locationManager startUpdatingLocation];
+    self.mapView.delegate = self;
+    self.mapView.showsUserLocation = YES;
+    self.mapView.showsBuildings = YES;
     
 }
 
 #pragma mark - TableView Stuff
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    LocationInfoObject * location = [self.modelData objectAtIndex:section];
-    return [NSString stringWithFormat:@"%@, %@", location.SubAdministrativeArea, location.State];
+    return [NSString stringWithFormat:@"%@, %@", self.currentCity.SubAdministrativeArea, self.currentCity.State];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.modelData.count;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 
-    return [[[self.modelData objectAtIndex: section] artists] count];
+    return self.currentCity.artists.count;
 }
 
 
@@ -117,8 +115,8 @@ UITableViewDelegate
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ArtistCell" forIndexPath:indexPath];
     
-    LocationInfoObject *location = [self.modelData objectAtIndex:indexPath.section];
-    ArtistInfoData *artist = [location.artists objectAtIndex:indexPath.row];
+
+    ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
     cell.textLabel.text = artist.artistName;
     cell.detailTextLabel.text = artist.albumTitle;
     return cell;
@@ -128,10 +126,9 @@ UITableViewDelegate
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     DetailViewController *vc = segue.destinationViewController;
+
     
-    LocationInfoObject * location = [self.modelData objectAtIndex:indexPath.section];
-    
-    vc.artist = [location.artists objectAtIndex:indexPath.row];
+    vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
 
     
 }
@@ -146,8 +143,10 @@ UITableViewDelegate
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     
-    [self setUpMapViewAndPin:newLocation];
+    
     [self.locationManager stopUpdatingLocation];
+    [self zoomIntoLocation:newLocation andZoom:100000];
+    [self getNearbyCitiesWithCoordinate:newLocation];
 }
 
 #pragma mark - Maps:
@@ -157,55 +156,57 @@ UITableViewDelegate
     userLocation.title = @"Music";
 }
 
-- (void)setUpMapViewAndPin:(CLLocation *)location {
+- (void)zoomIntoLocation:(CLLocation *)location andZoom:(CLLocationDistance) distance {
     
     CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
-    
-    self.mapView.delegate = self;
-    self.mapView.showsUserLocation = YES;
-    self.mapView.showsBuildings = YES;
-    
-    
-    
     //zoom in
-    MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate:location2D fromEyeCoordinate:location2D eyeAltitude:10000];
+    MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate:location2D fromEyeCoordinate:location2D eyeAltitude:distance];
     [self.mapView setCamera:camera animated:YES];
-    [self getNearbyCitiesWithCoordinate:location];
     
-    //add Pin
-    [self pinWithCoordinate:location];
     
 }
 
 -(void) getNearbyCitiesWithCoordinate: (CLLocation *) userLocation{
     
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
+        
+        [self dropPinsForCities:cities];
         [EchonestAPIManager getArtistInfoForCities:cities completion:^{
             [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
-                [self setModelAndReloadCollectionView:cities];
+                [self setModel:cities];
+                [self showDataForCity:[cities firstObject]];
             }];
         }];
     }];
     
 }
 
-- (void)setModelAndReloadCollectionView:(NSArray <LocationInfoObject *> *)cities {
+- (void)setModel:(NSArray <LocationInfoObject *> *)cities {
     [self.modelData removeAllObjects];
     self.modelData = [cities mutableCopy];
     
+    //[self.tableView reloadData];
+}
+
+- (void) showDataForCity: (LocationInfoObject *) city{
+    
+    self.currentCity = city;
     [self.tableView reloadData];
     
-    //NSLog(@"%@", self.modelData[0].artists[0].albumArtURL);
 }
 
 
-
-- (void)pinWithCoordinate:(CLLocation*)location {
-    CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
-    CustomPin *pin = [CustomPin alloc];
-    pin.coordinate = location2D;
+- (void)dropPinsForCities:(NSArray*)cities {
+    for (LocationInfoObject *city in cities) {
+        CLLocation *location = city.location;
+        CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+        CustomPin *pin = [CustomPin alloc];
+        pin.city = city;
+        pin.coordinate = location2D;
+        
+        [self.mapView addAnnotation:pin];
+    }
     
-    [self.mapView addAnnotation:pin];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation
@@ -340,125 +341,61 @@ UITableViewDelegate
     }
 }
 
-#pragma mark - collection view methods:
-
-- (void)setupCollectionView {
-    
-    // dummy data for collection view:
-    //self.array = [[NSMutableArray alloc] initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
-    
-    // collection view dummy info:
-    self.collectionImages = [NSArray arrayWithObjects:@"destroyer.png", @"drake.png", @"talking_heads.png", @"sleater_kinney.png", @"run_the_jewels.png", nil];
-    
-    // for carousel
-    // grab references to first and last items
-    id firstItem = [self.collectionImages firstObject];
-    id secondItem = [self.collectionImages objectAtIndex:1];
-    id thirdItem = [self.collectionImages objectAtIndex:2];
-    
-    id nextToNextToLastItem = [self.collectionImages objectAtIndex: [self.collectionImages count] - 3];
-    id nextToLastItem = [self.collectionImages objectAtIndex: [self.collectionImages count] - 2];
-    id lastItem = [self.collectionImages lastObject];
-    
-    NSMutableArray *workingArray = [self.collectionImages mutableCopy];
-    
-    // add the copy of the last item to the beginning
-    [workingArray insertObject:lastItem atIndex:0];
-    [workingArray insertObject:nextToLastItem atIndex:0];
-    [workingArray insertObject:nextToNextToLastItem atIndex:0];
-    
-    // add the copy of the first item to the end
-    [workingArray addObject:firstItem];
-    [workingArray addObject:secondItem];
-    [workingArray addObject:thirdItem];
-    //[workingArray insertObject:firstItem atIndex:self.array.count];
-    
-    // update the collection view's data source property
-    self.collectionImages = [NSArray arrayWithArray:workingArray];
-    
-    // make cells stick in view
-    [self.collectionView setPagingEnabled:YES];
-}
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.collectionImages.count;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *identifier = @"Cell"; // set collection view cell identifier name
-    
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    
-
-    cell.layer.shouldRasterize = YES;
-    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    
-    UIImageView *collectionImageView = (UIImageView *)[cell viewWithTag:100];
-    collectionImageView.image = [UIImage imageNamed:[self.collectionImages objectAtIndex:indexPath.row]];
-
-    
-    // round corners
-    cell.layer.borderWidth = 1.0;
-    cell.layer.borderColor = [UIColor whiteColor].CGColor;
-    cell.layer.cornerRadius = 10.0;
-    
-    return cell;
-}
-    
-- (void)viewWillAppear:(BOOL)animated {
-    [self.view layoutIfNeeded];
-    
-    NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:3 inSection:0];
-    
-    [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-}
-
-#pragma mark - collection view's infinite scrolling:
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
-    if (scrollView.contentOffset.x + scrollView.frame.size.width >= scrollView.contentSize.width - 15) {
-        
-        // user is scrolling to the right from the last item to the 'fake' item 1.
-        // reposition offset to show the 'real' item 1 at the left-hand end of the collection view
-        
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:3 inSection:0];
-        
-        [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-        
-    } else if (scrollView.contentOffset.x == 0) {
-        
-        // user is scrolling to the left from the first item to the fake item
-        // reposition offset to show the "real" item at the right end of the collection
-        
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:([self.collectionImages count] - 6) inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-        
-    }
-}
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
-    if (!self.pinSelected) {
-        
-        [mapView deselectAnnotation:view.annotation animated:YES];
-        LocationInfoObject *obj = [self.modelData firstObject];
-        self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
-        [self.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 100, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
-        [view addSubview:self.annotation];
-        self.pinSelected = YES;
-        
+    if(![view isKindOfClass:[MKUserLocation class]]){
+    [self.annotation removeFromSuperview];
+    CustomPin * pin = view.annotation;
+    LocationInfoObject *obj = pin.city;
+
+
+    self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
+    self.annotation.cityStateLabel.backgroundColor = [UIColor whiteColor];
+    [self.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 150, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
+    [view addSubview:self.annotation];
+        [self zoomIntoLocation:pin.city.location andZoom:100000];
+    self.currentCity = pin.city;
+    [self.tableView reloadData];
     }
-    else{
-        [self.annotation removeFromSuperview];
-        self.pinSelected = NO;
-        
-    }
+
+    
+
+    
+//    if(![view isKindOfClass:[MKUserLocation class]])
+//    {
+//        CustomPin *selectedPin = view.annotation;
+//        selectedPin.selected = YES;
+//        
+//        //    [mapView deselectAnnotation:view.annotation animated:YES];
+//        
+//        for (CustomPin *currentPin in [mapView annotations]) {
+//            
+//            if (currentPin.selected) {
+//                NSLog(@"%@", currentPin);
+////                LocationInfoObject *obj = pin.city;
+////                
+////                
+////                pin.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
+////                pin.annotation.cityStateLabel.backgroundColor = [UIColor whiteColor];
+////                [pin.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 150, pin.annotation.bounds.size.width, pin.annotation.bounds.size.height)];
+////                [view addSubview:pin.annotation];
+////                
+////                self.currentCity = pin.city;
+////                [self.tableView reloadData];
+//            }
+//            else{
+//                CustomPin *pin = view.annotation;
+//                [pin.annotation removeFromSuperview];
+//                
+//            }
+//        }
+
+//    }
+
+    
+    
+    
 }
 //shake function
 

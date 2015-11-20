@@ -6,7 +6,7 @@
 //  Copyright © 2015 Shena Yoshida. All rights reserved.
 //
 
-#define FIVE_MILES 16093.4
+#define FIVE_MILES 160093.4
 
 #import "NearbyLocationProcessor.h"
 
@@ -14,7 +14,8 @@
 
 + (void)findCitiesNearLocation:(CLLocation *)location
                     completion:(void(^)(NSArray <LocationInfoObject *> *cities))completion {
-//    self.foundCities = 0;
+    
+    
     double latitude = location.coordinate.latitude;
     double latitudeMin = latitude - 0.2;
     double latMax = latitude + 0.2;
@@ -26,6 +27,7 @@
     BOOL doneLocations = NO;
     
     NSMutableArray *locations = [[NSMutableArray alloc] init];
+    [locations addObject:location];
     
     while(!doneLocations) {
         
@@ -92,6 +94,7 @@
                            CLPlacemark *place = [placemarks firstObject];
 
                            LocationInfoObject * locObject = [[LocationInfoObject alloc] init];
+                           locObject.location = location;
                                locObject.State =[place.addressDictionary objectForKey:@"State"];
                                locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
                                locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];

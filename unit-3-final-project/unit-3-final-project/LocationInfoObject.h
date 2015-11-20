@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "ArtistInfoData.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface LocationInfoObject : NSObject
+    @property (nonatomic) CLLocation * location;
     @property (nonatomic) NSString * SubAdministrativeArea ;
     @property (nonatomic) NSString * State;
     @property (nonatomic) NSString * Sublocality;

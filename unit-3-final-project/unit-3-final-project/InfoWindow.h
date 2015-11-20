@@ -11,4 +11,5 @@
 @interface InfoWindow : UIView
 @property (weak, nonatomic) IBOutlet UILabel *cityStateLabel;
 
+
 @end
