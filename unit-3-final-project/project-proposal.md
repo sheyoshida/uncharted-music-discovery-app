@@ -3,6 +3,10 @@
 **Project Name: Face The Music**  
 **Team Members: Zoufishan Mehdi, Artur Lan, Shena Yoshida, Henna Ahmed**  
 
+## Project Description 
+
+Uncharted helps you discover new music by region. Create a personalized roadtrip playlist, sample new songs, and save them to your Spotify playlist. 
+
 ## The Problem 
 
 It is challenging and time-consuming to discover regional and emerging art as the media widely supports a homogenous cultural experience (ie: syndicated top 40 radio is played everywhere). This uniform experience reduces cultural awareness, curiosity and diversity. 
