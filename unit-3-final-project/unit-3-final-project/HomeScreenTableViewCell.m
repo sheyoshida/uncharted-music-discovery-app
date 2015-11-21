@@ -15,8 +15,8 @@
    
     // slightly round borders
     self.artistImageView.clipsToBounds = YES;
-    self.artistImageView.layer.cornerRadius = 2.0;
-    self.artistContainerView.layer.cornerRadius = 2.0;
+    self.artistImageView.layer.cornerRadius = 3.0;
+    self.artistContainerView.layer.cornerRadius = 3.0;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -27,28 +27,28 @@
    
     [super setHighlighted:highlighted animated:animated];
     
-    // animate cells when tapped
-    if (self.highlighted) {
-        POPBasicAnimation *scaleAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPViewScaleXY];
-        scaleAnimation.duration = 0.1;
-        scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
-        [self.artistContainerView pop_addAnimation:scaleAnimation forKey:nil];
-        [self.artistImageView pop_addAnimation:scaleAnimation forKey:nil];
-        [self.artistNameLabel pop_addAnimation:scaleAnimation forKey:nil];
-        [self.artistDetailLabel pop_addAnimation:scaleAnimation forKey:nil];
-        [self.buttonFavorite pop_addAnimation:scaleAnimation forKey:nil];
-        
-    } else {
-        POPSpringAnimation *sprintAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
-        sprintAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(0.9, 0.9)];
-        sprintAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(2, 2)];
-        sprintAnimation.springBounciness = 20.f;
-        [self.artistContainerView pop_addAnimation:sprintAnimation forKey:nil];
-        [self.artistImageView pop_addAnimation:sprintAnimation forKey:nil];
-        [self.artistNameLabel pop_addAnimation:sprintAnimation forKey:nil];
-        [self.artistDetailLabel pop_addAnimation:sprintAnimation forKey:nil];
-        [self.buttonFavorite pop_addAnimation:sprintAnimation forKey:nil];
-    }
+//    // animate cells when tapped
+//    if (self.highlighted) {
+//        POPBasicAnimation *scaleAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+//        scaleAnimation.duration = 0.1;
+//        scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+//        [self.artistContainerView pop_addAnimation:scaleAnimation forKey:nil];
+//        [self.artistImageView pop_addAnimation:scaleAnimation forKey:nil];
+//        [self.artistNameLabel pop_addAnimation:scaleAnimation forKey:nil];
+//        [self.artistDetailLabel pop_addAnimation:scaleAnimation forKey:nil];
+//        [self.buttonFavorite pop_addAnimation:scaleAnimation forKey:nil];
+//        
+//    } else {
+//        POPSpringAnimation *sprintAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+//        sprintAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(0.9, 0.9)];
+//        sprintAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(2, 2)];
+//        sprintAnimation.springBounciness = 20.f;
+//        [self.artistContainerView pop_addAnimation:sprintAnimation forKey:nil];
+//        [self.artistImageView pop_addAnimation:sprintAnimation forKey:nil];
+//        [self.artistNameLabel pop_addAnimation:sprintAnimation forKey:nil];
+//        [self.artistDetailLabel pop_addAnimation:sprintAnimation forKey:nil];
+//        [self.buttonFavorite pop_addAnimation:sprintAnimation forKey:nil];
+//    }
 }
 
 @end

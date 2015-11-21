@@ -115,9 +115,6 @@
 
         
         
-        
-//        NSLog(@"album title: %@, album id: %@, album art: %@", artistObject.albumTitle, artistObject.albumID, artistObject.albumArtURL);
-        
         completion();
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
