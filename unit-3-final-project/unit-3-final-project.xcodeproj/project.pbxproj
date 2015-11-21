@@ -27,6 +27,7 @@
 		F03138151BF8F19400785A44 /* EchonestAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F03138141BF8F19400785A44 /* EchonestAPIManager.m */; };
 		F03138181BF8F9BD00785A44 /* SpotifyApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */; };
 		F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */; };
+		F0C6D78E1C00CF6D00859CD8 /* RoadTripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,8 @@
 		F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotifyApiManager.m; sourceTree = "<group>"; };
 		F0610A941BF7AA7B0011BE01 /* LocationInfoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationInfoObject.h; sourceTree = "<group>"; };
 		F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationInfoObject.m; sourceTree = "<group>"; };
+		F0C6D78C1C00CF6D00859CD8 /* RoadTripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoadTripViewController.h; sourceTree = "<group>"; };
+		F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoadTripViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +139,8 @@
 				F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */,
 				0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */,
 				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
+				F0C6D78C1C00CF6D00859CD8 /* RoadTripViewController.h */,
+				F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */,
 				4DBA58EA1BEFF1BD00668D63 /* Assets.xcassets */,
 				4DBA58EC1BEFF1BD00668D63 /* LaunchScreen.storyboard */,
 				4DBA58EF1BEFF1BD00668D63 /* Info.plist */,
@@ -294,6 +299,7 @@
 				F03138181BF8F9BD00785A44 /* SpotifyApiManager.m in Sources */,
 				0B4779B91BF7CA8100D23273 /* InfoWindow.m in Sources */,
 				4DB852A51BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m in Sources */,
+				F0C6D78E1C00CF6D00859CD8 /* RoadTripViewController.m in Sources */,
 				4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */,
 				5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */,
 				0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */,

@@ -36,7 +36,7 @@ UITableViewDelegate
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) InfoWindow * annotation;
 @property(nonatomic) LocationInfoObject * currentCity;
-@property (nonatomic) int foundCities;
+
 
 
 
@@ -54,9 +54,7 @@ UITableViewDelegate
     [gesture1 setDelegate:self];
     [gesture1 setMinimumPressDuration:1];
     [self.tableView addGestureRecognizer: gesture1];
-    
 
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
 
     
     self.currentCity = [[LocationInfoObject alloc]init];
@@ -66,13 +64,11 @@ UITableViewDelegate
     // custom cell setup
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
     UINib *nib = [UINib nibWithNibName:@"HomeScreenTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:@"HomeScreenTableViewCellIdentifier"];
-    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 40.0;
-    // [self.tableView setTableFooterView:[UIView new]]; // hide extra lines in empty tableview cells
+
     
     // Location manager Stuff
     self.locationManager = [[CLLocationManager alloc] init];
@@ -97,7 +93,7 @@ UITableViewDelegate
     ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
     NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
 
-
+    NSLog(@"%@", artist.songPreview);
     
 }
 
@@ -141,6 +137,8 @@ UITableViewDelegate
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    NSLog(@"pressed");
 
     DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
     
@@ -269,7 +267,6 @@ UITableViewDelegate
     LocationInfoObject *obj = pin.city;
 
     self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
-    self.annotation.cityStateLabel.backgroundColor = [UIColor whiteColor];
     [self.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 150, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
     [view addSubview:self.annotation];
         [self zoomIntoLocation:pin.city.location andZoom:100000];
