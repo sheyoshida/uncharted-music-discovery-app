@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
 
 @interface InfoWindow : UIView
 @property (weak, nonatomic) IBOutlet UILabel *cityStateLabel;
 
+@property (weak, nonatomic) IBOutlet UIView *viewDetail;
 
 @end

@@ -250,7 +250,7 @@ UITableViewDelegate
         }
         annotationView.centerOffset = CGPointMake(0, -18.0);
         annotationView.canShowCallout = NO;
-        annotationView.image = [UIImage imageNamed:@"Pin.png"];
+        annotationView.image = [UIImage imageNamed:@"PinBlue.png"];
         
         return annotationView;
     }
@@ -262,17 +262,21 @@ UITableViewDelegate
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
     if(![view isKindOfClass:[MKUserLocation class]]){
-    [self.annotation removeFromSuperview];
-    CustomPin * pin = view.annotation;
-    LocationInfoObject *obj = pin.city;
+        [self.annotation removeFromSuperview];
+        CustomPin * pin = view.annotation;
+        LocationInfoObject *obj = pin.city;
+        
+        self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
+        [self.annotation setFrame:CGRectMake(view.bounds.origin.x - self.annotation.bounds.size.width/2, view.bounds.origin.y, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
+        [view addSubview:self.annotation];
+        [self zoomIntoLocation:pin.city.location andZoom:70000];
+        self.currentCity = pin.city;
+        self.annotation.viewDetail.layer.cornerRadius = 10;
 
-    self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
-    [self.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 150, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
-    [view addSubview:self.annotation];
-        [self zoomIntoLocation:pin.city.location andZoom:100000];
-    self.currentCity = pin.city;
-    [self.tableView reloadData];
+        [self.tableView reloadData];
     }
+    
+    NSLog(@"pin selected");
     
 //    if(![view isKindOfClass:[MKUserLocation class]])
 //    {
