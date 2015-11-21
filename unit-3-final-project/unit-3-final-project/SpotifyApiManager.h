@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class LocationInfoObject;
+@class ArtistInfoData;
 
 @interface SpotifyApiManager : NSObject
 
@@ -15,6 +16,8 @@
 
 + (void)getAlbumInfoForCities:(NSArray *)cities
                    completion:(void(^)())completion;
++ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject;
+
 
 
 @end

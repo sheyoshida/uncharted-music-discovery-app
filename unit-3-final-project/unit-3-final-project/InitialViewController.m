@@ -16,15 +16,16 @@
 #import "SpotifyApiManager.h"
 #import "DetailViewController.h"
 #import "HomeScreenTableViewCell.h" // custom cells!
+@import AVFoundation;
 
 @interface InitialViewController ()
 <
+UIGestureRecognizerDelegate,
 MKMapViewDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
 UITableViewDelegate
 >
-
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
 
@@ -37,8 +38,8 @@ UITableViewDelegate
 @property(nonatomic) LocationInfoObject * currentCity;
 @property (nonatomic) int foundCities;
 
-// for API search results
-@property (nonatomic) NSString *spotifyAlbumID;
+
+
 
 @end
 
@@ -47,6 +48,16 @@ UITableViewDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    //long touch
+    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
+    [gesture1 setDelegate:self];
+    [gesture1 setMinimumPressDuration:1];
+    [self.tableView addGestureRecognizer: gesture1];
+    
+
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+
     
     self.currentCity = [[LocationInfoObject alloc]init];
     self.modelData = [[NSMutableArray alloc]init];
@@ -75,6 +86,19 @@ UITableViewDelegate
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
     self.mapView.showsBuildings = YES;
+}
+
+#pragma mark - longPress Stuff
+-(void)celllongpressed:(UIGestureRecognizer *)longPress
+{
+    
+    CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
+    ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+    NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+
+
+    
 }
 
 #pragma mark - TableView Stuff
@@ -235,40 +259,6 @@ UITableViewDelegate
     return nil;
 }
 
-#pragma mark - spotify api call #2
-
-- (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject {
-    
-    // pass in album number - get song preview(url) + song name
-    // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
-    
-    self.spotifyAlbumID = artistObject.albumID;
-    
-    if (self.spotifyAlbumID != nil) {
-        
-        NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", self.spotifyAlbumID];
-        
-        NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        
-        AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
-        
-        [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-            
-            NSArray *resultsSpotifySecondCall = responseObject[@"items"];
-            
-            for (NSDictionary *result in resultsSpotifySecondCall) {
-                
-                artistObject.songPreview = [result objectForKey:@"preview_url"];
-                artistObject.songTitle = [result objectForKey:@"name"];
-                
-            }
-            
-        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-            NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
-        }];
-        
-    }
-}
 
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {

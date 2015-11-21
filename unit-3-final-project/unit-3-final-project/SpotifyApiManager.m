@@ -112,6 +112,10 @@
             NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
             [artistObject.spotifyImages addObject:artworkURL];
         }
+        
+        if (artistObject.albumID) {
+            [self passAlbumIDToSpotifyWithArtistObject:artistObject];
+        }
 
         
         
@@ -120,6 +124,40 @@
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"Error - Spotify #1 API Call: %@", error.localizedDescription);
     }];
+}
+
+
+#pragma mark - spotify api call #2
+
++ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject {
+    
+    // pass in album number - get song preview(url) + song name
+    // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
+    
+
+        
+        NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", artistObject.albumID];
+        
+        NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
+        
+        [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+            
+            NSArray *resultsSpotifySecondCall = responseObject[@"items"];
+            
+            for (NSDictionary *result in resultsSpotifySecondCall) {
+                
+                artistObject.songPreview = [result objectForKey:@"preview_url"];
+                artistObject.songTitle = [result objectForKey:@"name"];
+                
+            }
+            
+        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+            NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
+        }];
+        
+    
 }
 
 
