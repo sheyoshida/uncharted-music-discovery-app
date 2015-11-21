@@ -98,12 +98,12 @@ CLLocationManagerDelegate
     
     [NearbyLocationProcessor findCitiesInRoute:route completion:^(NSArray<LocationInfoObject *> *cities) {
         [self dropPinsForCities:cities];
-        
-        [EchonestAPIManager getArtistInfoForCities:cities completion:^{
-            [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
-                [self setModel:cities];
-            }];
-        }];
+//        
+//        [EchonestAPIManager getArtistInfoForCities:cities completion:^{
+//            [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
+//                [self setModel:cities];
+//            }];
+//        }];
         
     }];
     
