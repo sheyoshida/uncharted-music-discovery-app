@@ -46,7 +46,7 @@
             doneLocations = YES;
         }
         
-
+        
         
     }
     
@@ -81,7 +81,62 @@
             }
         }];
     }
+    
+}
 
++ (void)findCitiesInRoute:(MKRoute *)route
+               completion:(void(^)(NSArray <LocationInfoObject *> *cities))completion {
+    
+    NSUInteger pointCount = route.polyline.pointCount;
+    CLLocationCoordinate2D *routeCoordinates = malloc(pointCount * sizeof(CLLocationCoordinate2D));
+    [route.polyline getCoordinates:routeCoordinates range:NSMakeRange(0, pointCount)];
+    
+    
+    
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    NSMutableArray *finalResults = [[NSMutableArray alloc] init];
+    
+    int loopCount = floor(pointCount/100);
+
+    for (int c=0; c < loopCount; c++)
+    {
+
+        CLLocation * currLoc = [[CLLocation alloc] initWithLatitude:routeCoordinates[c*100].latitude longitude:routeCoordinates[c*100].longitude];
+        
+        [self reverseGeoCodeLocation:currLoc completion:^(LocationInfoObject *locationInfo) {
+            
+            [results addObject:locationInfo];
+            
+            if (results.count == loopCount) {
+               // NSLog(@"%lu, %d", (unsigned long)results.count, loopCount);
+                for (LocationInfoObject * tempLocation in results) {
+                    //NSLog(@"%@", tempLocation.SubAdministrativeArea);
+                    BOOL locationIsInFinalArray = NO;
+                    for (LocationInfoObject *finalLocation in finalResults) {
+                        
+                        if ( [tempLocation.SubAdministrativeArea isEqualToString:finalLocation.SubAdministrativeArea] ) {
+                            locationIsInFinalArray = YES;
+                        }
+                        if (!tempLocation.State) {
+                            locationIsInFinalArray = YES;
+                        }
+                    }
+                    if (!locationIsInFinalArray) {
+                        NSLog(@"%@", tempLocation.SubAdministrativeArea);
+                        [finalResults addObject:tempLocation];
+                    }
+                }
+                
+                completion(finalResults);
+            }
+        }];
+        
+    }
+    
+    
+    //free the memory used by the C array when done with it...
+    free(routeCoordinates);
+    
 }
 
 + (void)reverseGeoCodeLocation:(CLLocation*)location completion:(void(^)(LocationInfoObject *locationInfo))completion {
@@ -92,13 +147,13 @@
                        dispatch_async(dispatch_get_main_queue(),^ {
                            
                            CLPlacemark *place = [placemarks firstObject];
-
+                           
                            LocationInfoObject * locObject = [[LocationInfoObject alloc] init];
                            locObject.location = location;
-                               locObject.State =[place.addressDictionary objectForKey:@"State"];
-                               locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
-                               locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
-                               completion(locObject);
+                           locObject.State =[place.addressDictionary objectForKey:@"State"];
+                           locObject.SubAdministrativeArea =[place.addressDictionary objectForKey:@"SubAdministrativeArea"];
+                           locObject.Sublocality = [place.addressDictionary objectForKey:@"SubLocality"];
+                           completion(locObject);
                        });
                        
                    }];

@@ -24,8 +24,10 @@ UIGestureRecognizerDelegate,
 MKMapViewDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
-UITableViewDelegate
+UITableViewDelegate,
+AVAudioPlayerDelegate
 >
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
 
@@ -91,7 +93,22 @@ UITableViewDelegate
     CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
     ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+    NSLog(@"%@", artist.songPreview);
     NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+    
+    NSError *error;
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+    
+    if (error)
+    {
+        NSLog(@"Error in audioPlayer: %@",
+              [error localizedDescription]);
+    } else {
+        self.audioPlayer.delegate = self;
+        [self.audioPlayer prepareToPlay];
+        [self.audioPlayer play];
+    }
 
     NSLog(@"%@", artist.songPreview);
     
