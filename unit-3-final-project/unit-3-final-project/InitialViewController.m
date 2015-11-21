@@ -24,8 +24,10 @@ UIGestureRecognizerDelegate,
 MKMapViewDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
-UITableViewDelegate
+UITableViewDelegate,
+UISearchBarDelegate
 >
+
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
 
@@ -37,9 +39,7 @@ UITableViewDelegate
 @property (nonatomic) InfoWindow * annotation;
 @property(nonatomic) LocationInfoObject * currentCity;
 
-
-
-
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
 
@@ -54,8 +54,6 @@ UITableViewDelegate
     [gesture1 setDelegate:self];
     [gesture1 setMinimumPressDuration:1];
     [self.tableView addGestureRecognizer: gesture1];
-
-
     
     self.currentCity = [[LocationInfoObject alloc]init];
     self.modelData = [[NSMutableArray alloc]init];
@@ -69,7 +67,6 @@ UITableViewDelegate
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 40.0;
 
-    
     // Location manager Stuff
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -82,7 +79,33 @@ UITableViewDelegate
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
     self.mapView.showsBuildings = YES;
+    
+//    [self setupSearchBar];
 }
+
+- (void)viewWillAppear:(BOOL)animated { // for search bar
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated { // for search bar
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+//- (void)setupSearchBar {
+//    
+//    UIView *thing = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 64)];
+//    thing.backgroundColor = [UIColor redColor];
+//    [self.navigationController.navigationBar addSubview:thing];
+//    
+//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(5, 20, self.view.frame.size.width - 10, 44.0)];
+//    searchBar.searchBarStyle = UISearchBarStyleMinimal;
+//    [thing addSubview:searchBar];
+//    
+//    searchBar.barTintColor = [UIColor redColor];
+//
+//}
 
 #pragma mark - longPress Stuff
 -(void)celllongpressed:(UIGestureRecognizer *)longPress
@@ -117,7 +140,6 @@ UITableViewDelegate
 
     ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
     cell.artistNameLabel.text = artist.artistName;
-    cell.artistDetailLabel.text = artist.albumTitle; // need spotify api call #1 to use
     
     NSString *urlString = [[NSString alloc] init];
     

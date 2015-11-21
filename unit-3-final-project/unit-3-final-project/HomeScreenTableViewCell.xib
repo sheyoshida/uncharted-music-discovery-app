@@ -28,13 +28,6 @@
                                     <constraint firstAttribute="height" constant="69.5" id="Lxr-Sf-sdt"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Detail" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0FW-9c-856">
-                                <rect key="frame" x="89" y="36" width="243" height="19.5"/>
-                                <animations/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
                                 <rect key="frame" x="281" y="19" width="50" height="50"/>
                                 <animations/>
@@ -47,24 +40,21 @@
                                 <rect key="frame" x="89" y="10" width="243" height="21.5"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <animations/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="10" id="3x0-RM-hMD"/>
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="5" id="4px-id-Hx5"/>
                             <constraint firstAttribute="bottom" secondItem="Cm1-0Z-A8R" secondAttribute="bottom" constant="10" id="64Z-rB-LAx"/>
                             <constraint firstAttribute="trailing" secondItem="Cm1-0Z-A8R" secondAttribute="trailing" constant="11" id="9QN-t6-yuX"/>
-                            <constraint firstAttribute="trailing" secondItem="0FW-9c-856" secondAttribute="trailing" constant="10" id="I0F-FN-642"/>
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="leading" secondItem="6pY-Op-Kzy" secondAttribute="leading" constant="10" id="LE0-4l-4KT"/>
                             <constraint firstAttribute="bottom" secondItem="O3T-vN-MI9" secondAttribute="bottom" constant="5" id="SAK-1a-R95"/>
-                            <constraint firstItem="0FW-9c-856" firstAttribute="top" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="5" id="Zy4-pl-fDR"/>
                             <constraint firstAttribute="trailing" secondItem="kfC-3E-VvA" secondAttribute="trailing" constant="10" id="ghf-sl-yEv"/>
                             <constraint firstItem="kfC-3E-VvA" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="q7N-Eb-fdf"/>
-                            <constraint firstItem="0FW-9c-856" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="sif-SB-poT"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -79,7 +69,6 @@
             <animations/>
             <connections>
                 <outlet property="artistContainerView" destination="6pY-Op-Kzy" id="oWA-Qy-wQW"/>
-                <outlet property="artistDetailLabel" destination="0FW-9c-856" id="2qv-kS-3aZ"/>
                 <outlet property="artistImageView" destination="O3T-vN-MI9" id="ZAu-0Y-brx"/>
                 <outlet property="artistNameLabel" destination="kfC-3E-VvA" id="VTs-yq-gPj"/>
                 <outlet property="buttonFavorite" destination="Cm1-0Z-A8R" id="bce-ya-WJn"/>
