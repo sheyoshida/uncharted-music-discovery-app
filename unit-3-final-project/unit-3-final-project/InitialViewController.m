@@ -25,9 +25,9 @@ MKMapViewDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
 UITableViewDelegate,
-UISearchBarDelegate
+AVAudioPlayerDelegate
 >
-
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
 
@@ -114,7 +114,22 @@ UISearchBarDelegate
     CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
     ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+    NSLog(@"%@", artist.songPreview);
     NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+    
+    NSError *error;
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+    
+    if (error)
+    {
+        NSLog(@"Error in audioPlayer: %@",
+              [error localizedDescription]);
+    } else {
+        self.audioPlayer.delegate = self;
+        [self.audioPlayer prepareToPlay];
+        [self.audioPlayer play];
+    }
 
     NSLog(@"%@", artist.songPreview);
     
@@ -272,7 +287,7 @@ UISearchBarDelegate
         }
         annotationView.centerOffset = CGPointMake(0, -18.0);
         annotationView.canShowCallout = NO;
-        annotationView.image = [UIImage imageNamed:@"Pin.png"];
+        annotationView.image = [UIImage imageNamed:@"PinBlue.png"];
         
         return annotationView;
     }
@@ -284,17 +299,21 @@ UISearchBarDelegate
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
     if(![view isKindOfClass:[MKUserLocation class]]){
-    [self.annotation removeFromSuperview];
-    CustomPin * pin = view.annotation;
-    LocationInfoObject *obj = pin.city;
+        [self.annotation removeFromSuperview];
+        CustomPin * pin = view.annotation;
+        LocationInfoObject *obj = pin.city;
+        
+        self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
+        [self.annotation setFrame:CGRectMake(view.bounds.origin.x - self.annotation.bounds.size.width/2, view.bounds.origin.y, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
+        [view addSubview:self.annotation];
+        [self zoomIntoLocation:pin.city.location andZoom:70000];
+        self.currentCity = pin.city;
+        self.annotation.viewDetail.layer.cornerRadius = 10;
 
-    self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
-    [self.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 150, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
-    [view addSubview:self.annotation];
-        [self zoomIntoLocation:pin.city.location andZoom:100000];
-    self.currentCity = pin.city;
-    [self.tableView reloadData];
+        [self.tableView reloadData];
     }
+    
+    NSLog(@"pin selected");
     
 //    if(![view isKindOfClass:[MKUserLocation class]])
 //    {

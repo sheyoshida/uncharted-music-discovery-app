@@ -44,7 +44,8 @@ CLLocationManagerDelegate
     
     self.modelData = [[NSMutableArray alloc]init];
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
-    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     // Location manager Stuff
     self.locationManager = [[CLLocationManager alloc] init];
@@ -60,7 +61,7 @@ CLLocationManagerDelegate
     self.roadTripMapView.showsUserLocation = YES;
     self.roadTripMapView.showsBuildings = YES;
     
-    }
+}
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
@@ -86,12 +87,55 @@ CLLocationManagerDelegate
 
 -(void)showRoute:(MKDirectionsResponse *)response
 {
-    for (MKRoute *route in response.routes)
-    {
-        [self zoomIntoLocation: [[CLLocation alloc] initWithLatitude:42.3598 longitude:-71.0921] andZoom:route.distance];
-        [self.roadTripMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+    MKRoute *route = [response.routes firstObject];
+    MKMapPoint middlePoint = route.polyline.points[route.polyline.pointCount/2];
+    
+    CLLocationCoordinate2D coordinate = MKCoordinateForMapPoint(middlePoint);
+    
+    [self zoomIntoLocation: [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude] andZoom:route.distance*1.5];
+    [self.roadTripMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+    
+    
+    [NearbyLocationProcessor findCitiesInRoute:route completion:^(NSArray<LocationInfoObject *> *cities) {
+        [self dropPinsForCities:cities];
+        
+        [EchonestAPIManager getArtistInfoForCities:cities completion:^{
+            [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
+                [self setModel:cities];
+            }];
+        }];
+        
+    }];
+    
+}
+
+- (void)setModel:(NSArray <LocationInfoObject *> *)cities {
+    [self.modelData removeAllObjects];
+    self.modelData = [cities mutableCopy];
+    NSLog(@"%lu", (unsigned long)self.modelData.count);
+    [self.tableView reloadData];
+    //[self.tableView reloadData];
+}
+
+- (void)dropPinsForCities:(NSArray*)cities {
+    
+    for (LocationInfoObject *city in cities) {
+//        if (city.artists.count == 0) {
+//            //NSLog(@"nope: %@, %@", city.SubAdministrativeArea, city.State);
+//        }
+//        else{
+            NSLog(@"yupp: %@, %@", city.SubAdministrativeArea, city.State);
+            CLLocation *location = city.location;
+            CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+            MKPlacemark *placeMark = [[MKPlacemark alloc]initWithCoordinate:location2D addressDictionary:nil];
+            [self.roadTripMapView addAnnotation:placeMark];
+            
+            
+        //}
+        
     }
 }
+
 
 #pragma mark - CLLocationManagerDelegate
 
@@ -103,24 +147,15 @@ CLLocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
     
     [self.locationManager stopUpdatingLocation];
-    NSLog(@"%@", newLocation);
     
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(42.3598, -71.0921);
-
+    
     MKPlacemark *placeMark = [[MKPlacemark alloc]initWithCoordinate:coordinate addressDictionary:nil];
     [self.roadTripMapView addAnnotation:placeMark];
     self.destination = [[MKMapItem alloc]initWithPlacemark:placeMark];
     
-    
-    
-    
-    NSLog(@"PLACED DESTINATION");
-    
-
     MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
-    
     request.source = [MKMapItem mapItemForCurrentLocation];
-    
     request.destination = self.destination;
     [request setTransportType:MKDirectionsTransportTypeAutomobile];
     request.requestsAlternateRoutes = NO;
@@ -135,7 +170,7 @@ CLLocationManagerDelegate
              [self showRoute:response];
          }
      }];
-
+    
 }
 
 #pragma mark - TableView Stuff
@@ -143,6 +178,7 @@ CLLocationManagerDelegate
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
     LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
+    NSLog(@"%@", currentCity.SubAdministrativeArea);
     return [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

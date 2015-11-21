@@ -17,10 +17,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pY-Op-Kzy">
-                        <rect key="frame" x="13" y="8" width="342" height="79.5"/>
+                        <rect key="frame" x="13" y="8" width="342" height="80"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="O3T-vN-MI9">
-                                <rect key="frame" x="10" y="5" width="69.5" height="69.5"/>
+                                <rect key="frame" x="10" y="5" width="70" height="70"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="O3T-vN-MI9" secondAttribute="height" multiplier="1:1" id="5F3-UD-deo"/>
@@ -28,8 +28,15 @@
                                     <constraint firstAttribute="height" constant="69.5" id="Lxr-Sf-sdt"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Detail" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0FW-9c-856">
+                                <rect key="frame" x="89" y="36" width="243" height="20"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
-                                <rect key="frame" x="281" y="19" width="50" height="50"/>
+                                <rect key="frame" x="281" y="20" width="50" height="50"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="1J0-DQ-Ava"/>
@@ -37,7 +44,7 @@
                                 </constraints>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
-                                <rect key="frame" x="89" y="10" width="243" height="21.5"/>
+                                <rect key="frame" x="90" y="10" width="242" height="21.5"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
