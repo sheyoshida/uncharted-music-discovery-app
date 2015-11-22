@@ -111,27 +111,44 @@ AVAudioPlayerDelegate
 -(void)celllongpressed:(UIGestureRecognizer *)longPress
 {
     
-    CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
-    ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-    NSLog(@"%@", artist.songPreview);
-    NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-    
-    NSError *error;
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-    
-    if (error)
+    if (longPress.state == UIGestureRecognizerStateBegan)
     {
-        NSLog(@"Error in audioPlayer: %@",
-              [error localizedDescription]);
-    } else {
-        self.audioPlayer.delegate = self;
-        [self.audioPlayer prepareToPlay];
-        [self.audioPlayer play];
+        CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
+        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+        NSLog(@"%@", artist.songPreview);
+        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+        
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+        
+        if (error)
+        {
+            NSLog(@"Error in audioPlayer: %@",
+                  [error localizedDescription]);
+        } else {
+            self.audioPlayer.delegate = self;
+            [self.audioPlayer prepareToPlay];
+            [self.audioPlayer play];
+        }
+        
+        NSLog(@"%@", artist.songPreview);
+        
+        
     }
-
-    NSLog(@"%@", artist.songPreview);
+    else
+    {
+        if (longPress.state == UIGestureRecognizerStateCancelled
+            || longPress.state == UIGestureRecognizerStateFailed
+            || longPress.state == UIGestureRecognizerStateEnded)
+        {
+           // press ended
+            [self.audioPlayer stop];
+        }
+    }
+    
+    
     
 }
 
