@@ -1,2 +1,3 @@
 pod "AFNetworking", "~> 2.0"
 pod 'pop', '~> 1.0'
+pod 'HNKGooglePlacesAutocomplete', '~> 1.1'

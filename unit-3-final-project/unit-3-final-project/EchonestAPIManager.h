@@ -12,6 +12,7 @@
 @interface EchonestAPIManager : NSObject
 
 + (void)getArtistInfoForCities:(NSArray <LocationInfoObject *> *)cities
+                      andGenre:(NSString*)genre
                     completion:(void(^)())completion;
 
 @end
