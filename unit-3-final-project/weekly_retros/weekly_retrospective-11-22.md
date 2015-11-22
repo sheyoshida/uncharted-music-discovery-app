@@ -27,8 +27,8 @@ If you did not meet your goals, how will this affect the progression of the prod
 - Goals/Responsibilities This Week: Come up with elegant way to combine map view and custom pin into one feature. 
 * Team Member: **Zouf**
 - Goals/Responsibilities Last Week: Worked on EchoNest API to access artist name, biography and years active, etc. 
-- Did you meet your goals/responsibilities last week? Why or why not? While I added the API call, we still need to merge the API calls in order to get the data we need for the detailVC. 
-- Goals/Responsibilities This Week: populate api data, work on presentation
+- Did you meet your goals/responsibilities last week? Why or why not? populated the API data and worked on reveal.JS presentation. 
+- Goals/Responsibilities This Week: work on autocomplete and add filters for mood, etc. 
 * Team Member: **Shena**
 - Goals/Responsibilities Last Week: Complete wireframing, build collection carousel view, work on accessing Spotify API data to collect albums, songs and song previews. 
 - Did you meet your goals/responsibilities last week? Why or why not? The carousel only scrolls in one direction. Spotify API calls work nicely but sometimes returned data is inconsistent.
