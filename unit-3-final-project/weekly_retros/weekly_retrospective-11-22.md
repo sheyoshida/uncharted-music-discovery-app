@@ -1,11 +1,11 @@
 ## Weekly Retro Template 
-Today is: Sunday, Nov 15th, 2015
+Today is: Sunday, Nov 22nd, 2015
 
 **Goals for last week**:
-Research APIs, complete project proposal, complete wireframes, setup storyboard, integrate location, work towards MVP
+Finish MVP and incorporate two additional features: force touch and shake gesture
 
 **Goals for this week**:
-Finish MVP and incorporate two additional features: force touch and shake gesture
+Playlist feature, shake gesture, force touch, litle technicalities (stoping songs when they play),polish UI, 
 
 **Guiding Questions** (consider before the meeting):
 
@@ -18,17 +18,17 @@ Finish MVP and incorporate two additional features: force touch and shake gestur
 If you did not meet your goals, how will this affect the progression of the product? What will you do differently to meet your goals this week?
 
 * Team Member: **Henna**
-- Goals/Responsibilities Last Week: Figure out a way to find nearby cities from a CLLocation point. Combine API calls to display desired results
-- Did you meet your goals/responsibilities last week? Why or why not? Partially. Found a nonelegant solution by looping through nearby coordinates. Still working on merging API calls
-- Goals/Responsibilities This Week: Force Touch song preview feature
+- Goals/Responsibilities Last Week: Force Touch song preview feature
+- Did you meet your goals/responsibilities last week? Why or why not? Yes
+- Goals/Responsibilities This Week: shake gesture, roadtrip
 *  Team Member: **Artur** 
-- Goals/Responsibilities Last Week:Worked on maps, custom pins and custom infoWindows.
+- Goals/Responsibilities Last Week:Worked on MapBox, Gestures, AudioPlayer.
 - Did you meet your goals/responsibilities last week? Why or why not?Got the working version.
-- Goals/Responsibilities This Week: Come up with elegant way to combine map view and custom pin into one feature. 
+- Goals/Responsibilities This Week: Echonest API(genre), check Spotify API. 
 * Team Member: **Zouf**
 - Goals/Responsibilities Last Week: Worked on EchoNest API to access artist name, biography and years active, etc. 
-- Did you meet your goals/responsibilities last week? Why or why not? While I added the API call, we still need to merge the API calls in order to get the data we need for the detailVC. 
-- Goals/Responsibilities This Week: populate api data, work on presentation
+- Did you meet your goals/responsibilities last week? Why or why not? populated the API data and worked on reveal.JS presentation. 
+- Goals/Responsibilities This Week: work on autocomplete and add filters for mood, etc. 
 * Team Member: **Shena**
 - Goals/Responsibilities Last Week: Complete wireframing, build collection carousel view, work on accessing Spotify API data to collect albums, songs and song previews. 
 - Did you meet your goals/responsibilities last week? Why or why not? The carousel only scrolls in one direction. Spotify API calls work nicely but sometimes returned data is inconsistent.
