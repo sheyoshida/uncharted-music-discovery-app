@@ -12,6 +12,7 @@
 		0BE4DCB71BF10C3F0097B34C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BE4DCB61BF10C3F0097B34C /* MapKit.framework */; };
 		0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4DCB91BF1108E0097B34C /* CustomPin.m */; };
 		2C52F1D779145021059FA925 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C56A4FC2699A23DCDC70018 /* libPods.a */; };
+		4D1726D01C02562A006F5EA3 /* DetailArtistCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */; };
 		4DB852A51BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */; };
 		4DB852A61BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */; };
 		4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58DC1BEFF1BD00668D63 /* main.m */; };
@@ -38,6 +39,8 @@
 		0BE4DCB81BF1108E0097B34C /* CustomPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPin.h; sourceTree = "<group>"; };
 		0BE4DCB91BF1108E0097B34C /* CustomPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPin.m; sourceTree = "<group>"; };
 		3C56A4FC2699A23DCDC70018 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1726CE1C02562A006F5EA3 /* DetailArtistCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailArtistCollectionViewCell.h; sourceTree = "<group>"; };
+		4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailArtistCollectionViewCell.m; sourceTree = "<group>"; };
 		4DB852A21BFF7C5A00FE99E7 /* HomeScreenTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenTableViewCell.h; sourceTree = "<group>"; };
 		4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenTableViewCell.m; sourceTree = "<group>"; };
 		4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeScreenTableViewCell.xib; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 				F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */,
 				4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */,
 				4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */,
+				4D1726CE1C02562A006F5EA3 /* DetailArtistCollectionViewCell.h */,
+				4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */,
 				4DB852A21BFF7C5A00FE99E7 /* HomeScreenTableViewCell.h */,
 				4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */,
 				4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */,
@@ -138,9 +143,9 @@
 				F03138141BF8F19400785A44 /* EchonestAPIManager.m */,
 				F03138161BF8F9BD00785A44 /* SpotifyApiManager.h */,
 				F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */,
-				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
 				F0C6D78C1C00CF6D00859CD8 /* RoadTripViewController.h */,
 				F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */,
+				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
 				4DBA58EA1BEFF1BD00668D63 /* Assets.xcassets */,
 				4DBA58EC1BEFF1BD00668D63 /* LaunchScreen.storyboard */,
 				4DBA58EF1BEFF1BD00668D63 /* Info.plist */,
@@ -295,6 +300,7 @@
 				4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */,
 				4DBA58E91BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld in Sources */,
 				F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */,
+				4D1726D01C02562A006F5EA3 /* DetailArtistCollectionViewCell.m in Sources */,
 				F03138121BF8EC0A00785A44 /* NearbyLocationProcessor.m in Sources */,
 				F03138181BF8F9BD00785A44 /* SpotifyApiManager.m in Sources */,
 				0B4779B91BF7CA8100D23273 /* InfoWindow.m in Sources */,

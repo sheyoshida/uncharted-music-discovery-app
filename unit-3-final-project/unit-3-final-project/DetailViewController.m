@@ -7,16 +7,20 @@
 //
 
 #import "DetailViewController.h"
+#import "DetailArtistCollectionViewCell.h"
 
 @interface DetailViewController ()
 
-@property (strong, nonatomic) IBOutlet UIImageView *imageView;
-@property (strong, nonatomic) IBOutlet UITableViewCell *tableCell;
 @property (weak, nonatomic) IBOutlet UILabel *bandNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *cityStateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *yearsActiveLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bioLabel;
-@property (strong, nonatomic) IBOutlet UIButton *backButton;
+
+// for collection view
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (strong, nonatomic) NSMutableArray *array;
+
+
 
 @end
 
@@ -25,43 +29,50 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.bandNameLabel.text = self.artist.artistName;
+    self.array = self.artist.echonestImages;
+    [self.collectionView setPagingEnabled:YES];
     
+    self.bandNameLabel.text = self.artist.artistName;
     self.cityStateLabel.text = self.artist.artistLocation;
     
     NSString *startDate = self.artist.artistYearsActiveStartDate;
     NSString *endDate = self.artist.artistYearsActiveEndDate;
     self.yearsActiveLabel.text = [NSString stringWithFormat:@"%@ - %@", startDate, endDate];
-    
-    self.bioLabel.text = self.artist.artistBio;
-    
-    NSString *urlString = [[NSString alloc] init];
 
+}
+
+#pragma mark Collection View Methods
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.array.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (self.artist.echonestImages.count > 1) {
-        urlString = [self.artist.echonestImages objectAtIndex:1];
-    }
-    else {
-        urlString = [self.artist.echonestImages firstObject];
-    }
+    static NSString *identifier = @"Cell"; // set collection view cell identifier name
+    
+    DetailArtistCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    
+    cell.layer.shouldRasterize = YES;
+    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    
+    UIImageView *collectionImageView = (UIImageView *)[cell viewWithTag:100];
+    collectionImageView.image = [UIImage imageNamed:[self.artist.echonestImages objectAtIndex:0]];
+    
+    NSString *urlString = self.array[indexPath.row];
     
     NSURL *artworkURL = [NSURL URLWithString: urlString];
     NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
     UIImage *artworkImage = [UIImage imageWithData:artworkData];
-    self.imageView.image = artworkImage;
-    
-    UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swiperight:)];
-    swiperight.direction=UISwipeGestureRecognizerDirectionRight;
-    [self.view addGestureRecognizer:swiperight];
+    cell.imageView.image = artworkImage;
+
+    return cell;
 }
 
 
-
--(void)swiperight:(UISwipeGestureRecognizer*)gestureRecognizer
-{
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
-
-}
 
 @end

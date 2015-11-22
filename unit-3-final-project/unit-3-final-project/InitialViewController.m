@@ -93,19 +93,6 @@ AVAudioPlayerDelegate
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
-//- (void)setupSearchBar {
-//    
-//    UIView *thing = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 64)];
-//    thing.backgroundColor = [UIColor redColor];
-//    [self.navigationController.navigationBar addSubview:thing];
-//    
-//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(5, 20, self.view.frame.size.width - 10, 44.0)];
-//    searchBar.searchBarStyle = UISearchBarStyleMinimal;
-//    [thing addSubview:searchBar];
-//    
-//    searchBar.barTintColor = [UIColor redColor];
-//
-//}
 
 #pragma mark - longPress Stuff
 -(void)celllongpressed:(UIGestureRecognizer *)longPress

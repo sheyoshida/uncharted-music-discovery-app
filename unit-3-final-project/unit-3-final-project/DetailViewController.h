@@ -10,6 +10,10 @@
 #import "ArtistInfoData.h"
 
 @interface DetailViewController : UIViewController
+<
+UICollectionViewDelegate,
+UICollectionViewDataSource
+>
 
 @property (nonatomic) ArtistInfoData * artist;
 
