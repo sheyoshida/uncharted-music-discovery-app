@@ -44,7 +44,6 @@ UISearchBarDelegate
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *autoCompleteTableView;
-
 @property (nonatomic) NSMutableArray *autoCompleteSearchResults;
 @property (strong, nonatomic) HNKGooglePlacesAutocompleteQuery *searchQuery;
 
@@ -113,7 +112,7 @@ UISearchBarDelegate
 #pragma mark - searchbar stuff
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    [self.searchBar setShowsCancelButton:YES animated:YES];
+    [searchBar setShowsCancelButton:YES animated:YES];
     
     return YES;
 }
@@ -124,7 +123,7 @@ UISearchBarDelegate
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    if (self.searchBar.text > 0) {
+    if (searchBar.text > 0) {
         self.autoCompleteTableView.hidden = NO;
         [self.searchQuery fetchPlacesForSearchQuery:searchText completion:^(NSArray *places, NSError *error) {
             if (error) {
