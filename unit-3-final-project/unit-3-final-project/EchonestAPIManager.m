@@ -14,10 +14,11 @@
 @implementation EchonestAPIManager
 
 + (void)getArtistInfoForCities:(NSArray <LocationInfoObject *> *)cities
+                      andGenre:(NSString*)genre
                     completion:(void(^)())completion {
     __block int received = 0;
     for (LocationInfoObject *city in cities) {
-        [self getAristInfoForCity:city completion:^(NSArray *artists) {
+        [self getAristInfoForCity:city andGenre:genre completion:^(NSArray *artists) {
             
             city.artists = artists;
             received++;
@@ -29,9 +30,19 @@
     }
 }
 
-+ (void)getAristInfoForCity:(LocationInfoObject *)city completion:(void(^)(NSArray *artists))completion {
++ (void)getAristInfoForCity:(LocationInfoObject *)city
+                   andGenre:(NSString*)genre
+                 completion:(void(^)(NSArray *artists))completion {
+    NSString *url = [[NSString alloc]init];
     
-    NSString *url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=%@+%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank", city.SubAdministrativeArea, city.State];
+    if (![genre isEqualToString:@" "]) {
+        url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=%@+%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank&style=%@", city.SubAdministrativeArea, city.State, genre];
+    }
+    else{
+        url = [NSString stringWithFormat:@"http://developer.echonest.com/api/v4/artist/search?api_key=MUIMT3R874QGU0AFO&format=json&artist_location=%@+%@&bucket=artist_location&bucket=biographies&bucket=images&bucket=years_active&bucket=genre&bucket=discovery_rank&bucket=familiarity_rank&bucket=hotttnesss_rank", city.SubAdministrativeArea, city.State];
+    }
+    
+    NSLog(@"%@", url);
     
     NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     

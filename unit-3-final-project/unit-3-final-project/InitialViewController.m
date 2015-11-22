@@ -238,7 +238,7 @@ AVAudioPlayerDelegate
     
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
-        [EchonestAPIManager getArtistInfoForCities:cities completion:^{
+        [EchonestAPIManager getArtistInfoForCities:cities andGenre:@" " completion:^{
             [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
                 [self dropPinsForCities:cities];
                 [self setModel:cities];
