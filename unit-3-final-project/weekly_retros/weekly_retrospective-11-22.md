@@ -22,9 +22,9 @@ If you did not meet your goals, how will this affect the progression of the prod
 - Did you meet your goals/responsibilities last week? Why or why not? Yes
 - Goals/Responsibilities This Week: shake gesture, roadtrip
 *  Team Member: **Artur** 
-- Goals/Responsibilities Last Week:Worked on maps, custom pins and custom infoWindows.
+- Goals/Responsibilities Last Week:Worked on MapBox, Gestures, AudioPlayer.
 - Did you meet your goals/responsibilities last week? Why or why not?Got the working version.
-- Goals/Responsibilities This Week: Come up with elegant way to combine map view and custom pin into one feature. 
+- Goals/Responsibilities This Week: Echonest API(genre), check Spotify API. 
 * Team Member: **Zouf**
 - Goals/Responsibilities Last Week: Worked on EchoNest API to access artist name, biography and years active, etc. 
 - Did you meet your goals/responsibilities last week? Why or why not? populated the API data and worked on reveal.JS presentation. 
