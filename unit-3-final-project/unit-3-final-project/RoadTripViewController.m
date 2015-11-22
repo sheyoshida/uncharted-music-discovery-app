@@ -16,12 +16,15 @@
 #import "NearbyLocationProcessor.h"
 #import "EchonestAPIManager.h"
 #import "SpotifyApiManager.h"
+#import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
+#import "CLPlacemark+HNKAdditions.h"
 
 @interface RoadTripViewController () <MKMapViewDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
 UITableViewDelegate,
-CLLocationManagerDelegate
+CLLocationManagerDelegate,
+UISearchBarDelegate
 
 
 >
@@ -32,7 +35,20 @@ CLLocationManagerDelegate
 @property (weak, nonatomic) IBOutlet MKMapView *roadTripMapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic) CLLocationManager *locationManager;
-@property (nonatomic) MKMapItem * destination;
+
+
+@property (weak, nonatomic) IBOutlet UISearchBar *startSearchBar;
+@property (weak, nonatomic) IBOutlet UISearchBar *endSearchBar;
+@property (weak, nonatomic) IBOutlet UITableView *searchResultsTableView;
+@property (nonatomic) NSMutableArray *autoCompleteSearchResults;
+@property (strong, nonatomic) HNKGooglePlacesAutocompleteQuery *searchQuery;
+
+
+@property (nonatomic) CLLocation *start;
+@property (nonatomic) CLLocation *end;
+
+@property (nonatomic) BOOL startEdit;
+
 
 @end
 
@@ -40,6 +56,16 @@ CLLocationManagerDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.startEdit= NO;
+    self.autoCompleteSearchResults = [[NSMutableArray alloc]init];
+    self.searchResultsTableView.delegate = self;
+    self.searchResultsTableView.dataSource = self;
+    self.searchResultsTableView.hidden = YES;
+    self.startSearchBar.delegate = self;
+    self.endSearchBar.delegate = self;
+    
+    
+    self.searchQuery = [HNKGooglePlacesAutocompleteQuery sharedQuery];
     
     
     self.modelData = [[NSMutableArray alloc]init];
@@ -47,6 +73,7 @@ CLLocationManagerDelegate
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
+
     // Location manager Stuff
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -56,12 +83,61 @@ CLLocationManagerDelegate
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 500;
     [self.locationManager startUpdatingLocation];
-    
+
     self.roadTripMapView.delegate = self;
     self.roadTripMapView.showsUserLocation = YES;
     self.roadTripMapView.showsBuildings = YES;
     
 }
+
+
+#pragma mark - searchbar stuff
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+    [searchBar setShowsCancelButton:YES animated:YES];
+    
+    if (searchBar == self.startSearchBar) {
+        self.startEdit = YES;
+    }
+    else{
+        self.startEdit = NO;
+    }
+    
+    return YES;
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar{
+    self.searchResultsTableView.hidden = YES;
+    return YES;
+}
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    if (searchBar.text > 0) {
+        self.searchResultsTableView.hidden = NO;
+        [self.searchQuery fetchPlacesForSearchQuery:searchText completion:^(NSArray *places, NSError *error) {
+            if (error) {
+                NSLog(@"%@", error);
+            }
+            else{
+                [self.autoCompleteSearchResults removeAllObjects];
+                self.autoCompleteSearchResults = [places mutableCopy];
+                [self.searchResultsTableView reloadData];
+            }
+        }];
+        
+        
+    }
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    searchBar.text = @"";
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    [self.searchResultsTableView setHidden:YES];
+}
+
+
+#pragma mark - MKMapView Methods
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
@@ -95,43 +171,40 @@ CLLocationManagerDelegate
     [self zoomIntoLocation: [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude] andZoom:route.distance*1.5];
     [self.roadTripMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
     
+
     
-//    [NearbyLocationProcessor findCitiesInRoute:route completion:^(NSArray<LocationInfoObject *> *cities) {
-//        [self dropPinsForCities:cities];
-//        
-//        [EchonestAPIManager getArtistInfoForCities:cities completion:^{
-//            [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
-//                [self setModel:cities];
-//            }];
-//        }];
-//        
-//    }];
+        [NearbyLocationProcessor findCitiesInRoute:route completion:^(NSArray<LocationInfoObject *> *cities) {
+            
+    
+            [EchonestAPIManager getArtistInfoForCities:cities andGenre:@" " completion:^{
+                NSArray *finalCities = [cities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                    return evaluatedObject.artists.count > 0;
+                }]];
+                [self dropPinsForCities:finalCities];
+                [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
+                    [self setModel:finalCities];
+                }];
+            }];
+    
+        }];
     
 }
 
 - (void)setModel:(NSArray <LocationInfoObject *> *)cities {
     [self.modelData removeAllObjects];
     self.modelData = [cities mutableCopy];
-    NSLog(@"%lu", (unsigned long)self.modelData.count);
     [self.tableView reloadData];
-    //[self.tableView reloadData];
+
 }
 
 - (void)dropPinsForCities:(NSArray*)cities {
     
     for (LocationInfoObject *city in cities) {
-//        if (city.artists.count == 0) {
-//            //NSLog(@"nope: %@, %@", city.SubAdministrativeArea, city.State);
-//        }
-//        else{
-            NSLog(@"yupp: %@, %@", city.SubAdministrativeArea, city.State);
-            CLLocation *location = city.location;
-            CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
-            MKPlacemark *placeMark = [[MKPlacemark alloc]initWithCoordinate:location2D addressDictionary:nil];
-            [self.roadTripMapView addAnnotation:placeMark];
-            
-            
-        //}
+
+        CLLocation *location = city.location;
+        CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+        MKPlacemark *placeMark = [[MKPlacemark alloc]initWithCoordinate:location2D addressDictionary:nil];
+        [self.roadTripMapView addAnnotation:placeMark];
         
     }
 }
@@ -148,15 +221,116 @@ CLLocationManagerDelegate
     
     [self.locationManager stopUpdatingLocation];
     
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(42.3598, -71.0921);
+}
+
+#pragma mark - TableView Stuff
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (tableView == self.searchResultsTableView) {
+        return @"";
+    }
+    else{
+        LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
+        NSLog(@"%@", currentCity.SubAdministrativeArea);
+        return [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State];
+    }
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (tableView == self.searchResultsTableView) {
+        return 1;
+    }
+    else{
+        return self.modelData.count;
+    }
     
-    MKPlacemark *placeMark = [[MKPlacemark alloc]initWithCoordinate:coordinate addressDictionary:nil];
-    [self.roadTripMapView addAnnotation:placeMark];
-    self.destination = [[MKMapItem alloc]initWithPlacemark:placeMark];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    if (tableView == self.searchResultsTableView) {
+        return self.autoCompleteSearchResults.count;
+    }
+    else{
+        LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
+        return [currentCity.artists count];
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == self.searchResultsTableView) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mySearchCellIdentifier"];
+        HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
+        cell.textLabel.text = place.name;
+        return cell;
+    }
+    else{
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mySongCell"];
+        
+        LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
+        
+        ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
+        cell.textLabel.text = artist.artistName;
+        cell.detailTextLabel.text = artist.songTitle; // need spotify api call #1 to use
+        
+        NSString *urlString = [[NSString alloc] init];
+        
+        if (artist.spotifyImages.count > 1) {
+            urlString = [artist.spotifyImages objectAtIndex:1];
+        }
+        else {
+            urlString = [artist.spotifyImages firstObject];
+        }
+        
+        NSURL *artworkURL = [NSURL URLWithString: urlString]; // need spotify api call #1 to use
+        NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
+        UIImage *artworkImage = [UIImage imageWithData:artworkData];
+        cell.imageView.image = artworkImage;
+        
+        return cell;
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView == self.searchResultsTableView) {
+        [self.startSearchBar setShowsCancelButton:NO animated:YES];
+        [self.startSearchBar resignFirstResponder];
+        [self.endSearchBar setShowsCancelButton:NO animated:YES];
+        [self.endSearchBar resignFirstResponder];
+        
+        HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
+        
+
+        
+        if (self.startEdit) {
+            self.startSearchBar.text = place.name;
+            [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
+                self.start = placemark.location;
+            }];
+            
+        }
+        else{
+            self.endSearchBar.text = place.name;
+            [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
+                self.end = placemark.location;
+            }];
+        }
+        
+    }
+
+}
+- (IBAction)routeClicked:(UIButton *)sender {
+    
+    MKPlacemark *placeMarkStart = [[MKPlacemark alloc]initWithCoordinate:self.start.coordinate addressDictionary:nil];
+    [self.roadTripMapView addAnnotation:placeMarkStart];
+    MKMapItem * start= [[MKMapItem alloc]initWithPlacemark:placeMarkStart];
+    
+    MKPlacemark *placeMarkEnd = [[MKPlacemark alloc]initWithCoordinate:self.end.coordinate addressDictionary:nil];
+    [self.roadTripMapView addAnnotation:placeMarkEnd];
+    MKMapItem * end= [[MKMapItem alloc]initWithPlacemark:placeMarkEnd];
     
     MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
-    request.source = [MKMapItem mapItemForCurrentLocation];
-    request.destination = self.destination;
+    request.source = start;
+    request.destination = end;
     [request setTransportType:MKDirectionsTransportTypeAutomobile];
     request.requestsAlternateRoutes = NO;
     MKDirections *directions =
@@ -170,52 +344,13 @@ CLLocationManagerDelegate
              [self showRoute:response];
          }
      }];
-    
+
 }
 
-#pragma mark - TableView Stuff
+- (void) doneClicked{
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    
-    LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
-    NSLog(@"%@", currentCity.SubAdministrativeArea);
-    return [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State];
-}
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.modelData.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
-    
-    return [currentCity.artists count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mySongCell"];
-    
-    LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
-    
-    ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
-    cell.textLabel.text = artist.artistName;
-    cell.detailTextLabel.text = artist.songTitle; // need spotify api call #1 to use
-    
-    NSString *urlString = [[NSString alloc] init];
-    
-    if (artist.spotifyImages.count > 1) {
-        urlString = [artist.spotifyImages objectAtIndex:1];
-    }
-    else {
-        urlString = [artist.spotifyImages firstObject];
-    }
-    
-    NSURL *artworkURL = [NSURL URLWithString: urlString]; // need spotify api call #1 to use
-    NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
-    UIImage *artworkImage = [UIImage imageWithData:artworkData];
-    cell.imageView.image = artworkImage;
-    
-    return cell;
-}
 
 
 
