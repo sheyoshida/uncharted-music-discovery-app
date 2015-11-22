@@ -90,7 +90,8 @@
         if ([[json objectForKey:@"genres"]firstObject])
         {
             self.artistGenre = [[[json objectForKey:@"genres"]firstObject] objectForKey:@"name"];
-        } else {
+        }
+        else {
             self.artistGenre = [NSString stringWithFormat:@"n/a"];
         }
         
