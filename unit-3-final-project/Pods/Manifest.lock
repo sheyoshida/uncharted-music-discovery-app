@@ -20,14 +20,34 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - HNKGooglePlacesAutocomplete (1.1.1):
+    - HNKGooglePlacesAutocomplete/Models (= 1.1.1)
+    - HNKServerFacade (~> 0.3)
+    - Mantle (~> 2.0)
+  - HNKGooglePlacesAutocomplete/Models (1.1.1):
+    - HNKGooglePlacesAutocomplete/Models/Networking (= 1.1.1)
+    - HNKServerFacade (~> 0.3)
+    - Mantle (~> 2.0)
+  - HNKGooglePlacesAutocomplete/Models/Networking (1.1.1):
+    - HNKServerFacade (~> 0.3)
+    - Mantle (~> 2.0)
+  - HNKServerFacade (0.3.0):
+    - AFNetworking (~> 2.5)
+  - Mantle (2.0.5):
+    - Mantle/extobjc (= 2.0.5)
+  - Mantle/extobjc (2.0.5)
   - pop (1.0.8)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
+  - HNKGooglePlacesAutocomplete (~> 1.1)
   - pop (~> 1.0)
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  HNKGooglePlacesAutocomplete: e3628e130ad9c6b909760bf314b98227b03e708f
+  HNKServerFacade: 0fa3839353480b8862563a34903ad1406a38b4c9
+  Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
 
 COCOAPODS: 0.39.0

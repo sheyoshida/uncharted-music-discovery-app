@@ -16,6 +16,8 @@
 #import "SpotifyApiManager.h"
 #import "DetailViewController.h"
 #import "HomeScreenTableViewCell.h" // custom cells!
+#import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
+#import "CLPlacemark+HNKAdditions.h"
 @import AVFoundation;
 
 @interface InitialViewController ()
@@ -25,7 +27,8 @@ MKMapViewDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
 UITableViewDelegate,
-AVAudioPlayerDelegate
+AVAudioPlayerDelegate,
+UISearchBarDelegate
 >
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 // for model data
@@ -40,6 +43,10 @@ AVAudioPlayerDelegate
 @property(nonatomic) LocationInfoObject * currentCity;
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITableView *autoCompleteTableView;
+
+@property (nonatomic) NSMutableArray *autoCompleteSearchResults;
+@property (strong, nonatomic) HNKGooglePlacesAutocompleteQuery *searchQuery;
 
 @end
 
@@ -55,10 +62,20 @@ AVAudioPlayerDelegate
     [gesture1 setMinimumPressDuration:1];
     [self.tableView addGestureRecognizer: gesture1];
     
+    
+    
+    
     self.currentCity = [[LocationInfoObject alloc]init];
     self.modelData = [[NSMutableArray alloc]init];
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
-   
+    
+   //autocomplete table view set up
+    self.autoCompleteSearchResults = [[NSMutableArray alloc]init];
+    self.autoCompleteTableView.delegate = self;
+    self.autoCompleteTableView.dataSource = self;
+    self.autoCompleteTableView.hidden = YES;
+    self.searchQuery = [HNKGooglePlacesAutocompleteQuery sharedQuery];
+    
     // custom cell setup
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -93,6 +110,44 @@ AVAudioPlayerDelegate
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
+#pragma mark - searchbar stuff
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+    [self.searchBar setShowsCancelButton:YES animated:YES];
+    
+    return YES;
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar{
+    self.autoCompleteTableView.hidden = YES;
+    return YES;
+}
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    if (self.searchBar.text > 0) {
+        self.autoCompleteTableView.hidden = NO;
+        [self.searchQuery fetchPlacesForSearchQuery:searchText completion:^(NSArray *places, NSError *error) {
+            if (error) {
+                NSLog(@"%@", error);
+            }
+            else{
+                [self.autoCompleteSearchResults removeAllObjects];
+                self.autoCompleteSearchResults = [places mutableCopy];
+                [self.autoCompleteTableView reloadData];
+            }
+        }];
+        
+        
+    }
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    searchBar.text = @"";
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    [self.autoCompleteTableView setHidden:YES];
+}
+
 //- (void)setupSearchBar {
 //    
 //    UIView *thing = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 64)];
@@ -106,6 +161,7 @@ AVAudioPlayerDelegate
 //    searchBar.barTintColor = [UIColor redColor];
 //
 //}
+
 
 #pragma mark - longPress Stuff
 -(void)celllongpressed:(UIGestureRecognizer *)longPress
@@ -155,49 +211,85 @@ AVAudioPlayerDelegate
 #pragma mark - TableView Stuff
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (tableView == self.autoCompleteTableView) {
+        return @" ";
+    }
+    else{
     return [NSString stringWithFormat:@"%@, %@", self.currentCity.SubAdministrativeArea, self.currentCity.State];
+    }
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return self.currentCity.artists.count;
+    if (tableView == self.autoCompleteTableView) {
+        return self.autoCompleteSearchResults.count;
+    }
+    else{
+        return self.currentCity.artists.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
-
-    ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-    cell.artistNameLabel.text = artist.artistName;
-    
-    NSString *urlString = [[NSString alloc] init];
-    
-    if (artist.spotifyImages.count > 1) {
-        urlString = [artist.spotifyImages objectAtIndex:1];
-    }
-    else {
-        urlString = [artist.spotifyImages firstObject];
+    if (tableView == self.autoCompleteTableView) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"autocompleteCellIdentifier" forIndexPath:indexPath];
+        HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
+        cell.textLabel.text = place.name;
+        
+        return cell;
     }
     
-    NSURL *artworkURL = [NSURL URLWithString: urlString]; // need spotify api call #1 to use
-    NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
-    UIImage *artworkImage = [UIImage imageWithData:artworkData];
-    cell.artistImageView.image = artworkImage;
+    else{
+        HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
+        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+        cell.artistNameLabel.text = artist.artistName;
+        NSString *urlString = [[NSString alloc] init];
+        
+        if (artist.spotifyImages.count > 1) {
+            urlString = [artist.spotifyImages objectAtIndex:1];
+        }
+        else {
+            urlString = [artist.spotifyImages firstObject];
+        }
+        
+        NSURL *artworkURL = [NSURL URLWithString: urlString]; // need spotify api call #1 to use
+        NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
+        UIImage *artworkImage = [UIImage imageWithData:artworkData];
+        cell.artistImageView.image = artworkImage;
+        
+        
+        return cell;
+    }
     
-    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSLog(@"pressed");
 
-    DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
-    
-    vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:vc animated:YES];
+    if (tableView == self.autoCompleteTableView) {
+        
+        [self.searchBar setShowsCancelButton:NO animated:YES];
+        [self.searchBar resignFirstResponder];
+        
+        HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
+        
+        [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
+            self.searchBar.text = place.name;
+            [self.mapView removeAnnotations:self.mapView.annotations];
+            [self zoomIntoLocation:placemark.location andZoom:100000];
+            [self getNearbyCitiesWithCoordinate:placemark.location];
+        }];
+        
+        
+
+        
+    }
+    else{
+        DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
+        
+        vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 
 }
 
@@ -238,11 +330,18 @@ AVAudioPlayerDelegate
     
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
+        
         [EchonestAPIManager getArtistInfoForCities:cities andGenre:@" " completion:^{
-            [SpotifyApiManager getAlbumInfoForCities:cities completion:^{
-                [self dropPinsForCities:cities];
-                [self setModel:cities];
-                [self showDataForCity:[cities firstObject]];
+            
+            NSArray *finalCities = [cities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                return evaluatedObject.artists.count > 0;
+            }]];
+            
+            [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
+                
+                [self dropPinsForCities:finalCities];
+                [self setModel:finalCities];
+                [self showDataForCity:[finalCities firstObject]];
             }];
         }];
     }];
