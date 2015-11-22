@@ -20,7 +20,7 @@ If you did not meet your goals, how will this affect the progression of the prod
 * Team Member: **Henna**
 - Goals/Responsibilities Last Week: Force Touch song preview feature
 - Did you meet your goals/responsibilities last week? Why or why not? Yes
-- Goals/Responsibilities This Week: 
+- Goals/Responsibilities This Week: shake gesture, roadtrip
 *  Team Member: **Artur** 
 - Goals/Responsibilities Last Week:Worked on maps, custom pins and custom infoWindows.
 - Did you meet your goals/responsibilities last week? Why or why not?Got the working version.
