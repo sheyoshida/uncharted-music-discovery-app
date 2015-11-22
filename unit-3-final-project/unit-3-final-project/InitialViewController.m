@@ -206,7 +206,7 @@ AVAudioPlayerDelegate
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
-    userLocation.title = @"Music";
+    userLocation.title = @"Current location";
 }
 
 - (void)zoomIntoLocation:(CLLocation *)location andZoom:(CLLocationDistance) distance {
@@ -287,7 +287,7 @@ AVAudioPlayerDelegate
         }
         annotationView.centerOffset = CGPointMake(0, -18.0);
         annotationView.canShowCallout = NO;
-        annotationView.image = [UIImage imageNamed:@"PinBlue.png"];
+        annotationView.image = [UIImage imageNamed:@"MapPinOrange.png"];
         
         return annotationView;
     }
@@ -297,8 +297,9 @@ AVAudioPlayerDelegate
 
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    
-    if(![view isKindOfClass:[MKUserLocation class]]){
+    id annotation = view.annotation;
+
+    if(![annotation isKindOfClass:[MKUserLocation class]]){
         [self.annotation removeFromSuperview];
         CustomPin * pin = view.annotation;
         LocationInfoObject *obj = pin.city;
