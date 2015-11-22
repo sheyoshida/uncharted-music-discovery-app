@@ -1,11 +1,11 @@
 ## Weekly Retro Template 
-Today is: Sunday, Nov 15th, 2015
+Today is: Sunday, Nov 22nd, 2015
 
 **Goals for last week**:
-Research APIs, complete project proposal, complete wireframes, setup storyboard, integrate location, work towards MVP
+Finish MVP and incorporate two additional features: force touch and shake gesture
 
 **Goals for this week**:
-Finish MVP and incorporate two additional features: force touch and shake gesture
+Playlist feature, shake gesture, force touch, litle technicalities (stoping songs when they play),polish UI, 
 
 **Guiding Questions** (consider before the meeting):
 
@@ -18,9 +18,9 @@ Finish MVP and incorporate two additional features: force touch and shake gestur
 If you did not meet your goals, how will this affect the progression of the product? What will you do differently to meet your goals this week?
 
 * Team Member: **Henna**
-- Goals/Responsibilities Last Week: Figure out a way to find nearby cities from a CLLocation point. Combine API calls to display desired results
-- Did you meet your goals/responsibilities last week? Why or why not? Partially. Found a nonelegant solution by looping through nearby coordinates. Still working on merging API calls
-- Goals/Responsibilities This Week: Force Touch song preview feature
+- Goals/Responsibilities Last Week: Force Touch song preview feature
+- Did you meet your goals/responsibilities last week? Why or why not? Yes
+- Goals/Responsibilities This Week: 
 *  Team Member: **Artur** 
 - Goals/Responsibilities Last Week:Worked on maps, custom pins and custom infoWindows.
 - Did you meet your goals/responsibilities last week? Why or why not?Got the working version.
