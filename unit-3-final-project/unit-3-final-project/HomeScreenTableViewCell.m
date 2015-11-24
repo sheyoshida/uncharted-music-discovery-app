@@ -8,6 +8,7 @@
 
 #import "HomeScreenTableViewCell.h"
 #import "Pop.h"
+#import "Chameleon.h"
 
 @implementation HomeScreenTableViewCell
 

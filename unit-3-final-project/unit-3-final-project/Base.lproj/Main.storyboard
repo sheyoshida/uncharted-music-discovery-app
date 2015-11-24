@@ -6,6 +6,12 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="VarelaRound-Regular.ttf">
+            <string>VarelaRound-Regular</string>
+            <string>VarelaRound-Regular</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--Playlist-->
         <scene sceneID="u2P-UU-RAD">
@@ -87,24 +93,27 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="DlS-yI-abb">
+                            <searchBar contentMode="redraw" placeholder="END DESTINATION" translatesAutoresizingMaskIntoConstraints="NO" id="DlS-yI-abb">
                                 <rect key="frame" x="0.0" y="94" width="600" height="44"/>
                                 <animations/>
-                                <textInputTraits key="textInputTraits"/>
+                                <color key="barTintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" enablesReturnKeyAutomatically="YES"/>
                             </searchBar>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="75i-Jc-W7Y">
+                            <searchBar contentMode="redraw" placeholder="START DESTINATION" translatesAutoresizingMaskIntoConstraints="NO" id="75i-Jc-W7Y">
                                 <rect key="frame" x="0.0" y="50" width="600" height="44"/>
                                 <animations/>
-                                <textInputTraits key="textInputTraits"/>
+                                <color key="barTintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" enablesReturnKeyAutomatically="YES"/>
                             </searchBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CWd-de-jBv" userLabel="Navigation Bar View">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YLh-oV-QzC">
-                                        <rect key="frame" x="552" y="16" width="40" height="30"/>
+                                        <rect key="frame" x="518" y="20" width="72" height="32"/>
                                         <animations/>
-                                        <state key="normal" title="Route">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="16"/>
+                                        <state key="normal" title="   Route   ">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="routeClicked:" destination="3hW-Sk-yDp" eventType="touchUpInside" id="Trz-Gw-alJ"/>
@@ -114,8 +123,8 @@
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="4uw-Mq-vAK"/>
-                                    <constraint firstAttribute="trailing" secondItem="YLh-oV-QzC" secondAttribute="trailing" constant="8" id="i2c-6d-nPg"/>
-                                    <constraint firstAttribute="bottom" secondItem="YLh-oV-QzC" secondAttribute="bottom" constant="4" id="yIp-WD-eq7"/>
+                                    <constraint firstAttribute="trailing" secondItem="YLh-oV-QzC" secondAttribute="trailing" constant="10" id="i2c-6d-nPg"/>
+                                    <constraint firstAttribute="bottom" secondItem="YLh-oV-QzC" secondAttribute="bottom" constant="-2" id="yIp-WD-eq7"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ioI-dY-kCQ">
@@ -134,7 +143,7 @@
                                                     <rect key="frame" x="15" y="0.0" width="570" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -192,13 +201,13 @@
                                 <exclude reference="J5k-VZ-0NP"/>
                                 <exclude reference="eT5-4A-6eL"/>
                                 <exclude reference="wbD-49-EQO"/>
+                                <exclude reference="1Ns-f4-VlF"/>
+                                <exclude reference="BsG-K9-y30"/>
+                                <exclude reference="pN6-5d-9sq"/>
                                 <exclude reference="9wB-U0-1Xk"/>
                                 <exclude reference="Pwd-he-ef9"/>
                                 <exclude reference="e4v-wv-8NF"/>
                                 <exclude reference="oI0-sQ-YiZ"/>
-                                <exclude reference="1Ns-f4-VlF"/>
-                                <exclude reference="BsG-K9-y30"/>
-                                <exclude reference="pN6-5d-9sq"/>
                             </mask>
                         </variation>
                     </view>
@@ -275,7 +284,7 @@
             </objects>
             <point key="canvasLocation" x="-2200" y="822"/>
         </scene>
-        <!--Title-->
+        <!--Uncharted-->
         <scene sceneID="ZeN-Cp-tZo">
             <objects>
                 <viewController id="ai1-jF-iJg" customClass="InitialViewController" sceneMemberID="viewController">
@@ -397,7 +406,8 @@
                             <searchBar contentMode="redraw" placeholder="NEW LOCATION" translatesAutoresizingMaskIntoConstraints="NO" id="UUK-8d-Tf7">
                                 <rect key="frame" x="0.0" y="50" width="600" height="44"/>
                                 <animations/>
-                                <textInputTraits key="textInputTraits"/>
+                                <color key="barTintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="ai1-jF-iJg" id="emV-mk-inB"/>
                                 </connections>
@@ -430,7 +440,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="VlC-C4-qIt"/>
+                    <navigationItem key="navigationItem" title="Uncharted" id="VlC-C4-qIt"/>
                     <connections>
                         <outlet property="autoCompleteTableView" destination="poH-uK-KN5" id="bGD-N7-e92"/>
                         <outlet property="mapView" destination="77m-pW-K1k" id="KXH-cW-W1R"/>

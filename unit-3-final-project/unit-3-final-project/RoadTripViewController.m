@@ -18,6 +18,7 @@
 #import "SpotifyApiManager.h"
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
 #import "CLPlacemark+HNKAdditions.h"
+#import "Chameleon.h"
 
 @interface RoadTripViewController () <MKMapViewDelegate,
 CLLocationManagerDelegate,
@@ -61,8 +62,23 @@ UISearchBarDelegate
     self.searchResultsTableView.delegate = self;
     self.searchResultsTableView.dataSource = self;
     self.searchResultsTableView.hidden = YES;
+    
     self.startSearchBar.delegate = self;
     self.endSearchBar.delegate = self;
+    self.startSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    self.endSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    for(UIView *subView in self.startSearchBar.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            UITextField *searchField = (UITextField *)subView;
+            searchField.font = [UIFont fontWithName:@"Varela Round" size:16];
+        }
+    }
+    for(UIView *subView in self.endSearchBar.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            UITextField *searchField = (UITextField *)subView;
+            searchField.font = [UIFont fontWithName:@"Varela Round" size:16];
+        }
+    }
     
     
     self.searchQuery = [HNKGooglePlacesAutocompleteQuery sharedQuery];
@@ -87,6 +103,9 @@ UISearchBarDelegate
     self.roadTripMapView.delegate = self;
     self.roadTripMapView.showsUserLocation = YES;
     self.roadTripMapView.showsBuildings = YES;
+    
+    [self.navigationController setHidesNavigationBarHairline:YES];
+
     
 }
 
@@ -224,6 +243,18 @@ UISearchBarDelegate
 }
 
 #pragma mark - TableView Stuff
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    
+    // section text
+    header.textLabel.textColor = [UIColor colorWithRed:(251/255.f) green:(66/255.f) blue:(7/255.f) alpha:1]; // orange color
+    header.textLabel.font = [UIFont fontWithName:@"Varela" size:18];
+    CGRect headerFrame = self.tableView.tableHeaderView.frame;
+    headerFrame.size.height = self.tableView.frame.size.height;
+    header.textLabel.frame = headerFrame;
+    header.textLabel.textAlignment = NSTextAlignmentLeft;
+}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (tableView == self.searchResultsTableView) {

@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import "DetailArtistCollectionViewCell.h"
+#import "Chameleon.h"
 
 @interface DetailViewController ()
 
@@ -29,6 +30,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.navigationController setHidesNavigationBarHairline:YES];
+    
     self.array = self.artist.echonestImages;
     [self.collectionView setPagingEnabled:YES];
     
@@ -38,6 +41,8 @@
     NSString *startDate = self.artist.artistYearsActiveStartDate;
     NSString *endDate = self.artist.artistYearsActiveEndDate;
     self.yearsActiveLabel.text = [NSString stringWithFormat:@"%@ - %@", startDate, endDate];
+    
+    
 
 }
 

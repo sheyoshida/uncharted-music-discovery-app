@@ -13,6 +13,7 @@
 		0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4DCB91BF1108E0097B34C /* CustomPin.m */; };
 		2C52F1D779145021059FA925 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C56A4FC2699A23DCDC70018 /* libPods.a */; };
 		4D1726D01C02562A006F5EA3 /* DetailArtistCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */; };
+		4D7235781C03DA170094AE36 /* VarelaRound-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D7235771C03DA170094AE36 /* VarelaRound-Regular.ttf */; };
 		4DB852A51BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */; };
 		4DB852A61BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */; };
 		4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58DC1BEFF1BD00668D63 /* main.m */; };
@@ -41,6 +42,7 @@
 		3C56A4FC2699A23DCDC70018 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1726CE1C02562A006F5EA3 /* DetailArtistCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailArtistCollectionViewCell.h; sourceTree = "<group>"; };
 		4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailArtistCollectionViewCell.m; sourceTree = "<group>"; };
+		4D7235771C03DA170094AE36 /* VarelaRound-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "VarelaRound-Regular.ttf"; sourceTree = "<group>"; };
 		4DB852A21BFF7C5A00FE99E7 /* HomeScreenTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenTableViewCell.h; sourceTree = "<group>"; };
 		4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenTableViewCell.m; sourceTree = "<group>"; };
 		4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeScreenTableViewCell.xib; sourceTree = "<group>"; };
@@ -95,6 +97,60 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		4D72356D1C03CF920094AE36 /* API Files */ = {
+			isa = PBXGroup;
+			children = (
+				F03138131BF8F19400785A44 /* EchonestAPIManager.h */,
+				F03138141BF8F19400785A44 /* EchonestAPIManager.m */,
+				F03138161BF8F9BD00785A44 /* SpotifyApiManager.h */,
+				F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */,
+			);
+			name = "API Files";
+			sourceTree = "<group>";
+		};
+		4D72356F1C03D0600094AE36 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				4DBA58F51BEFF34200668D63 /* InitialViewController.h */,
+				4DBA58F61BEFF34200668D63 /* InitialViewController.m */,
+				4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */,
+				4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */,
+				4D1726CE1C02562A006F5EA3 /* DetailArtistCollectionViewCell.h */,
+				4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */,
+				F0C6D78C1C00CF6D00859CD8 /* RoadTripViewController.h */,
+				F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */,
+				4DB852A21BFF7C5A00FE99E7 /* HomeScreenTableViewCell.h */,
+				4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */,
+				4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */,
+				4D7235721C03D9930094AE36 /* Resources */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		4D7235701C03D0BE0094AE36 /* Maps and Location Data */ = {
+			isa = PBXGroup;
+			children = (
+				0BE4DCB81BF1108E0097B34C /* CustomPin.h */,
+				0BE4DCB91BF1108E0097B34C /* CustomPin.m */,
+				0B4779B71BF7CA8100D23273 /* InfoWindow.h */,
+				0B4779B81BF7CA8100D23273 /* InfoWindow.m */,
+				0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */,
+				F0610A941BF7AA7B0011BE01 /* LocationInfoObject.h */,
+				F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */,
+				F03138101BF8EC0A00785A44 /* NearbyLocationProcessor.h */,
+				F03138111BF8EC0A00785A44 /* NearbyLocationProcessor.m */,
+			);
+			name = "Maps and Location Data";
+			sourceTree = "<group>";
+		};
+		4D7235721C03D9930094AE36 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4D7235771C03DA170094AE36 /* VarelaRound-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		4DBA58CF1BEFF1BD00668D63 = {
 			isa = PBXGroup;
 			children = (
@@ -121,32 +177,11 @@
 				4DBA58DF1BEFF1BD00668D63 /* AppDelegate.m */,
 				5FE8B8551BF412DF00D1F557 /* ArtistInfoData.h */,
 				5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */,
-				4DBA58F51BEFF34200668D63 /* InitialViewController.h */,
-				4DBA58F61BEFF34200668D63 /* InitialViewController.m */,
-				F0610A941BF7AA7B0011BE01 /* LocationInfoObject.h */,
-				F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */,
-				4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */,
-				4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */,
-				4D1726CE1C02562A006F5EA3 /* DetailArtistCollectionViewCell.h */,
-				4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */,
-				4DB852A21BFF7C5A00FE99E7 /* HomeScreenTableViewCell.h */,
-				4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */,
-				4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */,
-				0BE4DCB81BF1108E0097B34C /* CustomPin.h */,
-				0BE4DCB91BF1108E0097B34C /* CustomPin.m */,
-				0B4779B71BF7CA8100D23273 /* InfoWindow.h */,
-				0B4779B81BF7CA8100D23273 /* InfoWindow.m */,
-				0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */,
-				F03138101BF8EC0A00785A44 /* NearbyLocationProcessor.h */,
-				F03138111BF8EC0A00785A44 /* NearbyLocationProcessor.m */,
-				F03138131BF8F19400785A44 /* EchonestAPIManager.h */,
-				F03138141BF8F19400785A44 /* EchonestAPIManager.m */,
-				F03138161BF8F9BD00785A44 /* SpotifyApiManager.h */,
-				F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */,
-				F0C6D78C1C00CF6D00859CD8 /* RoadTripViewController.h */,
-				F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */,
-				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
+				4D72356D1C03CF920094AE36 /* API Files */,
+				4D7235701C03D0BE0094AE36 /* Maps and Location Data */,
+				4D72356F1C03D0600094AE36 /* View Controllers */,
 				4DBA58EA1BEFF1BD00668D63 /* Assets.xcassets */,
+				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
 				4DBA58EC1BEFF1BD00668D63 /* LaunchScreen.storyboard */,
 				4DBA58EF1BEFF1BD00668D63 /* Info.plist */,
 				4DBA58E71BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld */,
@@ -237,6 +272,7 @@
 				4DBA58E61BEFF1BD00668D63 /* Main.storyboard in Resources */,
 				4DB852A61BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib in Resources */,
 				0B4779BD1BF7CAB600D23273 /* InfoWindow.xib in Resources */,
+				4D7235781C03DA170094AE36 /* VarelaRound-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

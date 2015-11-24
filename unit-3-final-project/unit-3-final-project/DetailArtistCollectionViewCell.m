@@ -7,6 +7,7 @@
 //
 
 #import "DetailArtistCollectionViewCell.h"
+#import "Chameleon.h"
 
 @implementation DetailArtistCollectionViewCell
 

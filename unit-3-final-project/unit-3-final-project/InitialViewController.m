@@ -18,6 +18,8 @@
 #import "HomeScreenTableViewCell.h" // custom cells!
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
 #import "CLPlacemark+HNKAdditions.h"
+#import "Chameleon.h"
+
 @import AVFoundation;
 
 @interface InitialViewController ()
@@ -96,8 +98,22 @@ UISearchBarDelegate
     self.mapView.showsUserLocation = YES;
     self.mapView.showsBuildings = YES;
     
-//    [self setupSearchBar];
+    // nav bar
+    [self.navigationController setHidesNavigationBarHairline:YES];
+
+    self.searchBar.searchBarStyle = UISearchBarStyleMinimal; // remove border from search bar
+    for(UIView *subView in self.searchBar.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            UITextField *searchField = (UITextField *)subView;
+            searchField.font = [UIFont fontWithName:@"Varela Round" size:16];
+        }
+    }
+
+    
 }
+
+
+
 
 - (void)viewWillAppear:(BOOL)animated { // for search bar
     [super viewWillAppear:animated];
@@ -193,6 +209,19 @@ UISearchBarDelegate
 }
 
 #pragma mark - TableView Stuff
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    
+    // section text
+    header.textLabel.textColor = [UIColor colorWithRed:(251/255.f) green:(66/255.f) blue:(7/255.f) alpha:1]; // orange color
+    header.textLabel.font = [UIFont fontWithName:@"Varela" size:18];
+    CGRect headerFrame = self.tableView.tableHeaderView.frame;
+    headerFrame.size.height = self.tableView.frame.size.height;
+    header.textLabel.frame = headerFrame;
+    header.textLabel.textAlignment = NSTextAlignmentLeft;
+
+}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (tableView == self.autoCompleteTableView) {
