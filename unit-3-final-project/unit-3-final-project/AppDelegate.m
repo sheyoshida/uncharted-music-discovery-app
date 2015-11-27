@@ -19,21 +19,16 @@ static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCo
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    
-    // remove translucent layer on navigation items
-    [UINavigationBar appearance].translucent = NO;
+
+    // set Navigation bar properties:
+    [[UINavigationBar appearance] setBarStyle:UIBarStyleDefault];
+    [[UINavigationBar appearance] setTranslucent:NO]; // remove translucent layer on navigation items
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]]; // set font color
-//    [UINavigationBar appearance].barTintColor = [UIColor colorWithRed:249/256.0 green:205/256.0 blue:78/256.0 alpha:1.0]; // set background color later
-
-    [UITabBar appearance].translucent = NO;
-
-   
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSFontAttributeName: @"Varela"}];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor redColor]}];
+    [UINavigationBar appearance].barTintColor = [UIColor colorWithRed:249/256.0 green:205/256.0 blue:78/256.0 alpha:1.0]; // set background color later
     
-    
-
-    
-      [HNKGooglePlacesAutocompleteQuery setupSharedQueryWithAPIKey: kHNKDemoGooglePlacesAutocompleteApiKey];
+    [HNKGooglePlacesAutocompleteQuery setupSharedQueryWithAPIKey: kHNKDemoGooglePlacesAutocompleteApiKey];
     
     return YES;
 }
