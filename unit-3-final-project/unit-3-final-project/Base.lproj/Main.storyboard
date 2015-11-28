@@ -39,19 +39,18 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KBh-3B-2YE" userLabel="search bar container view">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="88"/>
                                             <subviews>
-                                                <searchBar contentMode="redraw" placeholder="start destination" translatesAutoresizingMaskIntoConstraints="NO" id="7yM-6E-TP9" userLabel="Start Search Bar">
+                                                <searchBar contentMode="redraw" placeholder="START DESTINATION" translatesAutoresizingMaskIntoConstraints="NO" id="7yM-6E-TP9" userLabel="Start Search Bar">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                                     <animations/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </searchBar>
-                                                <searchBar contentMode="redraw" placeholder="end destination" translatesAutoresizingMaskIntoConstraints="NO" id="rx9-rh-rST" userLabel="End Search Bar">
+                                                <searchBar contentMode="redraw" text="" placeholder="END DESTINATION" translatesAutoresizingMaskIntoConstraints="NO" id="rx9-rh-rST" userLabel="End Search Bar">
                                                     <rect key="frame" x="0.0" y="44" width="600" height="44"/>
                                                     <animations/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </searchBar>
                                             </subviews>
                                             <animations/>
-                                            <color key="backgroundColor" red="0.97254901959999995" green="0.54901960780000003" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="rx9-rh-rST" firstAttribute="leading" secondItem="KBh-3B-2YE" secondAttribute="leading" id="0wA-Ws-rrE"/>
                                                 <constraint firstItem="rx9-rh-rST" firstAttribute="top" secondItem="7yM-6E-TP9" secondAttribute="bottom" id="IWD-1M-GEo"/>
@@ -89,7 +88,6 @@
                                         </view>
                                     </subviews>
                                     <animations/>
-                                    <color key="backgroundColor" red="0.066666666669999999" green="0.51764705879999995" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="ASy-8Q-GTq" secondAttribute="trailing" id="0nA-1a-v6T"/>
                                         <constraint firstItem="KBh-3B-2YE" firstAttribute="top" secondItem="ghL-s9-Gme" secondAttribute="top" id="N3L-6e-Sgg"/>
@@ -153,6 +151,7 @@
                     <navigationItem key="navigationItem" id="etN-Wr-DtV"/>
                     <connections>
                         <outlet property="endSearchBar" destination="rx9-rh-rST" id="01B-Fd-da9"/>
+                        <outlet property="roadTripMapView" destination="SOI-xC-KXi" id="vp4-N4-Guh"/>
                         <outlet property="startSearchBar" destination="7yM-6E-TP9" id="E2q-Z3-KMx"/>
                         <outlet property="tableHeader" destination="ghL-s9-Gme" id="3pS-Fq-pW7"/>
                         <outlet property="tableView" destination="Gnt-mM-2Vc" id="bW2-Ed-yU8"/>
@@ -162,26 +161,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jua-lG-FZW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-712" y="1577"/>
-        </scene>
-        <!--Playlist-->
-        <scene sceneID="u2P-UU-RAD">
-            <objects>
-                <viewController id="Q5b-c1-gPg" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="pTk-ZJ-bdV"/>
-                        <viewControllerLayoutGuide type="bottom" id="HCe-rU-YNi"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="1CJ-qt-gqS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Playlist" id="Hnn-YO-sV7"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kIW-bP-LIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="38" y="86"/>
         </scene>
         <!--Item-->
         <scene sceneID="AZC-Be-IoU">

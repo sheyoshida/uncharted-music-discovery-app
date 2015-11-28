@@ -7,21 +7,25 @@
 //
 
 #import "ScrollingRoadtripViewController.h"
+#import <MapKit/MapKit.h>
 #import "HomeScreenTableViewCell.h"
 
 
 
 @interface ScrollingRoadtripViewController ()
 <
+MKMapViewDelegate,
 UITableViewDelegate,
 UITableViewDelegate
 >
 
 @property (weak, nonatomic) IBOutlet UIView *tableHeader;
-@property (weak, nonatomic) IBOutlet UISearchBar *startSearchBar;
-@property (weak, nonatomic) IBOutlet UISearchBar *endSearchBar;
+@property (strong, nonatomic) IBOutlet UISearchBar *startSearchBar;
+@property (strong, nonatomic) IBOutlet UISearchBar *endSearchBar;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewTopSpaceConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet MKMapView *roadTripMapView;
+
 
 @property(nonatomic,strong) UIView *blockingView;
 
@@ -35,13 +39,39 @@ UITableViewDelegate
   
     self.tableHeader.clipsToBounds = YES;
     
-    [self.navigationController.navigationBar setBackgroundColor:[UIColor whiteColor]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    
     // Starting with the table view a bit scrolled down to hide the search bar
     [self.tableView setContentOffset:CGPointMake(0, 105)];
+    
+    // serach bars
+    self.startSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    self.endSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    for(UIView *subView in self.startSearchBar.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            UITextField *searchField = (UITextField *)subView;
+            searchField.font = [UIFont fontWithName:@"Varela Round" size:16];
+        }
+    }
+    for(UIView *subView in self.endSearchBar.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            UITextField *searchField = (UITextField *)subView;
+            searchField.font = [UIFont fontWithName:@"Varela Round" size:16];
+        }
+    }
+    
+    // add nav bar button
+    UIBarButtonItem *routeButton = [[UIBarButtonItem alloc]
+                                   initWithTitle:@"Route"
+                                   style:UIBarButtonItemStylePlain
+                                   target:self
+                                   action:@selector(routeButtonTapped)];
+    self.navigationItem.rightBarButtonItem = routeButton;
+    
+    
 
+}
+
+- (void)routeButtonTapped {
+    NSLog(@"route button tapped!!");
 }
 
 #pragma mark - table view cell stuff
