@@ -297,12 +297,13 @@ UISearchBarDelegate
 
         
     }
-    else{
-        DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
-        
-        vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+// Psst, I disconnected detail view by commenting below out.
+//    else{
+//        DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
+//        
+//        vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+//        [self.navigationController pushViewController:vc animated:YES];
+//    }
 
 }
 

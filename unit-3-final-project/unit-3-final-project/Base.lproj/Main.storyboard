@@ -13,10 +13,10 @@
         </mutableArray>
     </customFonts>
     <scenes>
-        <!--Item-->
+        <!--Scrolling Roadtrip-->
         <scene sceneID="lJh-dV-dGc">
             <objects>
-                <viewController id="GSM-0g-1LF" customClass="ScrollingRoadtripViewController" sceneMemberID="viewController">
+                <viewController id="GSM-0g-1LF" userLabel="Scrolling Roadtrip" customClass="ScrollingRoadtripViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rP4-ff-eYN"/>
                         <viewControllerLayoutGuide type="bottom" id="zge-xm-7zG"/>
@@ -517,7 +517,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cvi-XS-ZJc" userLabel="View Collection View Container">
                                 <rect key="frame" x="0.0" y="244" width="600" height="307"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="NfD-Tg-fzA">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="NfD-Tg-fzA">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="307"/>
                                         <animations/>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
