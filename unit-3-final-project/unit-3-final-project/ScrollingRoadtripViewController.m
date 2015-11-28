@@ -65,7 +65,6 @@ UITableViewDelegate
     [headerTitle setBackgroundColor:[UIColor clearColor]];
     [headerView addSubview:headerTitle];
     
-    
     return headerView;
 }
 

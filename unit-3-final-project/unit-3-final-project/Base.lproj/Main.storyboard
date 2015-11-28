@@ -152,6 +152,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="0Vc-z5-OkW"/>
                     <navigationItem key="navigationItem" id="etN-Wr-DtV"/>
                     <connections>
+                        <outlet property="endSearchBar" destination="rx9-rh-rST" id="01B-Fd-da9"/>
                         <outlet property="startSearchBar" destination="7yM-6E-TP9" id="E2q-Z3-KMx"/>
                         <outlet property="tableHeader" destination="ghL-s9-Gme" id="3pS-Fq-pW7"/>
                         <outlet property="tableView" destination="Gnt-mM-2Vc" id="bW2-Ed-yU8"/>
