@@ -39,18 +39,9 @@ UITableViewDelegate
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     
-//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-
     // Starting with the table view a bit scrolled down to hide the search bar
     [self.tableView setContentOffset:CGPointMake(0, 105)];
-    
-    // This blocking view is used to hide the tableview cells when they scroll too far up
-    // you can comment this view to see what happens
-    self.blockingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 105)];
-    [self.blockingView setBackgroundColor:[UIColor blueColor]];
-    self.blockingView.hidden = YES;
-    [self.view addSubview:_blockingView];
-    
+
 }
 
 #pragma mark - table view cell stuff
@@ -59,25 +50,25 @@ UITableViewDelegate
     return 80;
 }
 
-//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-//    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 80)];
-//    [headerView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1]];
-//    
-//    UIButton *shuffle = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, [UIScreen mainScreen].bounds.size.width - 80, 30)];
-//    [shuffle setTitle:@"Shuffle Play" forState:UIControlStateNormal];
-//    [shuffle setBackgroundColor:[UIColor greenColor]];
-//    [headerView addSubview:shuffle];
-//    
-//    UILabel *headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, [UIScreen mainScreen].bounds.size.width - 20, 30)];
-//    [headerTitle setText:@"Section Title"];
-//    [headerTitle setTextColor:[UIColor whiteColor]];
-//    [headerTitle setBackgroundColor:[UIColor clearColor]];
-//    [headerView addSubview:headerTitle];
-//    
-//    
-//    return headerView;
-//}
-//
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 80)];
+    [headerView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1]];
+    
+    UIButton *playlistButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, [UIScreen mainScreen].bounds.size.width - 80, 30)];
+    [playlistButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
+    [playlistButton setBackgroundColor:[UIColor blueColor]];
+    [headerView addSubview:playlistButton];
+    
+    UILabel *headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, [UIScreen mainScreen].bounds.size.width - 20, 30)];
+    [headerTitle setText:@"Section Title"];
+    [headerTitle setTextColor:[UIColor whiteColor]];
+    [headerTitle setBackgroundColor:[UIColor clearColor]];
+    [headerView addSubview:headerTitle];
+    
+    
+    return headerView;
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 20;
 }
@@ -91,35 +82,5 @@ UITableViewDelegate
     return cell;
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    // This weird 44 - 64 is basically to mean:
-    // Past 44 pixels (assuming the tableview starts at -64, which it does because of some automatic padding related to the status and nav bar)
-    if(scrollView.contentOffset.y > 88 - 64){
-        // Hide the search bar, and show the blocking view so when the content goes behind the nav bar, you dont see it
-        if (self.startSearchBar.alpha == 1 && self.endSearchBar.alpha == 1) {
-            [UIView animateWithDuration:0.3 animations:^{
-                self.startSearchBar.alpha = 0;
-                self.endSearchBar.alpha = 0;
-            } completion:^(BOOL finished) {
-                self.blockingView.hidden = NO;
-            }];
-        }
-
-        
-        // we move the top view down at the same pace we scroll up, to give the effect of it being always in the same place on the screen
-        self.topViewTopSpaceConstraint.constant = MAX(0, scrollView.contentOffset.y - (88 - 64));
-        
-    }else{
-        // showing the search bar again, and hiding the no longer needed blocking view (which would block the search bar)
-        if (self.startSearchBar.alpha == 0) {
-            self.blockingView.hidden = YES;
-            [UIView animateWithDuration:0.3 animations:^{
-                self.startSearchBar.alpha = 1;
-            }];
-        }
-        
-        self.topViewTopSpaceConstraint.constant = 0;
-    }
-}
 
 @end
