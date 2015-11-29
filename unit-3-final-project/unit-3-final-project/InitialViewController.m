@@ -379,7 +379,7 @@ UISearchBarDelegate
                 [self dropPinsForCities:finalCities];
                 [self setModel:finalCities];
                 [self showDataForCity:[finalCities firstObject]];
-                [self.loadview dismiss];
+                [self.loadview finish];
             }];
         }];
     }];

@@ -299,7 +299,7 @@ UISearchBarDelegate
                     [self dropPinsForCities:finalCities];
                     
                     [self setModel:finalCities];
-                    [self.loadview dismiss];
+                    [self.loadview finish];
                 }];
             }];
     
