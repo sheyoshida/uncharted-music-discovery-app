@@ -46,17 +46,13 @@
                                                   }];
                     
                     [task resume];
-                    
-                    
                 }
-                
             }
-            
         }
-        
         else { // this doesn't fill in the null images as expected (ie: David Coffee)
             
-            NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
+            //  NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"];
+            NSString *artworkURL =[NSString stringWithFormat:@"http://i67.tinypic.com/i74ugh.jpg"];
             [self.echonestImages addObject:artworkURL];
         }
         
