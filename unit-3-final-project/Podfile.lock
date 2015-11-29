@@ -39,12 +39,14 @@ PODS:
   - Mantle (2.0.5):
     - Mantle/extobjc (= 2.0.5)
   - Mantle/extobjc (2.0.5)
+  - MBSimpleLoadingIndicator (0.1.0)
   - pop (1.0.8)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
   - ChameleonFramework
   - HNKGooglePlacesAutocomplete (~> 1.1)
+  - MBSimpleLoadingIndicator (~> 0.1)
   - pop (~> 1.0)
 
 SPEC CHECKSUMS:
@@ -53,6 +55,7 @@ SPEC CHECKSUMS:
   HNKGooglePlacesAutocomplete: e3628e130ad9c6b909760bf314b98227b03e708f
   HNKServerFacade: 0fa3839353480b8862563a34903ad1406a38b4c9
   Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
+  MBSimpleLoadingIndicator: bb386548fda4a75fd792b1793ac1cd8ff2862cf7
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
 
 COCOAPODS: 0.39.0
