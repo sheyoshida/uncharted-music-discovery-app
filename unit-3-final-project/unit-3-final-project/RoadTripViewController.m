@@ -19,6 +19,7 @@
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
 #import "CLPlacemark+HNKAdditions.h"
 #import "Chameleon.h"
+#import "MBLoadingIndicator.h"
 
 @interface RoadTripViewController () <MKMapViewDelegate,
 CLLocationManagerDelegate,
@@ -50,6 +51,8 @@ UISearchBarDelegate
 
 @property (nonatomic) BOOL startEdit;
 
+@property (nonatomic, strong) MBLoadingIndicator *loadview;
+
 
 @end
 
@@ -57,6 +60,23 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //Create the loader
+    self.loadview = [[MBLoadingIndicator alloc] init];
+    
+    //NOTE: Any extra loader can be done here, including sizing, colors, animation speed, etc
+    //      Pre-start changes will not be animated.
+    [self.loadview  setLoaderStyle:MBLoaderFullCircle];
+    [self.loadview setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
+    [self.loadview setWidth:20];
+    [self.loadview  setLoaderSize:MBLoaderLarge];
+    [self.loadview  setStartPosition:MBLoaderRight];
+    [self.loadview  setAnimationSpeed:MBLoaderSpeedFast];
+    [self.loadview  offsetCenterXBy:-12.5f];
+    
+    
+    
+    
     self.startEdit= NO;
     self.autoCompleteSearchResults = [[NSMutableArray alloc]init];
     self.searchResultsTableView.delegate = self;
@@ -158,9 +178,40 @@ UISearchBarDelegate
 
 #pragma mark - MKMapView Methods
 
+- (MKAnnotationView *)mapView:(MKMapView *)mV viewForAnnotation:(id <MKAnnotation>)annotation {
+    
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+    {
+        return nil;
+    }
+    else if ([annotation isKindOfClass:[CustomPin class]]) // use whatever annotation class you used when creating the annotation
+    {
+        static NSString * const defaultPinID = @"com.invasivecode.pin";
+        
+        MKAnnotationView* annotationView = [self.roadTripMapView dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
+        
+        if (annotationView)
+        {
+            annotationView.annotation = annotation;
+        }
+        else
+        {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation
+                                                          reuseIdentifier:defaultPinID];
+        }
+        annotationView.centerOffset = CGPointMake(0, -18.0);
+        annotationView.canShowCallout = NO;
+        annotationView.image = [UIImage imageNamed:@"MapPinOrange.png"];
+        
+        return annotationView;
+    }
+    return nil;
+}
+
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
-    userLocation.title = @"Music";
+    userLocation.title = @"Current Location";
 }
 
 - (void)zoomIntoLocation:(CLLocation *)location andZoom:(CLLocationDistance) distance {
@@ -175,23 +226,67 @@ UISearchBarDelegate
 {
     MKPolylineRenderer *renderer =
     [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-    renderer.strokeColor = [UIColor blueColor];
+    renderer.strokeColor = [UIColor colorWithHexString:@"0099cc"];
     renderer.lineWidth = 5.0;
     return renderer;
 }
 
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    id annotation = view.annotation;
+    
+    if(![annotation isKindOfClass:[MKUserLocation class]]){
+        [self.annotation removeFromSuperview];
+        CustomPin * pin = view.annotation;
+        LocationInfoObject *obj = pin.city;
+        
+        self.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
+        [self.annotation setFrame:CGRectMake(view.bounds.origin.x - self.annotation.bounds.size.width/2, view.bounds.origin.y, self.annotation.bounds.size.width, self.annotation.bounds.size.height)];
+        [view addSubview:self.annotation];
+        
+        self.annotation.viewDetail.layer.cornerRadius = 10;
+        
+        
+        
+        [self.modelData enumerateObjectsUsingBlock:^(LocationInfoObject* object, NSUInteger idx, BOOL *stop)
+        {
+            if ([object.SubAdministrativeArea isEqualToString:obj.SubAdministrativeArea]) {
+                [self.modelData exchangeObjectAtIndex:idx withObjectAtIndex:0];
+            }
+            
+        }];
+        
+        
+        [self.tableView reloadData];
+    }
+    
+    
+}
+
+
+
+
 -(void)showRoute:(MKDirectionsResponse *)response
 {
+    [self.roadTripMapView removeOverlays: [self.roadTripMapView overlays]];
+    [self.roadTripMapView removeAnnotations: [self.roadTripMapView annotations]];
     MKRoute *route = [response.routes firstObject];
     MKMapPoint middlePoint = route.polyline.points[route.polyline.pointCount/2];
     
     CLLocationCoordinate2D coordinate = MKCoordinateForMapPoint(middlePoint);
     
     [self zoomIntoLocation: [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude] andZoom:route.distance*1.5];
+    
     [self.roadTripMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
     
-
     
+    
+    //Start the loader
+    [self.loadview start];
+    [self.loadview incrementPercentageBy:17];
+    
+    //Add the loader to our view
+    [self.view addSubview:self.loadview];
+
         [NearbyLocationProcessor findCitiesInRoute:route completion:^(NSArray<LocationInfoObject *> *cities) {
             
     
@@ -199,9 +294,12 @@ UISearchBarDelegate
                 NSArray *finalCities = [cities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
                     return evaluatedObject.artists.count > 0;
                 }]];
-                [self dropPinsForCities:finalCities];
+                
                 [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
+                    [self dropPinsForCities:finalCities];
+                    
                     [self setModel:finalCities];
+                    [self.loadview dismiss];
                 }];
             }];
     
@@ -219,14 +317,34 @@ UISearchBarDelegate
 - (void)dropPinsForCities:(NSArray*)cities {
     
     for (LocationInfoObject *city in cities) {
-
-        CLLocation *location = city.location;
-        CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
-        MKPlacemark *placeMark = [[MKPlacemark alloc]initWithCoordinate:location2D addressDictionary:nil];
-        [self.roadTripMapView addAnnotation:placeMark];
+        if (city.artists.count == 0) {
+           
+        }
+        else{
+            CLLocation *location = city.location;
+            CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+            CustomPin *pin = [CustomPin alloc];
+            pin.city = city;
+            pin.coordinate = location2D;
+            
+            [self.roadTripMapView addAnnotation:pin];
+            
+        }
         
     }
 }
+
+//- (void)dropPinsForCities:(NSArray*)cities {
+//    
+//    for (LocationInfoObject *city in cities) {
+//
+//        CLLocation *location = city.location;
+//        CLLocationCoordinate2D location2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+//        MKPlacemark *placeMark = [[MKPlacemark alloc]initWithCoordinate:location2D addressDictionary:nil];
+//        [self.roadTripMapView addAnnotation:placeMark];
+//        
+//    }
+//}
 
 
 #pragma mark - CLLocationManagerDelegate
@@ -260,9 +378,11 @@ UISearchBarDelegate
     if (tableView == self.searchResultsTableView) {
         return @"";
     }
+    else if (self.modelData.count < 1 ){
+        return @" ";
+    }
     else{
         LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
-        NSLog(@"%@", currentCity.SubAdministrativeArea);
         return [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State];
     }
 }
@@ -275,6 +395,8 @@ UISearchBarDelegate
     }
     
 }
+
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     

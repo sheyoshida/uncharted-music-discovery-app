@@ -19,6 +19,7 @@
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
 #import "CLPlacemark+HNKAdditions.h"
 #import "Chameleon.h"
+#import "MBLoadingIndicator.h"
 
 @import AVFoundation;
 
@@ -49,6 +50,8 @@ UISearchBarDelegate
 @property (nonatomic) NSMutableArray *autoCompleteSearchResults;
 @property (strong, nonatomic) HNKGooglePlacesAutocompleteQuery *searchQuery;
 
+@property (nonatomic, strong) MBLoadingIndicator *loadview;
+
 @end
 
 
@@ -56,6 +59,20 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //Create the loader
+    self.loadview = [[MBLoadingIndicator alloc] init];
+    
+    //NOTE: Any extra loader can be done here, including sizing, colors, animation speed, etc
+    //      Pre-start changes will not be animated.
+    [self.loadview  setLoaderStyle:MBLoaderFullCircle];
+    [self.loadview setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
+    [self.loadview setWidth:20];
+    [self.loadview  setLoaderSize:MBLoaderLarge];
+    [self.loadview  setStartPosition:MBLoaderRight];
+    [self.loadview  setAnimationSpeed:MBLoaderSpeedFast];
+    [self.loadview  offsetCenterXBy:-12.5f];
+
 
     //long touch
     UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
@@ -172,7 +189,6 @@ UISearchBarDelegate
         CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-        NSLog(@"%@", artist.songPreview);
         NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
         
         NSError *error;
@@ -188,10 +204,7 @@ UISearchBarDelegate
             [self.audioPlayer prepareToPlay];
             [self.audioPlayer play];
         }
-        
-        NSLog(@"%@", artist.songPreview);
-        
-        
+            
     }
     else
     {
@@ -225,6 +238,9 @@ UISearchBarDelegate
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (tableView == self.autoCompleteTableView) {
+        return @" ";
+    }
+    else if (self.modelData.count < 1 ){
         return @" ";
     }
     else{
@@ -342,6 +358,13 @@ UISearchBarDelegate
 
 - (void)getNearbyCitiesWithCoordinate: (CLLocation *) userLocation {
     
+    //Start the loader
+    [self.loadview start];
+    [self.loadview incrementPercentageBy:17];
+    
+    //Add the loader to our view
+    [self.view addSubview:self.loadview];
+    
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
         
@@ -356,6 +379,7 @@ UISearchBarDelegate
                 [self dropPinsForCities:finalCities];
                 [self setModel:finalCities];
                 [self showDataForCity:[finalCities firstObject]];
+                [self.loadview dismiss];
             }];
         }];
     }];
@@ -443,39 +467,6 @@ UISearchBarDelegate
 
         [self.tableView reloadData];
     }
-    
-    NSLog(@"pin selected");
-    
-//    if(![view isKindOfClass:[MKUserLocation class]])
-//    {
-//        CustomPin *selectedPin = view.annotation;
-//        selectedPin.selected = YES;
-//        
-//        //    [mapView deselectAnnotation:view.annotation animated:YES];
-//        
-//        for (CustomPin *currentPin in [mapView annotations]) {
-//            
-//            if (currentPin.selected) {
-//                NSLog(@"%@", currentPin);
-////                LocationInfoObject *obj = pin.city;
-////                
-////                
-////                pin.annotation.cityStateLabel.text = [NSString stringWithFormat:@"%@, %@", obj.SubAdministrativeArea, obj.State];
-////                pin.annotation.cityStateLabel.backgroundColor = [UIColor whiteColor];
-////                [pin.annotation setFrame:CGRectMake(view.bounds.origin.x - 55, view.bounds.origin.y - 150, pin.annotation.bounds.size.width, pin.annotation.bounds.size.height)];
-////                [view addSubview:pin.annotation];
-////                
-////                self.currentCity = pin.city;
-////                [self.tableView reloadData];
-//            }
-//            else{
-//                CustomPin *pin = view.annotation;
-//                [pin.annotation removeFromSuperview];
-//                
-//            }
-//        }
-
-//    }
     
 }
 
