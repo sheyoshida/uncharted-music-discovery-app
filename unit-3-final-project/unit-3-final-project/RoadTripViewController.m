@@ -69,13 +69,10 @@ UISearchBarDelegate
     [self.loadview  setLoaderStyle:MBLoaderFullCircle];
     [self.loadview setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
     [self.loadview setWidth:20];
-    [self.loadview  setLoaderSize:MBLoaderLarge];
-    [self.loadview  setStartPosition:MBLoaderRight];
+    [self.loadview  setLoaderSize:MBLoaderMedium];
+    [self.loadview  setStartPosition:MBLoaderTop];
     [self.loadview  setAnimationSpeed:MBLoaderSpeedFast];
-    [self.loadview  offsetCenterXBy:-12.5f];
-    
-    
-    
+    [self.loadview  offsetCenterXBy:0.0f];
     
     self.startEdit= NO;
     self.autoCompleteSearchResults = [[NSMutableArray alloc]init];
@@ -201,7 +198,7 @@ UISearchBarDelegate
         }
         annotationView.centerOffset = CGPointMake(0, -18.0);
         annotationView.canShowCallout = NO;
-        annotationView.image = [UIImage imageNamed:@"MapPinOrange.png"];
+        annotationView.image = [UIImage imageNamed:@"map-pin.png"];
         
         return annotationView;
     }

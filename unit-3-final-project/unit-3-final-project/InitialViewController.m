@@ -54,7 +54,6 @@ UISearchBarDelegate
 
 @end
 
-
 @implementation InitialViewController
 
 - (void)viewDidLoad {
