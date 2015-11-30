@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Xvi-al-HPM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Xvi-al-HPM">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
@@ -22,7 +22,7 @@
                         <viewControllerLayoutGuide type="bottom" id="zge-xm-7zG"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ORK-ip-stT">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="84" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Gnt-mM-2Vc">
@@ -162,11 +162,18 @@
             </objects>
             <point key="canvasLocation" x="-712" y="1577"/>
         </scene>
-        <!--Item-->
+        <!--Navigation Controller-->
         <scene sceneID="AZC-Be-IoU">
             <objects>
                 <navigationController id="cGy-O6-lWG" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="Knx-5s-fU1"/>
+                    <tabBarItem key="tabBarItem" title="" image="tab-user" id="Knx-5s-fU1">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="1" green="0.36078431372549019" blue="0.10196078431372549" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7ec-wU-GlK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -180,7 +187,7 @@
             </objects>
             <point key="canvasLocation" x="-712" y="858"/>
         </scene>
-        <!--Roadtrip-->
+        <!--Road Trip View Controller-->
         <scene sceneID="cWc-pa-3Pj">
             <objects>
                 <viewController id="3hW-Sk-yDp" customClass="RoadTripViewController" sceneMemberID="viewController">
@@ -189,11 +196,11 @@
                         <viewControllerLayoutGuide type="bottom" id="B1K-om-Att"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="MJC-qh-4WM">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1dJ-FW-vHU" customClass="MKMapView">
-                                <rect key="frame" x="0.0" y="138" width="600" height="240"/>
+                                <rect key="frame" x="0.0" y="138" width="600" height="220.5"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -205,8 +212,8 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="IAx-xf-Bmh">
-                                <rect key="frame" x="0.0" y="378" width="600" height="173"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="IAx-xf-Bmh">
+                                <rect key="frame" x="0.0" y="377" width="600" height="173"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -255,8 +262,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CWd-de-jBv" userLabel="Navigation Bar View">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YLh-oV-QzC">
-                                        <rect key="frame" x="518" y="20" width="72" height="32"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YLh-oV-QzC">
+                                        <rect key="frame" x="520" y="21" width="70" height="31"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="16"/>
                                         <state key="normal" title="   Route   ">
@@ -275,7 +282,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ioI-dY-kCQ">
-                                <rect key="frame" x="0.0" y="138" width="600" height="462"/>
+                                <rect key="frame" x="0.0" y="138" width="600" height="413"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -358,7 +365,13 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Roadtrip" id="s65-eK-Qep"/>
+                    <tabBarItem key="tabBarItem" title="" image="tab-logo" id="s65-eK-Qep">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="1" green="0.36078431372549019" blue="0.10196078431372549" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <connections>
                         <outlet property="endSearchBar" destination="DlS-yI-abb" id="LAC-5G-K9C"/>
                         <outlet property="roadTripMapView" destination="1dJ-FW-vHU" id="KQB-nj-fLU"/>
@@ -392,27 +405,32 @@
         <scene sceneID="vMe-fm-Bs2">
             <objects>
                 <tabBarController id="Xvi-al-HPM" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="Llf-CJ-wbb">
+                    <tabBar key="tabBar" contentMode="scaleAspectFit" translucent="NO" id="Llf-CJ-wbb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="wB5-HJ-Ksy" kind="relationship" relationship="viewControllers" id="76Q-fp-nRb"/>
-                        <segue destination="3hW-Sk-yDp" kind="relationship" relationship="viewControllers" id="f6X-UE-tTW"/>
-                        <segue destination="cGy-O6-lWG" kind="relationship" relationship="viewControllers" id="qjX-If-RL7"/>
+                        <segue destination="3hW-Sk-yDp" kind="relationship" relationship="viewControllers" id="U4l-1X-HMD"/>
+                        <segue destination="wB5-HJ-Ksy" kind="relationship" relationship="viewControllers" id="YzY-sh-ANr"/>
+                        <segue destination="cGy-O6-lWG" kind="relationship" relationship="viewControllers" id="QDh-pn-aMd"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EyI-He-rat" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1520" y="81"/>
         </scene>
-        <!--Discover-->
+        <!--Navigation Controller-->
         <scene sceneID="T1f-th-ANc">
             <objects>
                 <navigationController id="wB5-HJ-Ksy" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Discover" id="q2X-hB-EvR"/>
+                    <tabBarItem key="tabBarItem" title="" image="tab-music-pin" id="q2X-hB-EvR">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="1" green="0.36078431372549019" blue="0.10196078431372549" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="idZ-i4-Lgx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -440,14 +458,14 @@
                         <viewControllerLayoutGuide type="bottom" id="0ik-gQ-DfC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="SFD-80-rlq">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1qS-Xt-ORZ" userLabel="View Map Container">
-                                <rect key="frame" x="0.0" y="94" width="600" height="150"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1qS-Xt-ORZ" userLabel="View Map Container">
+                                <rect key="frame" x="0.0" y="94" width="600" height="151"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="77m-pW-K1k">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="150"/>
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="77m-pW-K1k">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="151"/>
                                         <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="250" id="Nfb-EQ-P9F"/>
@@ -487,10 +505,10 @@
                                     <constraint firstAttribute="height" constant="50" id="Uy8-28-WHN"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cvi-XS-ZJc" userLabel="View Collection View Container">
-                                <rect key="frame" x="0.0" y="244" width="600" height="307"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cvi-XS-ZJc" userLabel="View Collection View Container">
+                                <rect key="frame" x="0.0" y="232" width="600" height="307"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="NfD-Tg-fzA">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="NfD-Tg-fzA">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="307"/>
                                         <animations/>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -798,4 +816,9 @@
             <point key="canvasLocation" x="-2208" y="2218"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tab-logo" width="26" height="20"/>
+        <image name="tab-music-pin" width="18" height="25"/>
+        <image name="tab-user" width="20" height="20"/>
+    </resources>
 </document>

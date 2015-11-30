@@ -29,6 +29,22 @@ static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCo
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor redColor]}];
     [UINavigationBar appearance].barTintColor = [UIColor colorWithRed:256/256.0 green:256/256.0 blue:256/256.0 alpha:1.0]; // set background color
     
+    // tab bar properties
+    
+
+    
+    // Add this code to change StateNormal text Color,
+    [UITabBarItem.appearance setTitleTextAttributes:
+     @{NSForegroundColorAttributeName : [UIColor colorWithRed:128/256.0 green:128/256.0 blue:128/256.0 alpha:1.0]}
+                                           forState:UIControlStateNormal]; //grey color
+    
+    // then if StateSelected should be different, you should add this code
+    [UITabBarItem.appearance setTitleTextAttributes:
+     @{NSForegroundColorAttributeName : [UIColor colorWithRed:255/256.0 green:92/256.0 blue:26/256.0 alpha:1.0]}
+                                           forState:UIControlStateSelected]; // orange color
+    
+   
+    
     [HNKGooglePlacesAutocompleteQuery setupSharedQueryWithAPIKey: kHNKDemoGooglePlacesAutocompleteApiKey];
     
     return YES;
