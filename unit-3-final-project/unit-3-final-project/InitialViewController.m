@@ -230,11 +230,11 @@ UISearchBarDelegate
     
     // section text
     header.textLabel.textColor = [UIColor colorWithRed:(251/255.f) green:(66/255.f) blue:(7/255.f) alpha:1]; // orange color
-    header.textLabel.font = [UIFont fontWithName:@"Varela" size:18];
+    header.textLabel.font = [UIFont fontWithName:@"Varela" size:16];
     CGRect headerFrame = self.tableView.tableHeaderView.frame;
     headerFrame.size.height = self.tableView.frame.size.height;
     header.textLabel.frame = headerFrame;
-    header.textLabel.textAlignment = NSTextAlignmentLeft;
+    header.textLabel.textAlignment = NSTextAlignmentCenter;
 
 }
 
@@ -443,7 +443,7 @@ UISearchBarDelegate
         }
         annotationView.centerOffset = CGPointMake(0, -18.0);
         annotationView.canShowCallout = NO;
-        annotationView.image = [UIImage imageNamed:@"MapPinOrange.png"];
+        annotationView.image = [UIImage imageNamed:@"map-pin.png"];
         
         return annotationView;
     }
