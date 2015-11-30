@@ -68,10 +68,10 @@ UISearchBarDelegate
     [self.loadview  setLoaderStyle:MBLoaderFullCircle];
     [self.loadview setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
     [self.loadview setWidth:20];
-    [self.loadview  setLoaderSize:MBLoaderLarge];
-    [self.loadview  setStartPosition:MBLoaderRight];
+    [self.loadview  setLoaderSize:MBLoaderMedium];
+    [self.loadview  setStartPosition:MBLoaderTop];
     [self.loadview  setAnimationSpeed:MBLoaderSpeedFast];
-    [self.loadview  offsetCenterXBy:-12.5f];
+    [self.loadview  offsetCenterXBy:0.0f];
 
 
     //long touch
