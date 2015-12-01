@@ -3,4 +3,5 @@ pod 'pop', '~> 1.0'
 pod 'HNKGooglePlacesAutocomplete', '~> 1.1'
 pod 'ChameleonFramework'
 pod 'MBSimpleLoadingIndicator', '~> 0.1'
+pod 'DGActivityIndicatorView', '~> 2.0'
 

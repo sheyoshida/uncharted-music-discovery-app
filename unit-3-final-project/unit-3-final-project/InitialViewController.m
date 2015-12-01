@@ -50,7 +50,6 @@ UISearchBarDelegate
 @property (nonatomic) NSMutableArray *autoCompleteSearchResults;
 @property (strong, nonatomic) HNKGooglePlacesAutocompleteQuery *searchQuery;
 
-@property (nonatomic, strong) MBLoadingIndicator *loadview;
 
 @end
 
@@ -58,29 +57,12 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    //Create the loader
-    self.loadview = [[MBLoadingIndicator alloc] init];
-    
-    //NOTE: Any extra loader can be done here, including sizing, colors, animation speed, etc
-    //      Pre-start changes will not be animated.
-    [self.loadview  setLoaderStyle:MBLoaderFullCircle];
-    [self.loadview setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
-    [self.loadview setWidth:20];
-    [self.loadview  setLoaderSize:MBLoaderMedium];
-    [self.loadview  setStartPosition:MBLoaderTop];
-    [self.loadview  setAnimationSpeed:MBLoaderSpeedFast];
-    [self.loadview  offsetCenterXBy:0.0f];
-
 
     //long touch
     UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
     [gesture1 setDelegate:self];
     [gesture1 setMinimumPressDuration:1];
     [self.tableView addGestureRecognizer: gesture1];
-    
-    
-    
     
     self.currentCity = [[LocationInfoObject alloc]init];
     self.modelData = [[NSMutableArray alloc]init];
@@ -147,6 +129,7 @@ UISearchBarDelegate
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     [searchBar setShowsCancelButton:YES animated:YES];
+    [self searchBar:searchBar textDidChange:searchBar.text];
     
     return YES;
 }
@@ -157,7 +140,7 @@ UISearchBarDelegate
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    if (searchBar.text > 0) {
+    if (searchBar.text.length > 0) {
         self.autoCompleteTableView.hidden = NO;
         [self.searchQuery fetchPlacesForSearchQuery:searchText completion:^(NSArray *places, NSError *error) {
             if (error) {
@@ -304,11 +287,12 @@ UISearchBarDelegate
         
         HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
         
+        __weak typeof(self) weakSelf = self;
         [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
-            self.searchBar.text = place.name;
-            [self.mapView removeAnnotations:self.mapView.annotations];
-            [self zoomIntoLocation:placemark.location andZoom:100000];
-            [self getNearbyCitiesWithCoordinate:placemark.location];
+            weakSelf.searchBar.text = place.name;
+            [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
+            [weakSelf zoomIntoLocation:placemark.location andZoom:100000];
+            [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
         
@@ -360,12 +344,9 @@ UISearchBarDelegate
 
 - (void)getNearbyCitiesWithCoordinate: (CLLocation *) userLocation {
     
-    //Start the loader
-    [self.loadview start];
-    [self.loadview incrementPercentageBy:17];
+    MBLoadingIndicator *indicator = [self showLoadingIndicator];
     
-    //Add the loader to our view
-    [self.view addSubview:self.loadview];
+    __weak typeof(self) weakSelf = self;
     
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
@@ -378,13 +359,43 @@ UISearchBarDelegate
             
             [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
                 
-                [self dropPinsForCities:finalCities];
-                [self setModel:finalCities];
+                [weakSelf dropPinsForCities:finalCities];
+                [weakSelf setModel:finalCities];
                 
-                
+                [weakSelf hideLoadingIndicator:indicator];
             }];
         }];
     }];
+}
+
+- (MBLoadingIndicator *)showLoadingIndicator {
+    NSLog(@"***** SHOWING INDICATOR ****");
+    MBLoadingIndicator *indicator = [[MBLoadingIndicator alloc] init];
+    
+    //NOTE: Any extra loader can be done here, including sizing, colors, animation speed, etc
+    //      Pre-start changes will not be animated.
+    [indicator setLoaderStyle:MBLoaderFullCircle];
+    [indicator setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
+    [indicator setWidth:20];
+    [indicator setLoaderSize:MBLoaderMedium];
+    [indicator setStartPosition:MBLoaderTop];
+    [indicator setAnimationSpeed:MBLoaderSpeedFast];
+    [indicator offsetCenterXBy:0.0f];
+    
+    [self.view addSubview:indicator];
+    [indicator start];
+    [indicator incrementPercentageBy:(arc4random_uniform(30) + 17)];
+    
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 4 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [weakSelf hideLoadingIndicator:indicator];
+    });
+    return indicator;
+}
+
+- (void)hideLoadingIndicator:(MBLoadingIndicator *)indicator {
+    [indicator finish];
 }
 
 - (void)setModel:(NSArray <LocationInfoObject *> *)cities {
@@ -398,7 +409,6 @@ UISearchBarDelegate
     
     self.currentCity = city;
     [self.tableView reloadData];
-    [self.loadview finish];
 }
 
 - (void)dropPinsForCities:(NSArray*)cities {

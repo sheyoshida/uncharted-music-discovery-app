@@ -23,6 +23,7 @@ PODS:
   - ChameleonFramework (2.0.4):
     - ChameleonFramework/Default (= 2.0.4)
   - ChameleonFramework/Default (2.0.4)
+  - DGActivityIndicatorView (2.0)
   - HNKGooglePlacesAutocomplete (1.1.1):
     - HNKGooglePlacesAutocomplete/Models (= 1.1.1)
     - HNKServerFacade (~> 0.3)
@@ -45,6 +46,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
   - ChameleonFramework
+  - DGActivityIndicatorView (~> 2.0)
   - HNKGooglePlacesAutocomplete (~> 1.1)
   - MBSimpleLoadingIndicator (~> 0.1)
   - pop (~> 1.0)
@@ -52,6 +54,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   ChameleonFramework: 5abe69b1f2a6cc79c3c435fcd9d3d855748225ee
+  DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
   HNKGooglePlacesAutocomplete: e3628e130ad9c6b909760bf314b98227b03e708f
   HNKServerFacade: 0fa3839353480b8862563a34903ad1406a38b4c9
   Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
