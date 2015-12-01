@@ -344,16 +344,21 @@ UITableViewDelegate
                     //DGActivityIndicatorView
                     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             
-                    self.activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType: DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:30.0f];
-            
+                    DGActivityIndicatorView *activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType: DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:40.0f];
+        
+        
                     if(cell.isSelected) {
-                        self.activityIndicatorView.frame = CGRectMake(314.0f, 19.0f, 50.0f, 50.0f);
-                        [cell.contentView addSubview:self.activityIndicatorView];
-                        [self.activityIndicatorView startAnimating];
+                        activityIndicatorView.frame = CGRectMake(300.0f, 19.0f, 50.0f, 50.0f);
+                       [cell.contentView addSubview:activityIndicatorView];
+                        [cell.contentView sendSubviewToBack:activityIndicatorView];
+                    
+                        [activityIndicatorView startAnimating];
                         
                     } else {
-                        [self.activityIndicatorView stopAnimating];
-                        self.activityIndicatorView.hidden = YES;
+                        [activityIndicatorView stopAnimating];
+                        activityIndicatorView.hidden = YES;
+                        [cell reloadInputViews];
+                     
                     }
     
     }
