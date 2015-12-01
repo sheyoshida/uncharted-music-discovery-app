@@ -207,6 +207,7 @@ UISearchBarDelegate
 
 #pragma mark - TableView Stuff
 
+
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     
@@ -216,7 +217,7 @@ UISearchBarDelegate
     CGRect headerFrame = self.tableView.tableHeaderView.frame;
     headerFrame.size.height = self.tableView.frame.size.height;
     header.textLabel.frame = headerFrame;
-    header.textLabel.textAlignment = NSTextAlignmentCenter;
+    header.textLabel.textAlignment = NSTextAlignmentLeft;
 
 }
 
