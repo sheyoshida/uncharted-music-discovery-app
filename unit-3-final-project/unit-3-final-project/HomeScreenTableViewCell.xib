@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
@@ -34,23 +34,42 @@
                                     <constraint firstAttribute="height" constant="69.5" id="Lxr-Sf-sdt"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
-                                <rect key="frame" x="281" y="20" width="50" height="50"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="artist name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
+                                <rect key="frame" x="83" y="5" width="169" height="18.5"/>
                                 <animations/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="1J0-DQ-Ava"/>
-                                    <constraint firstAttribute="height" constant="50" id="lvF-he-GiU"/>
-                                </constraints>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
-                                <rect key="frame" x="90" y="10" width="242" height="22"/>
-                                <animations/>
-                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
-                                <rect key="frame" x="90" y="42" width="242" height="14.5"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a1F-HC-WaR" userLabel="View - visualizer">
+                                <rect key="frame" x="257" y="5" width="80" height="70"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
+                                        <rect key="frame" x="27.5" y="22.5" width="25" height="25"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="o9q-Gn-APL"/>
+                                            <constraint firstAttribute="width" constant="25" id="qHS-yx-T40"/>
+                                        </constraints>
+                                        <state key="normal" image="heart-selected"/>
+                                        <state key="disabled" image="heart-button"/>
+                                        <connections>
+                                            <action selector="heartButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ize-ZA-b1f"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="Jgc-72-JaT"/>
+                                    <constraint firstAttribute="height" constant="70" id="LDd-L2-ZSZ"/>
+                                    <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerX" secondItem="a1F-HC-WaR" secondAttribute="centerX" id="Wsi-70-afI"/>
+                                    <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerY" secondItem="a1F-HC-WaR" secondAttribute="centerY" id="pSh-b3-pKs"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
+                                <rect key="frame" x="85" y="33" width="167" height="26.5"/>
+                                <animations/>
                                 <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -59,17 +78,19 @@
                         <animations/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="10" id="3x0-RM-hMD"/>
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="5" id="4px-id-Hx5"/>
-                            <constraint firstAttribute="bottom" secondItem="Cm1-0Z-A8R" secondAttribute="bottom" constant="10" id="64Z-rB-LAx"/>
-                            <constraint firstAttribute="trailing" secondItem="Cm1-0Z-A8R" secondAttribute="trailing" constant="11" id="9QN-t6-yuX"/>
+                            <constraint firstAttribute="trailing" secondItem="a1F-HC-WaR" secondAttribute="trailing" constant="5" id="9pa-wh-LKa"/>
+                            <constraint firstItem="E80-fT-Hl3" firstAttribute="top" secondItem="O3T-vN-MI9" secondAttribute="top" id="B0V-VZ-ekU"/>
+                            <constraint firstItem="E80-fT-Hl3" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="3" id="B0e-c6-zv1"/>
+                            <constraint firstAttribute="bottom" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="20" symbolic="YES" id="FrB-Qv-ygK"/>
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="leading" secondItem="6pY-Op-Kzy" secondAttribute="leading" constant="10" id="LE0-4l-4KT"/>
+                            <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="E80-fT-Hl3" secondAttribute="bottom" constant="10" id="M5Q-WJ-NiV"/>
+                            <constraint firstItem="a1F-HC-WaR" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="5" id="NO5-md-C6z"/>
                             <constraint firstAttribute="bottom" secondItem="O3T-vN-MI9" secondAttribute="bottom" constant="5" id="SAK-1a-R95"/>
-                            <constraint firstItem="E80-fT-Hl3" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="fB7-7h-sXu"/>
-                            <constraint firstItem="E80-fT-Hl3" firstAttribute="top" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="10" id="fBf-8g-igN"/>
-                            <constraint firstAttribute="trailing" secondItem="kfC-3E-VvA" secondAttribute="trailing" constant="10" id="ghf-sl-yEv"/>
-                            <constraint firstItem="kfC-3E-VvA" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="q7N-Eb-fdf"/>
-                            <constraint firstAttribute="trailing" secondItem="E80-fT-Hl3" secondAttribute="trailing" constant="10" id="zc5-zi-jmt"/>
+                            <constraint firstAttribute="bottom" secondItem="a1F-HC-WaR" secondAttribute="bottom" constant="5" id="qjz-lK-MIk"/>
+                            <constraint firstItem="a1F-HC-WaR" firstAttribute="leading" secondItem="E80-fT-Hl3" secondAttribute="trailing" constant="5" id="vo6-l9-4Tx"/>
+                            <constraint firstItem="a1F-HC-WaR" firstAttribute="leading" secondItem="kfC-3E-VvA" secondAttribute="trailing" constant="5" id="y2f-nr-uRU"/>
+                            <constraint firstItem="kfC-3E-VvA" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="5" id="zq2-0r-NEU"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -92,4 +113,8 @@
             <point key="canvasLocation" x="825" y="541"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="heart-button" width="44" height="41"/>
+        <image name="heart-selected" width="44" height="41"/>
+    </resources>
 </document>

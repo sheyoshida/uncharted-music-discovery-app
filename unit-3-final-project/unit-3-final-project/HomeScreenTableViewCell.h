@@ -16,4 +16,5 @@
 @property (strong, nonatomic) IBOutlet UIButton *buttonFavorite;
 @property (weak, nonatomic) IBOutlet UILabel *SongNameLabel;
 
+
 @end

@@ -6,6 +6,7 @@
 //  Copyright © 2015 Shena Yoshida. All rights reserved.
 //
 
+
 #import "HomeScreenTableViewCell.h"
 #import "Pop.h"
 #import "Chameleon.h"
@@ -16,13 +17,33 @@
    
     // slightly round borders
     self.artistImageView.clipsToBounds = YES;
-    self.artistImageView.layer.cornerRadius = 3.0;
-    self.artistContainerView.layer.cornerRadius = 3.0;
+    self.artistImageView.layer.cornerRadius = 5.0;
+    self.artistContainerView.layer.cornerRadius = 5.0;
+    
+    // button!
+    [self.buttonFavorite setImage:[UIImage imageNamed:@"heart-button.png"] forState:UIControlStateNormal];
 }
+    
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+
 }
+
+- (IBAction)heartButtonTapped:(id)sender {
+
+    UIButton *btn = (UIButton *)sender;
+    
+    if( [[btn imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"heart-button.png"]]) {
+        [btn setImage:[UIImage imageNamed:@"heart-selected.png"] forState:UIControlStateNormal];
+        // other statements
+    } else {
+        [btn setImage:[UIImage imageNamed:@"heart-button.png"] forState:UIControlStateNormal];
+        // other statements
+    }
+}
+
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
    

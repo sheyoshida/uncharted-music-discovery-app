@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "run_the_jewels.png",
+      "filename" : "heart-selected.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "heart-selected2x.png",
       "scale" : "2x"
     },
     {

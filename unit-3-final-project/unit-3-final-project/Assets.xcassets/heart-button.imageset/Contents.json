@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "talking_heads.png",
+      "filename" : "heart-button.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "heart-button@2x.png",
       "scale" : "2x"
     },
     {
