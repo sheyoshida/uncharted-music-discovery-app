@@ -24,27 +24,19 @@
 #import "MBLoadingIndicator.h"
 #import "DGActivityIndicatorView.h"
 
-
-
 @interface ScrollingRoadtripViewController ()
 <
 MKMapViewDelegate,
-CLLocationManagerDelegate,
-UITableViewDataSource,
 UITableViewDelegate,
-CLLocationManagerDelegate,
-UISearchBarDelegate
+UITableViewDelegate
 >
 
+@property (nonatomic) DGActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, readonly) BOOL animating;
 
-
-
 @property (weak, nonatomic) IBOutlet UIView *tableHeader;
-
 @property (strong, nonatomic) IBOutlet UISearchBar *startSearchBar;
 @property (strong, nonatomic) IBOutlet UISearchBar *endSearchBar;
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewTopSpaceConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet MKMapView *roadTripMapView;
@@ -71,14 +63,13 @@ UISearchBarDelegate
 @property (nonatomic, strong) MBLoadingIndicator *loadview;
 
 
-
 @end
 
 @implementation ScrollingRoadtripViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-  
+    
     // custom cell setup
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -86,7 +77,7 @@ UISearchBarDelegate
     [self.tableView registerNib:nib forCellReuseIdentifier:@"HomeScreenTableViewCellIdentifier"];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 40.0;
-
+    
     self.tableHeader.clipsToBounds = YES;
     
     // Starting with the table view a bit scrolled down to hide the search bar
@@ -110,10 +101,10 @@ UISearchBarDelegate
     
     // add nav bar button
     UIBarButtonItem *routeButton = [[UIBarButtonItem alloc]
-                                   initWithTitle:@"Route"
-                                   style:UIBarButtonItemStylePlain
-                                   target:self
-                                   action:@selector(routeButtonTapped)];
+                                    initWithTitle:@"Route"
+                                    style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(routeButtonTapped)];
     self.navigationItem.rightBarButtonItem = routeButton;
     
     //Create the loader
@@ -177,10 +168,10 @@ UISearchBarDelegate
     self.roadTripMapView.showsBuildings = YES;
     
     [self.navigationController setHidesNavigationBarHairline:YES];
-
     
     
-
+    
+    
 }
 
 - (void)routeButtonTapped {
@@ -208,7 +199,7 @@ UISearchBarDelegate
              [self showRoute:response];
          }
      }];
-
+    
 }
 
 #pragma mark - table view cell stuff
@@ -218,7 +209,7 @@ UISearchBarDelegate
         return 0;
     }
     else{
-    return 80;
+        return 80;
     }
 }
 
@@ -227,28 +218,28 @@ UISearchBarDelegate
         return nil;
     }
     else{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 80)];
-    [headerView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1]];
-    
-//    UIButton *playlistButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, [UIScreen mainScreen].bounds.size.width - 80, 30)];
-//    [playlistButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
-//    [playlistButton setBackgroundColor:[UIColor blueColor]];
-//    [headerView addSubview:playlistButton];
-    
-    UILabel *headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, [UIScreen mainScreen].bounds.size.width - 20, 30)];
-    if (self.modelData.count < 1 ){
-        [headerTitle setText:@" "];
-
-    }
-    else{
-        LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
-        [headerTitle setText: [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State]];
-    }
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 80)];
+        [headerView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1]];
+        
+        //    UIButton *playlistButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, [UIScreen mainScreen].bounds.size.width - 80, 30)];
+        //    [playlistButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
+        //    [playlistButton setBackgroundColor:[UIColor blueColor]];
+        //    [headerView addSubview:playlistButton];
+        
+        UILabel *headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, [UIScreen mainScreen].bounds.size.width - 20, 30)];
+        if (self.modelData.count < 1 ){
+            [headerTitle setText:@" "];
+            
+        }
+        else{
+            LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
+            [headerTitle setText: [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State]];
+        }
         [headerTitle setTextColor:[UIColor whiteColor]];
-    [headerTitle setBackgroundColor:[UIColor clearColor]];
-    [headerView addSubview:headerTitle];
-    
-    return headerView;
+        [headerTitle setBackgroundColor:[UIColor clearColor]];
+        [headerView addSubview:headerTitle];
+        
+        return headerView;
     }
 }
 
@@ -282,11 +273,10 @@ UISearchBarDelegate
         LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
         return [currentCity.artists count];
     }
-
+    
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     
     if (tableView == self.searchResultsTableView) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mySearchCellIdentifierUniq"];
@@ -298,7 +288,6 @@ UISearchBarDelegate
         HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
         
         //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"songCell"];
-   
         
         LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
         
@@ -326,12 +315,7 @@ UISearchBarDelegate
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
     if (tableView == self.searchResultsTableView) {
-     
-        
-        //search stuff
         [self.startSearchBar setShowsCancelButton:NO animated:YES];
         [self.startSearchBar resignFirstResponder];
         [self.endSearchBar setShowsCancelButton:NO animated:YES];
@@ -356,25 +340,34 @@ UISearchBarDelegate
         }
         
     } else {
-        
-        //DGActivityIndicatorView
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        
-        DGActivityIndicatorView *activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType: DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:30.0f];
-        
-        if(cell.isSelected) {
-            activityIndicatorView.frame = CGRectMake(314.0f, 19.0f, 50.0f, 50.0f);
-            [cell.contentView addSubview:activityIndicatorView];
-            [activityIndicatorView startAnimating];
             
-        } else {
+                    //DGActivityIndicatorView
+                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             
-           [activityIndicatorView stopAnimating];
-           activityIndicatorView.hidden = YES;
-        }
+                    self.activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType: DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:30.0f];
+            
+                    if(cell.isSelected) {
+                        self.activityIndicatorView.frame = CGRectMake(314.0f, 19.0f, 50.0f, 50.0f);
+                        [cell.contentView addSubview:self.activityIndicatorView];
+                        [self.activityIndicatorView startAnimating];
+                        
+                    } else {
+                        [self.activityIndicatorView stopAnimating];
+                        self.activityIndicatorView.hidden = YES;
+                    }
+    
     }
     
 }
+
+
+//- (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
+//
+//    [self.activityIndicatorView stopAnimating];
+//    self.activityIndicatorView.hidden = YES;
+//}
+
+
 
 #pragma mark - searchbar stuff
 
@@ -605,7 +598,5 @@ UISearchBarDelegate
     [self.locationManager stopUpdatingLocation];
     
 }
-
-
 
 @end
