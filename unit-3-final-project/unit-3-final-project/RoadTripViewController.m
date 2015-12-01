@@ -21,6 +21,13 @@
 #import "Chameleon.h"
 #import "MBLoadingIndicator.h"
 
+#import "CBZSplashView.h"
+#import "UIColor+HexString.h"
+#import "UIBezierPath+Shapes.h"
+
+static NSString * const kUnchartedIcon = @"unchartedWhiteMap";
+static NSString * const kUnchartedColor = @"0099cc";
+
 @interface RoadTripViewController () <MKMapViewDelegate,
 CLLocationManagerDelegate,
 UITableViewDataSource,
@@ -30,6 +37,9 @@ UISearchBarDelegate
 
 
 >
+
+@property (nonatomic, strong) CBZSplashView *splashView;
+
 
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
@@ -60,6 +70,19 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //CBZ Splashview
+//    __unused UIImage *icon = [UIImage imageNamed:kUnchartedIcon];
+//    UIColor *color = [UIColor colorWithHexString:kUnchartedColor];
+//    
+//    CBZSplashView *splashView = [CBZSplashView splashViewWithIcon:icon backgroundColor:color];
+//    
+//    splashView.animationDuration = 1.4;
+//    
+//    [self.view addSubview:splashView];
+//    
+//    self.splashView = splashView;
+    
     
     //Create the loader
     self.loadview = [[MBLoadingIndicator alloc] init];
@@ -94,6 +117,8 @@ UISearchBarDelegate
         if ([subView isKindOfClass:[UITextField class]]) {
             UITextField *searchField = (UITextField *)subView;
             searchField.font = [UIFont fontWithName:@"Varela Round" size:16];
+            
+          
         }
     }
     
@@ -125,6 +150,23 @@ UISearchBarDelegate
 
     
 }
+
+#pragma mark CBZ Splashview
+
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    
+//    /* wait a beat before animating in */
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.splashView startAnimation];
+//    });
+//}
+//
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return YES;
+//}
 
 
 #pragma mark - searchbar stuff

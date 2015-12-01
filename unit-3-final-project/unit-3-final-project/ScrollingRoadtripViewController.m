@@ -22,6 +22,7 @@
 #import "CLPlacemark+HNKAdditions.h"
 #import "Chameleon.h"
 #import "MBLoadingIndicator.h"
+#import "DGActivityIndicatorView.h"
 
 
 
@@ -34,6 +35,10 @@ UITableViewDelegate,
 CLLocationManagerDelegate,
 UISearchBarDelegate
 >
+
+@property (nonatomic, readonly) BOOL animating;
+
+
 
 @property (weak, nonatomic) IBOutlet UIView *tableHeader;
 
@@ -282,6 +287,7 @@ UISearchBarDelegate
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    
     if (tableView == self.searchResultsTableView) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mySearchCellIdentifierUniq"];
         HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
@@ -292,6 +298,7 @@ UISearchBarDelegate
         HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
         
         //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"songCell"];
+   
         
         LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
         
@@ -319,7 +326,12 @@ UISearchBarDelegate
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
     if (tableView == self.searchResultsTableView) {
+     
+        
+        //search stuff
         [self.startSearchBar setShowsCancelButton:NO animated:YES];
         [self.startSearchBar resignFirstResponder];
         [self.endSearchBar setShowsCancelButton:NO animated:YES];
@@ -343,6 +355,23 @@ UISearchBarDelegate
             }];
         }
         
+    } else {
+        
+        //DGActivityIndicatorView
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        DGActivityIndicatorView *activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType: DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:30.0f];
+        
+        if(cell.isSelected) {
+            activityIndicatorView.frame = CGRectMake(314.0f, 19.0f, 50.0f, 50.0f);
+            [cell.contentView addSubview:activityIndicatorView];
+            [activityIndicatorView startAnimating];
+            
+        } else {
+            
+           [activityIndicatorView stopAnimating];
+           activityIndicatorView.hidden = YES;
+        }
     }
     
 }

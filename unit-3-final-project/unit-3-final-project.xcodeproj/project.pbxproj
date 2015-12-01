@@ -25,6 +25,8 @@
 		4DBA58EE1BEFF1BD00668D63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DBA58EC1BEFF1BD00668D63 /* LaunchScreen.storyboard */; };
 		4DBA58F71BEFF34200668D63 /* InitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58F61BEFF34200668D63 /* InitialViewController.m */; };
 		4DBA58FA1BEFF3BA00668D63 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */; };
+		5FE457231C0D63F500F155A9 /* UIColor+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE4571E1C0D63F500F155A9 /* UIColor+HexString.m */; };
+		5FE457241C0D63F500F155A9 /* UIBezierPath+Shapes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE457201C0D63F500F155A9 /* UIBezierPath+Shapes.m */; };
 		5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */; };
 		F03138121BF8EC0A00785A44 /* NearbyLocationProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = F03138111BF8EC0A00785A44 /* NearbyLocationProcessor.m */; };
 		F03138151BF8F19400785A44 /* EchonestAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F03138141BF8F19400785A44 /* EchonestAPIManager.m */; };
@@ -62,6 +64,10 @@
 		4DBA58F61BEFF34200668D63 /* InitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitialViewController.m; sourceTree = "<group>"; };
 		4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		5FE4571D1C0D63F500F155A9 /* UIColor+HexString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HexString.h"; sourceTree = "<group>"; };
+		5FE4571E1C0D63F500F155A9 /* UIColor+HexString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HexString.m"; sourceTree = "<group>"; };
+		5FE4571F1C0D63F500F155A9 /* UIBezierPath+Shapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Shapes.h"; sourceTree = "<group>"; };
+		5FE457201C0D63F500F155A9 /* UIBezierPath+Shapes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Shapes.m"; sourceTree = "<group>"; };
 		5FE8B8551BF412DF00D1F557 /* ArtistInfoData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArtistInfoData.h; sourceTree = "<group>"; };
 		5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArtistInfoData.m; sourceTree = "<group>"; };
 		E1CA228851D4E7F9BFEC256D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -184,6 +190,7 @@
 				5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */,
 				4D72356D1C03CF920094AE36 /* API Files */,
 				4D7235701C03D0BE0094AE36 /* Maps and Location Data */,
+				5FE4571C1C0D63D300F155A9 /* CBZ */,
 				4D72356F1C03D0600094AE36 /* View Controllers */,
 				4DBA58EA1BEFF1BD00668D63 /* Assets.xcassets */,
 				4DBA58E41BEFF1BD00668D63 /* Main.storyboard */,
@@ -201,6 +208,17 @@
 				4DBA58DC1BEFF1BD00668D63 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5FE4571C1C0D63D300F155A9 /* CBZ */ = {
+			isa = PBXGroup;
+			children = (
+				5FE4571D1C0D63F500F155A9 /* UIColor+HexString.h */,
+				5FE4571E1C0D63F500F155A9 /* UIColor+HexString.m */,
+				5FE4571F1C0D63F500F155A9 /* UIBezierPath+Shapes.h */,
+				5FE457201C0D63F500F155A9 /* UIBezierPath+Shapes.m */,
+			);
+			name = CBZ;
 			sourceTree = "<group>";
 		};
 		71490F0067EF87169D6F2E4D /* Frameworks */ = {
@@ -223,7 +241,6 @@
 				4DBA58D51BEFF1BD00668D63 /* Frameworks */,
 				4DBA58D61BEFF1BD00668D63 /* Resources */,
 				C6303839D80B14EB4904BB3A /* Copy Pods Resources */,
-				F242565C5AB50C5A46448FE6 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -314,21 +331,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F242565C5AB50C5A46448FE6 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -341,6 +343,7 @@
 				4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */,
 				4DBA58E91BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld in Sources */,
 				F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */,
+				5FE457241C0D63F500F155A9 /* UIBezierPath+Shapes.m in Sources */,
 				4D1726D01C02562A006F5EA3 /* DetailArtistCollectionViewCell.m in Sources */,
 				F03138121BF8EC0A00785A44 /* NearbyLocationProcessor.m in Sources */,
 				4D79196C1C08F11E00C85465 /* ScrollingRoadtripViewController.m in Sources */,
@@ -352,6 +355,7 @@
 				5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */,
 				0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */,
 				4DBA58F71BEFF34200668D63 /* InitialViewController.m in Sources */,
+				5FE457231C0D63F500F155A9 /* UIColor+HexString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
