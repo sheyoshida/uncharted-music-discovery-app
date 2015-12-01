@@ -24,15 +24,20 @@
 #import "MBLoadingIndicator.h"
 #import "DGActivityIndicatorView.h"
 
+@import AVFoundation;
+
 @interface ScrollingRoadtripViewController ()
 <
 MKMapViewDelegate,
 UITableViewDelegate,
-UITableViewDelegate
+UITableViewDelegate,
+AVAudioPlayerDelegate
 >
 
 @property (nonatomic) DGActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, readonly) BOOL animating;
+@property(nonatomic) LocationInfoObject * currentCity;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 
 @property (weak, nonatomic) IBOutlet UIView *tableHeader;
 @property (strong, nonatomic) IBOutlet UISearchBar *startSearchBar;
@@ -316,6 +321,7 @@ UITableViewDelegate
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
     if (tableView == self.searchResultsTableView) {
         [self.startSearchBar setShowsCancelButton:NO animated:YES];
         [self.startSearchBar resignFirstResponder];
@@ -341,32 +347,54 @@ UITableViewDelegate
         }
         
     } else {
-            
-                    //DGActivityIndicatorView
-                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            
-                    DGActivityIndicatorView *activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType: DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:40.0f];
+        
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        DGActivityIndicatorView *activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:40.0f];
         
         
-                    if(cell.isSelected) {
-                        activityIndicatorView.frame = CGRectMake(300.0f, 19.0f, 50.0f, 50.0f);
-                       [cell.contentView addSubview:activityIndicatorView];
-                        [cell.contentView sendSubviewToBack:activityIndicatorView];
+        if (cell.isSelected) {
+            if (self.audioPlayer.playing == NO) {
+                LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
+                
+                ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
+                NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+                
+                NSError *error;
+                NSData *data = [NSData dataWithContentsOfURL:url];
+                self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+                
+                if (error)
+                {
+                    NSLog(@"Error in audioPlayer: %@",
+                          [error localizedDescription]);
+                } else {
+                    self.audioPlayer.delegate = self;
+                    [self.audioPlayer prepareToPlay];
+                    [self.audioPlayer play];
                     
-                        [activityIndicatorView startAnimating];
-                        
-                    } else {
-                        [activityIndicatorView stopAnimating];
-                        activityIndicatorView.hidden = YES;
-                        [cell reloadInputViews];
-                     
-                    }
-    
+                    
+                    //DGActivityIndicatorView
+                    activityIndicatorView.frame = CGRectMake(300.0f, 19.0f, 50.0f, 50.0f);
+                    [cell.contentView addSubview:activityIndicatorView];
+                    [cell.contentView sendSubviewToBack:activityIndicatorView];
+                    
+                    [activityIndicatorView startAnimating];
+                }
+                
+            } else {
+                [self.audioPlayer stop];
+                
+                //hide indicatorView
+                [activityIndicatorView stopAnimating];
+                activityIndicatorView.hidden = YES;
+                [cell reloadInputViews];
+            }
+            
+        }
+        
     }
-    
 }
-
-
 //- (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
 //
 //    [self.activityIndicatorView stopAnimating];

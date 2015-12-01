@@ -164,6 +164,7 @@ UISearchBarDelegate
     [self.autoCompleteTableView setHidden:YES];
 }
 
+
 #pragma mark - longPress Stuff
 -(void)celllongpressed:(UIGestureRecognizer *)longPress
 {
@@ -174,7 +175,8 @@ UISearchBarDelegate
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
         NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-        
+
+
         NSError *error;
         NSData *data = [NSData dataWithContentsOfURL:url];
         self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
@@ -282,7 +284,6 @@ UISearchBarDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (tableView == self.autoCompleteTableView) {
-        
         [self.searchBar setShowsCancelButton:NO animated:YES];
         [self.searchBar resignFirstResponder];
         
@@ -296,7 +297,7 @@ UISearchBarDelegate
             [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
-        
+
 
         
     }
