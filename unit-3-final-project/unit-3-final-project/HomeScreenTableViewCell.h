@@ -14,5 +14,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *artistImageView;
 @property (strong, nonatomic) IBOutlet UILabel *artistNameLabel;
 @property (strong, nonatomic) IBOutlet UIButton *buttonFavorite;
+@property (weak, nonatomic) IBOutlet UILabel *SongNameLabel;
 
 @end

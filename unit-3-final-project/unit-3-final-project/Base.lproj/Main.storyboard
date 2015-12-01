@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Xvi-al-HPM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Xvi-al-HPM">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
@@ -127,15 +127,36 @@
                                     <outlet property="delegate" destination="GSM-0g-1LF" id="bVn-3v-iD1"/>
                                 </connections>
                             </tableView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mei-WN-ebP">
+                                <rect key="frame" x="20" y="239" width="560" height="312"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="mySearchCellIdentifierUniq" id="7Kk-ky-AYv">
+                                        <rect key="frame" x="0.0" y="28" width="560" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Kk-ky-AYv" id="aU3-ra-70q">
+                                            <rect key="frame" x="0.0" y="0.0" width="560" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                            </tableView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Mei-WN-ebP" firstAttribute="leading" secondItem="ORK-ip-stT" secondAttribute="leadingMargin" id="7qe-JQ-W8q"/>
                             <constraint firstItem="zge-xm-7zG" firstAttribute="top" secondItem="Gnt-mM-2Vc" secondAttribute="bottom" id="FtU-ek-HfC"/>
                             <constraint firstItem="Gnt-mM-2Vc" firstAttribute="trailing" secondItem="ORK-ip-stT" secondAttribute="trailingMargin" constant="-20" id="Gyr-yk-ZH7"/>
+                            <constraint firstItem="zge-xm-7zG" firstAttribute="top" secondItem="Mei-WN-ebP" secondAttribute="bottom" id="HyJ-x3-yrO"/>
                             <constraint firstItem="Gnt-mM-2Vc" firstAttribute="leading" secondItem="ORK-ip-stT" secondAttribute="leadingMargin" constant="-20" id="KEN-xO-KDm"/>
                             <constraint firstItem="Gnt-mM-2Vc" firstAttribute="top" secondItem="rP4-ff-eYN" secondAttribute="bottom" id="ONl-7I-psH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Mei-WN-ebP" secondAttribute="trailing" id="Oq2-dH-ncx"/>
+                            <constraint firstItem="Mei-WN-ebP" firstAttribute="top" secondItem="rP4-ff-eYN" secondAttribute="bottom" constant="105" id="Qas-3a-sPJ"/>
                             <constraint firstItem="Gnt-mM-2Vc" firstAttribute="leading" secondItem="ORK-ip-stT" secondAttribute="leadingMargin" constant="-20" id="S2t-Zm-s0v"/>
+                            <constraint firstItem="Mei-WN-ebP" firstAttribute="leading" secondItem="ORK-ip-stT" secondAttribute="leading" id="ZWX-fk-fl3"/>
+                            <constraint firstAttribute="trailing" secondItem="Mei-WN-ebP" secondAttribute="trailing" id="e0D-Uc-lBI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Gnt-mM-2Vc" secondAttribute="trailing" constant="-20" id="onZ-Ly-d0T"/>
                             <constraint firstItem="Gnt-mM-2Vc" firstAttribute="top" secondItem="rP4-ff-eYN" secondAttribute="bottom" id="s0b-t0-TgP"/>
                         </constraints>
@@ -144,6 +165,8 @@
                                 <exclude reference="Gyr-yk-ZH7"/>
                                 <exclude reference="KEN-xO-KDm"/>
                                 <exclude reference="s0b-t0-TgP"/>
+                                <exclude reference="7qe-JQ-W8q"/>
+                                <exclude reference="Oq2-dH-ncx"/>
                             </mask>
                         </variation>
                     </view>
@@ -152,6 +175,7 @@
                     <connections>
                         <outlet property="endSearchBar" destination="rx9-rh-rST" id="01B-Fd-da9"/>
                         <outlet property="roadTripMapView" destination="SOI-xC-KXi" id="vp4-N4-Guh"/>
+                        <outlet property="searchResultsTableView" destination="Mei-WN-ebP" id="O0n-Vq-T8q"/>
                         <outlet property="startSearchBar" destination="7yM-6E-TP9" id="E2q-Z3-KMx"/>
                         <outlet property="tableHeader" destination="ghL-s9-Gme" id="3pS-Fq-pW7"/>
                         <outlet property="tableView" destination="Gnt-mM-2Vc" id="bW2-Ed-yU8"/>

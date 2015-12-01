@@ -274,6 +274,7 @@ UISearchBarDelegate
         HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
         cell.artistNameLabel.text = artist.artistName;
+        cell.SongNameLabel.text = artist.songTitle;
         NSString *urlString = [[NSString alloc] init];
         
         if (artist.spotifyImages.count > 1) {
@@ -379,8 +380,8 @@ UISearchBarDelegate
                 
                 [self dropPinsForCities:finalCities];
                 [self setModel:finalCities];
-                [self showDataForCity:[finalCities firstObject]];
-                [self.loadview finish];
+                
+                
             }];
         }];
     }];
@@ -389,7 +390,7 @@ UISearchBarDelegate
 - (void)setModel:(NSArray <LocationInfoObject *> *)cities {
     [self.modelData removeAllObjects];
     self.modelData = [cities mutableCopy];
-    
+    [self showDataForCity:[self.modelData firstObject]];
     //[self.tableView reloadData];
 }
 
@@ -397,6 +398,7 @@ UISearchBarDelegate
     
     self.currentCity = city;
     [self.tableView reloadData];
+    [self.loadview finish];
 }
 
 - (void)dropPinsForCities:(NSArray*)cities {
