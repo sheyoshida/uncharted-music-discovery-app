@@ -20,6 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - CBZSplashView (1.0.0)
   - ChameleonFramework (2.0.4):
     - ChameleonFramework/Default (= 2.0.4)
   - ChameleonFramework/Default (2.0.4)
@@ -45,7 +46,9 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
+  - CBZSplashView (~> 1.0.0)
   - ChameleonFramework
+  - DGActivityIndicatorView
   - DGActivityIndicatorView (~> 2.0)
   - HNKGooglePlacesAutocomplete (~> 1.1)
   - MBSimpleLoadingIndicator (~> 0.1)
@@ -53,6 +56,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  CBZSplashView: 9ce4cba22024476ff4a97d6433e7347da6376016
   ChameleonFramework: 5abe69b1f2a6cc79c3c435fcd9d3d855748225ee
   DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
   HNKGooglePlacesAutocomplete: e3628e130ad9c6b909760bf314b98227b03e708f
@@ -61,4 +65,4 @@ SPEC CHECKSUMS:
   MBSimpleLoadingIndicator: bb386548fda4a75fd792b1793ac1cd8ff2862cf7
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
 
-COCOAPODS: 0.39.0
+COCOAPODS: 0.38.2
