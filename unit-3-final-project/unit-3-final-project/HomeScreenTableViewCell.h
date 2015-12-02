@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DGActivityIndicatorView.h"
 
 @interface HomeScreenTableViewCell : UITableViewCell
 
@@ -15,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *artistNameLabel;
 @property (strong, nonatomic) IBOutlet UIButton *buttonFavorite;
 @property (weak, nonatomic) IBOutlet UILabel *SongNameLabel;
+@property (weak, nonatomic) IBOutlet DGActivityIndicatorView *activityIndicatorView;
 
 
 @end

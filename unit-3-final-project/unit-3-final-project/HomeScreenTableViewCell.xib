@@ -19,7 +19,7 @@
             <rect key="frame" x="0.0" y="0.0" width="368" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="368" height="99.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="368" height="99"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pY-Op-Kzy">
@@ -41,7 +41,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a1F-HC-WaR" userLabel="View - visualizer">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a1F-HC-WaR" userLabel="View - visualizer" customClass="DGActivityIndicatorView">
                                 <rect key="frame" x="257" y="5" width="80" height="70"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
@@ -67,7 +67,7 @@
                                     <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerY" secondItem="a1F-HC-WaR" secondAttribute="centerY" id="pSh-b3-pKs"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
                                 <rect key="frame" x="85" y="33" width="167" height="27"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="12"/>
@@ -105,6 +105,7 @@
             <animations/>
             <connections>
                 <outlet property="SongNameLabel" destination="kfC-3E-VvA" id="GdV-w4-pxC"/>
+                <outlet property="activityIndicatorView" destination="a1F-HC-WaR" id="Fm2-FQ-NFP"/>
                 <outlet property="artistContainerView" destination="6pY-Op-Kzy" id="oWA-Qy-wQW"/>
                 <outlet property="artistImageView" destination="O3T-vN-MI9" id="ZAu-0Y-brx"/>
                 <outlet property="artistNameLabel" destination="E80-fT-Hl3" id="cFd-OB-fnP"/>
