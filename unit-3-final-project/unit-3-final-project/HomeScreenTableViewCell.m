@@ -43,6 +43,8 @@
     if( [[btn imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"heart-button.png"]]) {
         [btn setImage:[UIImage imageNamed:@"heart-selected.png"] forState:UIControlStateNormal];
         // other statements
+        // set up delegate to tell view controller that button has been tapped
+        
     } else {
         [btn setImage:[UIImage imageNamed:@"heart-button.png"] forState:UIControlStateNormal];
         // other statements

@@ -261,6 +261,16 @@ UISearchBarDelegate
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
         cell.artistNameLabel.text = artist.artistName;
         cell.SongNameLabel.text = artist.songTitle;
+        
+        // like button
+        if (artist.liked == YES) {
+            [cell.buttonFavorite setImage:[UIImage imageNamed:@"heart-selected.png"] forState:UIControlStateNormal];
+            
+        } else {
+            [cell.buttonFavorite setImage:[UIImage imageNamed:@"heart-button.png"] forState:UIControlStateNormal];
+        }
+     
+        
         NSString *urlString = [[NSString alloc] init];
         
         if (artist.spotifyImages.count > 1) {
@@ -274,6 +284,8 @@ UISearchBarDelegate
         NSData *artworkData = [NSData dataWithContentsOfURL:artworkURL];
         UIImage *artworkImage = [UIImage imageWithData:artworkData];
         cell.artistImageView.image = artworkImage;
+        
+        
         
         
         return cell;

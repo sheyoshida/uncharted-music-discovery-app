@@ -15,11 +15,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HomeScreenTableViewCellIdentifier" rowHeight="132" id="KGk-i7-Jjw" customClass="HomeScreenTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="368" height="100"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HomeScreenTableViewCellIdentifier" rowHeight="151" id="KGk-i7-Jjw" customClass="HomeScreenTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="368" height="119"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="368" height="99"/>
+                <rect key="frame" x="0.0" y="0.0" width="368" height="118.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pY-Op-Kzy">
@@ -35,9 +35,16 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="artist name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
-                                <rect key="frame" x="83" y="5" width="169" height="19"/>
+                                <rect key="frame" x="90" y="5" width="162" height="20.5"/>
                                 <animations/>
-                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="15"/>
+                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
+                                <rect key="frame" x="90" y="35" width="162" height="25"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -67,13 +74,6 @@
                                     <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerY" secondItem="a1F-HC-WaR" secondAttribute="centerY" id="pSh-b3-pKs"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
-                                <rect key="frame" x="85" y="33" width="167" height="27"/>
-                                <animations/>
-                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="12"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -81,7 +81,7 @@
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="5" id="4px-id-Hx5"/>
                             <constraint firstAttribute="trailing" secondItem="a1F-HC-WaR" secondAttribute="trailing" constant="5" id="9pa-wh-LKa"/>
                             <constraint firstItem="E80-fT-Hl3" firstAttribute="top" secondItem="O3T-vN-MI9" secondAttribute="top" id="B0V-VZ-ekU"/>
-                            <constraint firstItem="E80-fT-Hl3" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="3" id="B0e-c6-zv1"/>
+                            <constraint firstItem="E80-fT-Hl3" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="B0e-c6-zv1"/>
                             <constraint firstAttribute="bottom" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="20" symbolic="YES" id="FrB-Qv-ygK"/>
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="leading" secondItem="6pY-Op-Kzy" secondAttribute="leading" constant="10" id="LE0-4l-4KT"/>
                             <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="E80-fT-Hl3" secondAttribute="bottom" constant="10" id="M5Q-WJ-NiV"/>
@@ -90,7 +90,7 @@
                             <constraint firstAttribute="bottom" secondItem="a1F-HC-WaR" secondAttribute="bottom" constant="5" id="qjz-lK-MIk"/>
                             <constraint firstItem="a1F-HC-WaR" firstAttribute="leading" secondItem="E80-fT-Hl3" secondAttribute="trailing" constant="5" id="vo6-l9-4Tx"/>
                             <constraint firstItem="a1F-HC-WaR" firstAttribute="leading" secondItem="kfC-3E-VvA" secondAttribute="trailing" constant="5" id="y2f-nr-uRU"/>
-                            <constraint firstItem="kfC-3E-VvA" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="5" id="zq2-0r-NEU"/>
+                            <constraint firstItem="kfC-3E-VvA" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="zq2-0r-NEU"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -111,7 +111,7 @@
                 <outlet property="artistNameLabel" destination="E80-fT-Hl3" id="cFd-OB-fnP"/>
                 <outlet property="buttonFavorite" destination="Cm1-0Z-A8R" id="bce-ya-WJn"/>
             </connections>
-            <point key="canvasLocation" x="825" y="541"/>
+            <point key="canvasLocation" x="825" y="550.5"/>
         </tableViewCell>
     </objects>
     <resources>

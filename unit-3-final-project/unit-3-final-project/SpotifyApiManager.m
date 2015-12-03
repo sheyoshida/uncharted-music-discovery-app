@@ -152,6 +152,7 @@
                 
                 artistObject.songPreview = [result objectForKey:@"preview_url"];
                 artistObject.songTitle = [result objectForKey:@"name"];
+                artistObject.songURI = [result objectForKey:@"uri"];
                 
             }
             

@@ -23,7 +23,7 @@
 @property (nonatomic) NSString *artistImageURL;
 @property (nonatomic) NSString *artistGenre;
 
-@property (nonatomic) NSString *ratingDiscovery; // measure how unexpectedly artist is
+@property (nonatomic) NSString *ratingDiscovery; // measure how unexpected artist is
 @property (nonatomic) NSString *ratingFamiliarity; // measure how familiar artist is
 @property (nonatomic) NSString *ratingHotttnesss; // measure how popular artist is
 
@@ -35,6 +35,10 @@
 // spotify api call #2
 @property (nonatomic) NSString *songPreview; // url
 @property (nonatomic) NSString *songTitle;
+@property (nonatomic) NSString *songURI; // for adding song to playlist
+
+// playlist stuff
+@property (nonatomic) BOOL liked; // for heart button
 
 
 - (instancetype)initWithJSON:(NSDictionary *)json;
