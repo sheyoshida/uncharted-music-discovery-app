@@ -50,6 +50,11 @@ UISearchBarDelegate
 @property (nonatomic) NSMutableArray *autoCompleteSearchResults;
 @property (strong, nonatomic) HNKGooglePlacesAutocompleteQuery *searchQuery;
 
+@property (nonatomic) NSMutableArray *randomLocations; // array of cities
+@property (nonatomic) CLLocation *randomCity;
+@property (nonatomic) double latitude;
+@property (nonatomic) double longitude;
+
 
 @end
 
@@ -57,7 +62,7 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     //long touch
     UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
     [gesture1 setDelegate:self];
@@ -107,12 +112,7 @@ UISearchBarDelegate
         }
     }
 
-
-
-    
 }
-
-
 
 
 - (void)viewWillAppear:(BOOL)animated { // for search bar
@@ -501,24 +501,78 @@ UISearchBarDelegate
 
 # pragma mark - shake feature
 
-//- (BOOL)canBecomeFirstResponder
-//{
-//    return YES;
-//}
-//
-//- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
-//{
-//    if (motion == UIEventSubtypeMotionShake)
-//    {
-//        [self showAlert];
-//    }
-//}
-//
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (motion == UIEventSubtypeMotionShake)
+    {
+        NSLog(@"shaaakiiing shake shake shakkkkiing");
+        [self generateRandoCity];
+    }
+}
+
 //-(void)showAlert
 //{
 //    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hello World" message:@"This is my first app!" delegate:nil cancelButtonTitle:@"Awesome" otherButtonTitles:nil];
 //    
 //    [alertView show];
 //}
+
+- (void)generateRandoCity {
+    
+    self.randomLocations = [[NSMutableArray alloc] init];
+    [self.randomLocations addObject:@"Los Angeles, CA"]; // 34.050,	118.250
+    [self.randomLocations addObject:@"Halifax, NS"]; // 43.700,	79.400
+    [self.randomLocations addObject:@"Moscow, Russia"]; // 44.647, 63.571
+    [self.randomLocations addObject:@"Mumbai, India"]; // 18.975, 72.825
+    [self.randomLocations addObject:@"El Paso, TX"]; // 31.790, 106.423
+    [self.randomLocations addObject:@"Atlanta, GA"]; // 33.755, 84.390
+    [self.randomLocations addObject:@"New Orleans, LA"]; // 29.950, 90.066
+    
+    NSString *generatedCity = [self.randomLocations objectAtIndex:arc4random_uniform([self.randomLocations count])];
+    
+    NSLog(@"generated city: %@", generatedCity);
+    
+    if ([generatedCity isEqual: @"Los Angeles, CA"]) {
+        self.latitude = 34.050;
+        self.longitude = -118.250;
+        
+    } else if ([generatedCity  isEqual: @"Halifax, NS"]) {
+        self.latitude = 43.700;
+        self.longitude = -79.400;
+        
+    } else if ([generatedCity isEqual: @"Moscow, Russia"]) {
+        self.latitude = 44.647;
+        self.longitude = 63.571;
+        
+    } else if ([generatedCity  isEqual: @"Mumbai, India"]) {
+        self.latitude = 18.975;
+        self.longitude = 72.825;
+        
+    } else if ([generatedCity isEqual: @"El Paso, TX"]) {
+        self.latitude = 31.790;
+        self.longitude = -106.423;
+        
+    } else if ([generatedCity  isEqual: @"Atlanta, GA"]) {
+        self.latitude = 33.755;
+        self.longitude = -84.390;
+        
+    } else if ([self.randomCity  isEqual: @"NewOrleans, LA"]) {
+        self.latitude = 29.950;
+        self.longitude = -90.066;
+    }
+    
+    NSLog(@"lat %f", self.latitude);
+    NSLog(@"long %f", self.longitude);
+    
+    self.randomCity = [[CLLocation alloc] initWithLatitude:self.latitude longitude:self.longitude];
+    
+    NSLog(@"random city %@", self.randomCity);
+    
+}
 
 @end
