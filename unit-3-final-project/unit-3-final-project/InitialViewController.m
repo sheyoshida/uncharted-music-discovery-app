@@ -580,8 +580,6 @@ UISearchBarDelegate
     
     NSString *generatedCity = [self.randomLocations objectAtIndex:arc4random_uniform([self.randomLocations count])];
     
-    NSLog(@"generated city: %@", generatedCity);
-    
     if ([generatedCity isEqual: @"Los Angeles, CA"]) {
         self.latitude = 34.050;
         self.longitude = -118.250;
@@ -611,13 +609,7 @@ UISearchBarDelegate
         self.longitude = -90.066;
     }
     
-    NSLog(@"lat %f", self.latitude);
-    NSLog(@"long %f", self.longitude);
-    
     self.randomCity = [[CLLocation alloc] initWithLatitude:self.latitude longitude:self.longitude];
-    
-    NSLog(@"random city %@", self.randomCity);
-    
 }
 
 @end
