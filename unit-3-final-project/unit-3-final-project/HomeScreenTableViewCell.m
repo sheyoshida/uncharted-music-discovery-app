@@ -10,6 +10,8 @@
 #import "HomeScreenTableViewCell.h"
 #import "Pop.h"
 #import "Chameleon.h"
+#import "User.h"
+#import "SpotifyPlaylistManager.h"
 
 @implementation HomeScreenTableViewCell
 
@@ -42,8 +44,26 @@
     
     if( [[btn imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"heart-button.png"]]) {
         [btn setImage:[UIImage imageNamed:@"heart-selected.png"] forState:UIControlStateNormal];
-        // other statements
-        // set up delegate to tell view controller that button has been tapped
+        
+        __block NSString *uri = self.songURI;
+        void (^addTrack)() = ^void() {
+            [SpotifyPlaylistManager addTrackToPlaylist:uri completion:^(BOOL success) {
+                if (success) {
+                    NSLog(@"WE DID IT!!!!!");
+                } else {
+                    NSLog(@"womp womp");
+                }
+            }];
+        };
+        
+        if (![[User currentUser] isLoggedInToSpotify]) {
+            [User currentUser].onLoginCallback = ^{
+                addTrack();
+            };
+            [[User currentUser] loginToSpotify];
+        } else {
+            addTrack();
+        }
         
     } else {
         [btn setImage:[UIImage imageNamed:@"heart-button.png"] forState:UIControlStateNormal];

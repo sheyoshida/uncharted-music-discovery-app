@@ -300,6 +300,7 @@ AVAudioPlayerDelegate
         ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
         cell.artistNameLabel.text = artist.artistName;
         cell.SongNameLabel.text = artist.songTitle; // need spotify api call #1 to use
+        cell.songURI = artist.songURI;
         
         NSString *urlString = [[NSString alloc] init];
         
@@ -376,10 +377,10 @@ AVAudioPlayerDelegate
                     
                     //DGActivityIndicatorView
                     
-                     
+                    
                     
                     [cell.activityIndicatorView startAnimating];
-
+                    
                 }
                 
             }
@@ -389,13 +390,13 @@ AVAudioPlayerDelegate
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-     HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-     [self.audioPlayer stop];
+    [self.audioPlayer stop];
     [cell.activityIndicatorView stopAnimating];
     cell.activityIndicatorView.hidden = YES;
     //[cell reloadInputViews];
-
+    
 }
 
 //- (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {

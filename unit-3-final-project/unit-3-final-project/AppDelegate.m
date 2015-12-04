@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocompleteQuery.h>
+#import "User.h"
+
+#define ClientID @"8cd3e645d1eb4d3d9040456cb98ce224"
 
 static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCoTk_j7oZabHJkVZW0ULVFg5uZ0";
 
@@ -17,8 +20,35 @@ static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCo
 
 @implementation AppDelegate
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    if ([[SPTAuth defaultInstance] canHandleURL:url]) {
+        [[SPTAuth defaultInstance] handleAuthCallbackWithTriggeredAuthURL:url callback:^(NSError *error, SPTSession *session) {
+            
+            if (!error) {
+                [[NSUserDefaults standardUserDefaults] setObject:session.accessToken forKey:SPOTIFY_ACCESS_TOKEN_KEY];
+                [[NSUserDefaults standardUserDefaults] setObject:session.canonicalUsername forKey:SPOTIFY_USERNAME_KEY];
+                
+                if ([User currentUser].onLoginCallback) {
+                    [User currentUser].onLoginCallback();
+                }
+            }
+            
+        }];
+        
+        return YES;
+    }
+    
+    return NO;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    // setup spotify
+    [[SPTAuth defaultInstance] setClientID:ClientID];
+    [[SPTAuth defaultInstance] setRedirectURL:[NSURL URLWithString:@"spotifyapi://callback"]];
+    [[SPTAuth defaultInstance] setRequestedScopes:@[SPTAuthStreamingScope,SPTAuthPlaylistModifyPublicScope]];
+
 
     // set Navigation bar properties:
     // blue = 83, 148, 196

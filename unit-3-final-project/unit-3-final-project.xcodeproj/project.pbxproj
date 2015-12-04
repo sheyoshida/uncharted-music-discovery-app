@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0B4779B91BF7CA8100D23273 /* InfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B4779B81BF7CA8100D23273 /* InfoWindow.m */; };
 		0B4779BD1BF7CAB600D23273 /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */; };
+		0B5421661C1129730046AA74 /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B5421651C1129730046AA74 /* Spotify.framework */; };
+		0B5421691C112A420046AA74 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5421681C112A420046AA74 /* User.m */; };
+		0B54216C1C112D5D0046AA74 /* SpotifyPlaylistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B54216B1C112D5D0046AA74 /* SpotifyPlaylistManager.m */; };
 		0BE4DCB71BF10C3F0097B34C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BE4DCB61BF10C3F0097B34C /* MapKit.framework */; };
 		0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4DCB91BF1108E0097B34C /* CustomPin.m */; };
 		2C52F1D779145021059FA925 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C56A4FC2699A23DCDC70018 /* libPods.a */; };
@@ -39,6 +42,11 @@
 		0B4779B71BF7CA8100D23273 /* InfoWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoWindow.h; sourceTree = "<group>"; };
 		0B4779B81BF7CA8100D23273 /* InfoWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoWindow.m; sourceTree = "<group>"; };
 		0B4779BC1BF7CAB600D23273 /* InfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoWindow.xib; sourceTree = "<group>"; };
+		0B5421651C1129730046AA74 /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
+		0B5421671C112A420046AA74 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		0B5421681C112A420046AA74 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		0B54216A1C112D5D0046AA74 /* SpotifyPlaylistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotifyPlaylistManager.h; sourceTree = "<group>"; };
+		0B54216B1C112D5D0046AA74 /* SpotifyPlaylistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotifyPlaylistManager.m; sourceTree = "<group>"; };
 		0BE4DCB61BF10C3F0097B34C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0BE4DCB81BF1108E0097B34C /* CustomPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPin.h; sourceTree = "<group>"; };
 		0BE4DCB91BF1108E0097B34C /* CustomPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPin.m; sourceTree = "<group>"; };
@@ -90,6 +98,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0BE4DCB71BF10C3F0097B34C /* MapKit.framework in Frameworks */,
+				0B5421661C1129730046AA74 /* Spotify.framework in Frameworks */,
 				2C52F1D779145021059FA925 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,6 +113,19 @@
 				E381A40FE22BDEDA1E0296EB /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		0B54216D1C112F450046AA74 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5FE8B8551BF412DF00D1F557 /* ArtistInfoData.h */,
+				5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */,
+				0B5421671C112A420046AA74 /* User.h */,
+				0B5421681C112A420046AA74 /* User.m */,
+				0B54216A1C112D5D0046AA74 /* SpotifyPlaylistManager.h */,
+				0B54216B1C112D5D0046AA74 /* SpotifyPlaylistManager.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		4D72356D1C03CF920094AE36 /* API Files */ = {
@@ -157,6 +179,7 @@
 		4D7235721C03D9930094AE36 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0B5421651C1129730046AA74 /* Spotify.framework */,
 				4D7235771C03DA170094AE36 /* VarelaRound-Regular.ttf */,
 			);
 			name = Resources;
@@ -186,8 +209,7 @@
 			children = (
 				4DBA58DE1BEFF1BD00668D63 /* AppDelegate.h */,
 				4DBA58DF1BEFF1BD00668D63 /* AppDelegate.m */,
-				5FE8B8551BF412DF00D1F557 /* ArtistInfoData.h */,
-				5FE8B8561BF412DF00D1F557 /* ArtistInfoData.m */,
+				0B54216D1C112F450046AA74 /* Model */,
 				4D72356D1C03CF920094AE36 /* API Files */,
 				4D7235701C03D0BE0094AE36 /* Maps and Location Data */,
 				5FE4571C1C0D63D300F155A9 /* CBZ */,
@@ -340,6 +362,7 @@
 			files = (
 				F03138151BF8F19400785A44 /* EchonestAPIManager.m in Sources */,
 				4DBA58FA1BEFF3BA00668D63 /* DetailViewController.m in Sources */,
+				0B54216C1C112D5D0046AA74 /* SpotifyPlaylistManager.m in Sources */,
 				4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */,
 				4DBA58E91BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld in Sources */,
 				F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */,
@@ -353,6 +376,7 @@
 				F0C6D78E1C00CF6D00859CD8 /* RoadTripViewController.m in Sources */,
 				4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */,
 				5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */,
+				0B5421691C112A420046AA74 /* User.m in Sources */,
 				0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */,
 				4DBA58F71BEFF34200668D63 /* InitialViewController.m in Sources */,
 				5FE457231C0D63F500F155A9 /* UIColor+HexString.m in Sources */,
@@ -468,6 +492,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/unit-3-final-project",
+				);
 				INFOPLIST_FILE = "unit-3-final-project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.c4q.Uncharted;
@@ -483,6 +511,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/unit-3-final-project",
+				);
 				INFOPLIST_FILE = "unit-3-final-project/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.c4q.Uncharted;

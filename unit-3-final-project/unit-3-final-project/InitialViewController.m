@@ -260,6 +260,8 @@ UISearchBarDelegate
         HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
         cell.artistNameLabel.text = artist.artistName;
+        NSLog(@"*******%@*********", artist.songURI);
+        cell.songURI = artist.songURI;
         cell.SongNameLabel.text = artist.songTitle;
         
         // like button
