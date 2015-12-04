@@ -35,14 +35,10 @@
 // spotify api call #2
 @property (nonatomic) NSString *songPreview; // url
 @property (nonatomic) NSString *songTitle;
-<<<<<<< 954d15ad8bb336a4fdc55d5249c0d06fc1b0a252
 @property (nonatomic) NSString *songURI; // for adding song to playlist
 
 // playlist stuff
 @property (nonatomic) BOOL liked; // for heart button
-=======
-@property (nonatomic) NSString *songURI;
->>>>>>> spotify integration
 
 
 - (instancetype)initWithJSON:(NSDictionary *)json;
