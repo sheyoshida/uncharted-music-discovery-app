@@ -56,18 +56,12 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-//    //long touch
-//    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
-//    [gesture1 setDelegate:self];
-//    [gesture1 setMinimumPressDuration:1];
-//    [self.tableView addGestureRecognizer: gesture1];
     
     self.currentCity = [[LocationInfoObject alloc]init];
     self.modelData = [[NSMutableArray alloc]init];
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
-   //autocomplete table view set up
+    //autocomplete table view set up
     self.autoCompleteSearchResults = [[NSMutableArray alloc]init];
     self.autoCompleteTableView.delegate = self;
     self.autoCompleteTableView.dataSource = self;
@@ -163,48 +157,6 @@ UISearchBarDelegate
     [self.autoCompleteTableView setHidden:YES];
 }
 
-
-#pragma mark - longPress Stuff
-//-(void)celllongpressed:(UIGestureRecognizer *)longPress
-//{
-//    
-////    if (longPress.state == UIGestureRecognizerStateBegan)
-////    {
-////        CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
-////        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
-////        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-////        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-////
-////
-////        NSError *error;
-////        NSData *data = [NSData dataWithContentsOfURL:url];
-////        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-////        
-////        if (error)
-////        {
-////            NSLog(@"Error in audioPlayer: %@",
-////                  [error localizedDescription]);
-////        } else {
-////            self.audioPlayer.delegate = self;
-////            [self.audioPlayer prepareToPlay];
-////            [self.audioPlayer play];
-////        }
-////            
-////    }
-////    else
-////    {
-////        if (longPress.state == UIGestureRecognizerStateCancelled
-////            || longPress.state == UIGestureRecognizerStateFailed
-////            || longPress.state == UIGestureRecognizerStateEnded)
-////        {
-////           // press ended
-////            [self.audioPlayer stop];
-////        }
-////    }
-////    
-////    
-//    
-//}
 
 #pragma mark - TableView Stuff
 
@@ -399,21 +351,36 @@ UISearchBarDelegate
             
             [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
                 
-                [weakSelf dropPinsForCities:finalCities];
-                [weakSelf setModel:finalCities];
+                if (finalCities.count>0) {
+                    
+                    NSArray *finalArtistCities = [finalCities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                        
+                         evaluatedObject.artists = [evaluatedObject.artists filteredArrayUsingPredicate:[ NSPredicate predicateWithBlock:^BOOL(ArtistInfoData* artistObjectEval, NSDictionary<NSString *,id> * _Nullable bindings) {
+                             
+                            return artistObjectEval.songURI;
+                        }]];
+
+                        return evaluatedObject.artists.count > 0;
+                    }]];
+                    
+                    NSLog(@"%@", finalArtistCities);
+                    [weakSelf dropPinsForCities:finalArtistCities];
+                    [weakSelf setModel:finalArtistCities];
+                    [weakSelf hideLoadingIndicator:indicator];
+                }
+                else{
+                    NSLog(@"please choose another city");
+                }
                 
-                [weakSelf hideLoadingIndicator:indicator];
             }];
         }];
     }];
 }
 
 - (MBLoadingIndicator *)showLoadingIndicator {
-    NSLog(@"***** SHOWING INDICATOR ****");
+
     MBLoadingIndicator *indicator = [[MBLoadingIndicator alloc] init];
     
-    //NOTE: Any extra loader can be done here, including sizing, colors, animation speed, etc
-    //      Pre-start changes will not be animated.
     [indicator setLoaderStyle:MBLoaderFullCircle];
     [indicator setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
     [indicator setWidth:20];
