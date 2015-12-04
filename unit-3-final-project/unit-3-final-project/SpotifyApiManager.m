@@ -109,21 +109,27 @@
         
         else { // this doesn't fill in the null images as expected (ie: David Coffee)
             
-           // NSString *artworkURL = [NSString stringWithFormat:@"http://seattletwist.com/wp-content/uploads/awesomely-cute-kitten-1500.jpg"]; // change this
+
             NSString *artworkURL =[NSString stringWithFormat:@"http://i67.tinypic.com/i74ugh.jpg"];
 
             [artistObject.spotifyImages addObject:artworkURL];
         }
         
         if (artistObject.albumID) {
-            [self passAlbumIDToSpotifyWithArtistObject:artistObject];
+            [self passAlbumIDToSpotifyWithArtistObject:artistObject completion:^{
+                completion();
+            }];
+        }
+        else{
+            completion();
         }
 
         
         
-        completion();
+        
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        completion();
         NSLog(@"Error - Spotify #1 API Call: %@", error.localizedDescription);
     }];
 }
@@ -131,7 +137,7 @@
 
 #pragma mark - spotify api call #2
 
-+ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject {
++ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject completion:(void(^)())completion {
     
     // pass in album number - get song preview(url) + song name
     // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
@@ -157,7 +163,10 @@
                 
             }
             
+            completion();
+            
         } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+            completion();
             NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
         }];
         

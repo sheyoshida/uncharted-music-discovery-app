@@ -16,7 +16,9 @@
 
 + (void)getAlbumInfoForCities:(NSArray *)cities
                    completion:(void(^)())completion;
-+ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject;
+
++ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject
+                                  completion:(void(^)())completion;
 
 
 
