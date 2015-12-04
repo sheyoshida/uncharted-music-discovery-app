@@ -22,6 +22,13 @@
 
 @import AVFoundation;
 
+#import "CBZSplashView.h"
+#import "UIColor+HexString.h"
+#import "UIBezierPath+Shapes.h"
+
+static NSString * const kUnchartedIcon = @"unchartedWhiteMap";
+static NSString * const kUnchartedColor = @"0099cc";
+
 @interface InitialViewController ()
 <
 UIGestureRecognizerDelegate,
@@ -32,6 +39,9 @@ UITableViewDelegate,
 AVAudioPlayerDelegate,
 UISearchBarDelegate
 >
+
+@property (nonatomic, strong) CBZSplashView *splashView;
+
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
@@ -56,6 +66,19 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+//    //CBZ Splashview
+//        __unused UIImage *icon = [UIImage imageNamed:kUnchartedIcon];
+//        UIColor *color = [UIColor colorWithHexString:kUnchartedColor];
+//    
+//        CBZSplashView *splashView = [CBZSplashView splashViewWithIcon:icon backgroundColor:color];
+//    
+//        splashView.animationDuration = 1.0;
+//    
+//        [self.view addSubview:splashView];
+//    
+//        self.splashView = splashView;
 
 //    //long touch
 //    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
@@ -111,10 +134,30 @@ UISearchBarDelegate
     
 }
 
+#pragma mark CBZ Splashview
 
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//
+//    /* wait a beat before animating in */
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.splashView startAnimation];
+//    });
+//}
+//
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return YES;
+//}
+
+
+
+#pragma mark - searchbar stuff
 
 
 - (void)viewWillAppear:(BOOL)animated { // for search bar
+    
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
@@ -124,7 +167,6 @@ UISearchBarDelegate
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
-#pragma mark - searchbar stuff
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     [searchBar setShowsCancelButton:YES animated:YES];

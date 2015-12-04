@@ -17,17 +17,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="081-kG-EaB">
-                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unchartedWhiteMap" translatesAutoresizingMaskIntoConstraints="NO" id="V4I-tQ-IYn">
+                                <rect key="frame" x="250" y="258" width="100" height="85"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="85" id="0gQ-X6-x8M"/>
+                                    <constraint firstAttribute="width" constant="100" id="H7j-ju-cwd"/>
+                                    <constraint firstAttribute="height" id="jAK-N7-2MC"/>
+                                    <constraint firstAttribute="width" id="jB9-r1-KfH"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="jAK-N7-2MC"/>
+                                        <exclude reference="jB9-r1-KfH"/>
+                                    </mask>
+                                </variation>
                             </imageView>
                         </subviews>
                         <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.019557907566170596" green="0.67849923450091176" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="081-kG-EaB" secondAttribute="bottom" id="IGG-G3-1br"/>
-                            <constraint firstAttribute="trailing" secondItem="081-kG-EaB" secondAttribute="trailing" id="JYe-1B-ZlG"/>
-                            <constraint firstItem="081-kG-EaB" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="hlD-G6-XXE"/>
-                            <constraint firstItem="081-kG-EaB" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="qzW-1m-mPj"/>
+                            <constraint firstItem="V4I-tQ-IYn" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="IeF-iH-XCj"/>
+                            <constraint firstItem="V4I-tQ-IYn" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="iZq-pc-rwn"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,6 +47,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash" width="400" height="400"/>
+        <image name="unchartedWhiteMap" width="396" height="301"/>
     </resources>
 </document>
