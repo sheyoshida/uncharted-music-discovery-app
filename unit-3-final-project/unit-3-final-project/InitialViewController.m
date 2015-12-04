@@ -58,11 +58,11 @@ UISearchBarDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //long touch
-    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
-    [gesture1 setDelegate:self];
-    [gesture1 setMinimumPressDuration:1];
-    [self.tableView addGestureRecognizer: gesture1];
+//    //long touch
+//    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
+//    [gesture1 setDelegate:self];
+//    [gesture1 setMinimumPressDuration:1];
+//    [self.tableView addGestureRecognizer: gesture1];
     
     self.currentCity = [[LocationInfoObject alloc]init];
     self.modelData = [[NSMutableArray alloc]init];
@@ -166,46 +166,46 @@ UISearchBarDelegate
 
 
 #pragma mark - longPress Stuff
--(void)celllongpressed:(UIGestureRecognizer *)longPress
-{
-    
-    if (longPress.state == UIGestureRecognizerStateBegan)
-    {
-        CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
-        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
-        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-
-
-        NSError *error;
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-        
-        if (error)
-        {
-            NSLog(@"Error in audioPlayer: %@",
-                  [error localizedDescription]);
-        } else {
-            self.audioPlayer.delegate = self;
-            [self.audioPlayer prepareToPlay];
-            [self.audioPlayer play];
-        }
-            
-    }
-    else
-    {
-        if (longPress.state == UIGestureRecognizerStateCancelled
-            || longPress.state == UIGestureRecognizerStateFailed
-            || longPress.state == UIGestureRecognizerStateEnded)
-        {
-           // press ended
-            [self.audioPlayer stop];
-        }
-    }
-    
-    
-    
-}
+//-(void)celllongpressed:(UIGestureRecognizer *)longPress
+//{
+//    
+////    if (longPress.state == UIGestureRecognizerStateBegan)
+////    {
+////        CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
+////        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
+////        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+////        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+////
+////
+////        NSError *error;
+////        NSData *data = [NSData dataWithContentsOfURL:url];
+////        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+////        
+////        if (error)
+////        {
+////            NSLog(@"Error in audioPlayer: %@",
+////                  [error localizedDescription]);
+////        } else {
+////            self.audioPlayer.delegate = self;
+////            [self.audioPlayer prepareToPlay];
+////            [self.audioPlayer play];
+////        }
+////            
+////    }
+////    else
+////    {
+////        if (longPress.state == UIGestureRecognizerStateCancelled
+////            || longPress.state == UIGestureRecognizerStateFailed
+////            || longPress.state == UIGestureRecognizerStateEnded)
+////        {
+////           // press ended
+////            [self.audioPlayer stop];
+////        }
+////    }
+////    
+////    
+//    
+//}
 
 #pragma mark - TableView Stuff
 
@@ -295,6 +295,10 @@ UISearchBarDelegate
     
 }
 
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.audioPlayer stop];
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (tableView == self.autoCompleteTableView) {
@@ -315,18 +319,27 @@ UISearchBarDelegate
 
         
     }
-// Psst, I disconnected detail view by commenting below out.
-//    else{
-//        DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
-//        
-//        vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-//        [self.navigationController pushViewController:vc animated:YES];
-//    }
 
-}
+    else{
+        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+        
+        
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+        
+        if (error)
+        {
+            NSLog(@"Error in audioPlayer: %@",
+                  [error localizedDescription]);
+        } else {
+            self.audioPlayer.delegate = self;
+            [self.audioPlayer prepareToPlay];
+            [self.audioPlayer play];
+        }
+    }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
 }
 
 #pragma mark - CLLocationManagerDelegate

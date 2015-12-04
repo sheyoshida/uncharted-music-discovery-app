@@ -293,8 +293,6 @@ AVAudioPlayerDelegate
     else{
         HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
         
-        //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"songCell"];
-        
         LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
         
         ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
@@ -348,54 +346,34 @@ AVAudioPlayerDelegate
         }
         
     } else {
+        LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
         
-        HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        
-//        DGActivityIndicatorView *activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:40.0f];
-        
-        
-        if (cell.isSelected) {
-            if (self.audioPlayer.playing == NO) {
-                LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
-                
-                ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
-                NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-                
-                NSError *error;
-                NSData *data = [NSData dataWithContentsOfURL:url];
-                self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-                
-                if (error)
-                {
-                    NSLog(@"Error in audioPlayer: %@",
-                          [error localizedDescription]);
-                } else {
-                    self.audioPlayer.delegate = self;
-                    [self.audioPlayer prepareToPlay];
-                    [self.audioPlayer play];
-                    
-                    
-                    //DGActivityIndicatorView
-                    
-                    
-                    
-                    [cell.activityIndicatorView startAnimating];
-                    
-                }
-                
-            }
+        ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
+
+            NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
             
-        }
+            
+            NSError *error;
+            NSData *data = [NSData dataWithContentsOfURL:url];
+            self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+            
+            if (error)
+            {
+                NSLog(@"Error in audioPlayer: %@",
+                      [error localizedDescription]);
+            } else {
+                self.audioPlayer.delegate = self;
+                [self.audioPlayer prepareToPlay];
+                [self.audioPlayer play];
+            }
+        
     }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+
     
     [self.audioPlayer stop];
-    [cell.activityIndicatorView stopAnimating];
-    cell.activityIndicatorView.hidden = YES;
-    //[cell reloadInputViews];
     
 }
 
