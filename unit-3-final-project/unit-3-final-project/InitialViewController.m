@@ -14,7 +14,6 @@
 #import "NearbyLocationProcessor.h"
 #import "EchonestAPIManager.h"
 #import "SpotifyApiManager.h"
-#import "DetailViewController.h"
 #import "HomeScreenTableViewCell.h" // custom cells!
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
 #import "CLPlacemark+HNKAdditions.h"
@@ -22,6 +21,13 @@
 #import "MBLoadingIndicator.h"
 
 @import AVFoundation;
+
+#import "CBZSplashView.h"
+#import "UIColor+HexString.h"
+#import "UIBezierPath+Shapes.h"
+
+static NSString * const kUnchartedIcon = @"unchartedWhiteMap";
+static NSString * const kUnchartedColor = @"0099cc";
 
 @interface InitialViewController ()
 <
@@ -33,6 +39,9 @@ UITableViewDelegate,
 AVAudioPlayerDelegate,
 UISearchBarDelegate
 >
+
+@property (nonatomic, strong) CBZSplashView *splashView;
+
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 // for model data
 @property(nonatomic) NSMutableArray <LocationInfoObject *> *modelData;
@@ -62,18 +71,34 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+
     
-    //long touch
-    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
-    [gesture1 setDelegate:self];
-    [gesture1 setMinimumPressDuration:1];
-    [self.tableView addGestureRecognizer: gesture1];
+    
+//    //CBZ Splashview
+//        __unused UIImage *icon = [UIImage imageNamed:kUnchartedIcon];
+//        UIColor *color = [UIColor colorWithHexString:kUnchartedColor];
+//    
+//        CBZSplashView *splashView = [CBZSplashView splashViewWithIcon:icon backgroundColor:color];
+//    
+//        splashView.animationDuration = 1.0;
+//    
+//        [self.view addSubview:splashView];
+//    
+//        self.splashView = splashView;
+
+//    //long touch
+//    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
+//    [gesture1 setDelegate:self];
+//    [gesture1 setMinimumPressDuration:1];
+//    [self.tableView addGestureRecognizer: gesture1];
+
     
     self.currentCity = [[LocationInfoObject alloc]init];
     self.modelData = [[NSMutableArray alloc]init];
     self.annotation = [[[NSBundle mainBundle] loadNibNamed:@"InfoWindow" owner:self options:nil] objectAtIndex:0];
     
-   //autocomplete table view set up
+    //autocomplete table view set up
     self.autoCompleteSearchResults = [[NSMutableArray alloc]init];
     self.autoCompleteTableView.delegate = self;
     self.autoCompleteTableView.dataSource = self;
@@ -114,8 +139,31 @@ UISearchBarDelegate
 
 }
 
+#pragma mark CBZ Splashview
+
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//
+//    /* wait a beat before animating in */
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.splashView startAnimation];
+//    });
+//}
+//
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return YES;
+//}
+
+
+
+#pragma mark - searchbar stuff
+
+
 
 - (void)viewWillAppear:(BOOL)animated { // for search bar
+    
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
@@ -125,7 +173,6 @@ UISearchBarDelegate
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
-#pragma mark - searchbar stuff
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     [searchBar setShowsCancelButton:YES animated:YES];
@@ -164,48 +211,6 @@ UISearchBarDelegate
     [self.autoCompleteTableView setHidden:YES];
 }
 
-
-#pragma mark - longPress Stuff
--(void)celllongpressed:(UIGestureRecognizer *)longPress
-{
-    
-    if (longPress.state == UIGestureRecognizerStateBegan)
-    {
-        CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
-        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
-        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-
-
-        NSError *error;
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-        
-        if (error)
-        {
-            NSLog(@"Error in audioPlayer: %@",
-                  [error localizedDescription]);
-        } else {
-            self.audioPlayer.delegate = self;
-            [self.audioPlayer prepareToPlay];
-            [self.audioPlayer play];
-        }
-            
-    }
-    else
-    {
-        if (longPress.state == UIGestureRecognizerStateCancelled
-            || longPress.state == UIGestureRecognizerStateFailed
-            || longPress.state == UIGestureRecognizerStateEnded)
-        {
-           // press ended
-            [self.audioPlayer stop];
-        }
-    }
-    
-    
-    
-}
 
 #pragma mark - TableView Stuff
 
@@ -295,6 +300,14 @@ UISearchBarDelegate
     
 }
 
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.audioPlayer stop];
+    HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell.activityIndicator stopAnimating];
+    cell.activityIndicatorView.hidden = YES;
+    [cell.activityIndicatorView reloadInputViews];
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (tableView == self.autoCompleteTableView) {
@@ -315,18 +328,35 @@ UISearchBarDelegate
 
         
     }
-// Psst, I disconnected detail view by commenting below out.
-//    else{
-//        DetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DVCIdentifier"];;
-//        
-//        vc.artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-//        [self.navigationController pushViewController:vc animated:YES];
-//    }
 
-}
+    else{
+        HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+        
+        
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+        
+        if (error)
+        {
+            NSLog(@"Error in audioPlayer: %@",
+                  [error localizedDescription]);
+        } else {
+            self.audioPlayer.delegate = self;
+            [self.audioPlayer prepareToPlay];
+            [self.audioPlayer play];
+            if (cell.activityIndicatorView.hidden == YES) {
+                cell.activityIndicatorView.hidden = NO;
+                [cell.activityIndicator startAnimating];
+            } else {
+                [cell.activityIndicator startAnimating];
+            }
+        }
+    }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
 }
 
 #pragma mark - CLLocationManagerDelegate
@@ -375,21 +405,36 @@ UISearchBarDelegate
             
             [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
                 
-                [weakSelf dropPinsForCities:finalCities];
-                [weakSelf setModel:finalCities];
+                if (finalCities.count>0) {
+                    
+                    NSArray *finalArtistCities = [finalCities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                        
+                         evaluatedObject.artists = [evaluatedObject.artists filteredArrayUsingPredicate:[ NSPredicate predicateWithBlock:^BOOL(ArtistInfoData* artistObjectEval, NSDictionary<NSString *,id> * _Nullable bindings) {
+                             
+                            return artistObjectEval.songURI;
+                        }]];
+
+                        return evaluatedObject.artists.count > 0;
+                    }]];
+                    
+                    NSLog(@"%@", finalArtistCities);
+                    [weakSelf dropPinsForCities:finalArtistCities];
+                    [weakSelf setModel:finalArtistCities];
+                    [weakSelf hideLoadingIndicator:indicator];
+                }
+                else{
+                    NSLog(@"please choose another city");
+                }
                 
-                [weakSelf hideLoadingIndicator:indicator];
             }];
         }];
     }];
 }
 
 - (MBLoadingIndicator *)showLoadingIndicator {
-    NSLog(@"***** SHOWING INDICATOR ****");
+
     MBLoadingIndicator *indicator = [[MBLoadingIndicator alloc] init];
     
-    //NOTE: Any extra loader can be done here, including sizing, colors, animation speed, etc
-    //      Pre-start changes will not be animated.
     [indicator setLoaderStyle:MBLoaderFullCircle];
     [indicator setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
     [indicator setWidth:20];
