@@ -21,10 +21,13 @@
     self.artistImageView.clipsToBounds = YES;
     self.artistImageView.layer.cornerRadius = 5.0;
     self.artistContainerView.layer.cornerRadius = 5.0;
-    DGActivityIndicatorView * activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:40.0f];
-    activityIndicatorView.frame = CGRectMake(300.0f, 19.0f, 50.0f, 50.0f);
-    [activityIndicatorView startAnimating];
-    [self.activityIndicatorView addSubview: activityIndicatorView];
+    
+    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:50.0f];
+    CGRect frame = self.activityIndicatorView.frame;
+    self.activityIndicator.center = CGPointMake(frame.size.width/2, frame.size.height/2);
+    [self.activityIndicatorView addSubview: self.activityIndicator];
+    [self.activityIndicatorView sendSubviewToBack:self.activityIndicator];
+    
     
     
     // button!

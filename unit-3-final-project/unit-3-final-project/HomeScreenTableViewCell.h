@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *buttonFavorite;
 @property (weak, nonatomic) IBOutlet UILabel *SongNameLabel;
 @property (weak, nonatomic) IBOutlet DGActivityIndicatorView *activityIndicatorView;
+@property (nonatomic) DGActivityIndicatorView *activityIndicator;
 @property (nonatomic, weak) NSString *songURI;
 
 

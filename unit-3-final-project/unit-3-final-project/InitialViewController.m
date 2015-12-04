@@ -14,7 +14,6 @@
 #import "NearbyLocationProcessor.h"
 #import "EchonestAPIManager.h"
 #import "SpotifyApiManager.h"
-#import "DetailViewController.h"
 #import "HomeScreenTableViewCell.h" // custom cells!
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocomplete.h>
 #import "CLPlacemark+HNKAdditions.h"
@@ -297,6 +296,10 @@ UISearchBarDelegate
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.audioPlayer stop];
+    HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell.activityIndicator stopAnimating];
+    cell.activityIndicatorView.hidden = YES;
+    [cell.activityIndicatorView reloadInputViews];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -321,6 +324,8 @@ UISearchBarDelegate
     }
 
     else{
+        HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
         NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
         
@@ -337,6 +342,12 @@ UISearchBarDelegate
             self.audioPlayer.delegate = self;
             [self.audioPlayer prepareToPlay];
             [self.audioPlayer play];
+            if (cell.activityIndicatorView.hidden == YES) {
+                cell.activityIndicatorView.hidden = NO;
+                [cell.activityIndicator startAnimating];
+            } else {
+                [cell.activityIndicator startAnimating];
+            }
         }
     }
 

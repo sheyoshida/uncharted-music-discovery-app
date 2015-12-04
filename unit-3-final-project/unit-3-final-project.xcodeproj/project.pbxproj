@@ -15,7 +15,6 @@
 		0BE4DCB71BF10C3F0097B34C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BE4DCB61BF10C3F0097B34C /* MapKit.framework */; };
 		0BE4DCBA1BF1108E0097B34C /* CustomPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4DCB91BF1108E0097B34C /* CustomPin.m */; };
 		2C52F1D779145021059FA925 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C56A4FC2699A23DCDC70018 /* libPods.a */; };
-		4D1726D01C02562A006F5EA3 /* DetailArtistCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */; };
 		4D7235781C03DA170094AE36 /* VarelaRound-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D7235771C03DA170094AE36 /* VarelaRound-Regular.ttf */; };
 		4DB852A51BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */; };
 		4DB852A61BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */; };
@@ -26,7 +25,6 @@
 		4DBA58EB1BEFF1BD00668D63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DBA58EA1BEFF1BD00668D63 /* Assets.xcassets */; };
 		4DBA58EE1BEFF1BD00668D63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DBA58EC1BEFF1BD00668D63 /* LaunchScreen.storyboard */; };
 		4DBA58F71BEFF34200668D63 /* InitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58F61BEFF34200668D63 /* InitialViewController.m */; };
-		4DBA58FA1BEFF3BA00668D63 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */; };
 		5FE457231C0D63F500F155A9 /* UIColor+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE4571E1C0D63F500F155A9 /* UIColor+HexString.m */; };
 		5FE457241C0D63F500F155A9 /* UIBezierPath+Shapes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE457201C0D63F500F155A9 /* UIBezierPath+Shapes.m */; };
 		5FE676531C0E16C800B64CA0 /* ScrollingRoadtripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE676521C0E16C800B64CA0 /* ScrollingRoadtripViewController.m */; };
@@ -35,7 +33,6 @@
 		F03138151BF8F19400785A44 /* EchonestAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F03138141BF8F19400785A44 /* EchonestAPIManager.m */; };
 		F03138181BF8F9BD00785A44 /* SpotifyApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */; };
 		F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */; };
-		F0C6D78E1C00CF6D00859CD8 /* RoadTripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,8 +48,6 @@
 		0BE4DCB81BF1108E0097B34C /* CustomPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPin.h; sourceTree = "<group>"; };
 		0BE4DCB91BF1108E0097B34C /* CustomPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPin.m; sourceTree = "<group>"; };
 		3C56A4FC2699A23DCDC70018 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D1726CE1C02562A006F5EA3 /* DetailArtistCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailArtistCollectionViewCell.h; sourceTree = "<group>"; };
-		4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailArtistCollectionViewCell.m; sourceTree = "<group>"; };
 		4D7235771C03DA170094AE36 /* VarelaRound-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "VarelaRound-Regular.ttf"; sourceTree = "<group>"; };
 		4DB852A21BFF7C5A00FE99E7 /* HomeScreenTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenTableViewCell.h; sourceTree = "<group>"; };
 		4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenTableViewCell.m; sourceTree = "<group>"; };
@@ -68,8 +63,6 @@
 		4DBA58EF1BEFF1BD00668D63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4DBA58F51BEFF34200668D63 /* InitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitialViewController.h; sourceTree = "<group>"; };
 		4DBA58F61BEFF34200668D63 /* InitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitialViewController.m; sourceTree = "<group>"; };
-		4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		5FE4571D1C0D63F500F155A9 /* UIColor+HexString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HexString.h"; sourceTree = "<group>"; };
 		5FE4571E1C0D63F500F155A9 /* UIColor+HexString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HexString.m"; sourceTree = "<group>"; };
 		5FE4571F1C0D63F500F155A9 /* UIBezierPath+Shapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Shapes.h"; sourceTree = "<group>"; };
@@ -88,8 +81,6 @@
 		F03138171BF8F9BD00785A44 /* SpotifyApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotifyApiManager.m; sourceTree = "<group>"; };
 		F0610A941BF7AA7B0011BE01 /* LocationInfoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationInfoObject.h; sourceTree = "<group>"; };
 		F0610A951BF7AA7B0011BE01 /* LocationInfoObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationInfoObject.m; sourceTree = "<group>"; };
-		F0C6D78C1C00CF6D00859CD8 /* RoadTripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoadTripViewController.h; sourceTree = "<group>"; };
-		F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoadTripViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,12 +135,6 @@
 			children = (
 				4DBA58F51BEFF34200668D63 /* InitialViewController.h */,
 				4DBA58F61BEFF34200668D63 /* InitialViewController.m */,
-				4DBA58F81BEFF3BA00668D63 /* DetailViewController.h */,
-				4DBA58F91BEFF3BA00668D63 /* DetailViewController.m */,
-				4D1726CE1C02562A006F5EA3 /* DetailArtistCollectionViewCell.h */,
-				4D1726CF1C02562A006F5EA3 /* DetailArtistCollectionViewCell.m */,
-				F0C6D78C1C00CF6D00859CD8 /* RoadTripViewController.h */,
-				F0C6D78D1C00CF6D00859CD8 /* RoadTripViewController.m */,
 				4DB852A21BFF7C5A00FE99E7 /* HomeScreenTableViewCell.h */,
 				4DB852A31BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m */,
 				4DB852A41BFF7C5A00FE99E7 /* HomeScreenTableViewCell.xib */,
@@ -361,19 +346,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F03138151BF8F19400785A44 /* EchonestAPIManager.m in Sources */,
-				4DBA58FA1BEFF3BA00668D63 /* DetailViewController.m in Sources */,
 				0B54216C1C112D5D0046AA74 /* SpotifyPlaylistManager.m in Sources */,
 				4DBA58E01BEFF1BD00668D63 /* AppDelegate.m in Sources */,
 				4DBA58E91BEFF1BD00668D63 /* unit_3_final_project.xcdatamodeld in Sources */,
 				F0610A961BF7AA7B0011BE01 /* LocationInfoObject.m in Sources */,
 				5FE457241C0D63F500F155A9 /* UIBezierPath+Shapes.m in Sources */,
-				4D1726D01C02562A006F5EA3 /* DetailArtistCollectionViewCell.m in Sources */,
 				F03138121BF8EC0A00785A44 /* NearbyLocationProcessor.m in Sources */,
 				F03138181BF8F9BD00785A44 /* SpotifyApiManager.m in Sources */,
 				0B4779B91BF7CA8100D23273 /* InfoWindow.m in Sources */,
 				5FE676531C0E16C800B64CA0 /* ScrollingRoadtripViewController.m in Sources */,
 				4DB852A51BFF7C5A00FE99E7 /* HomeScreenTableViewCell.m in Sources */,
-				F0C6D78E1C00CF6D00859CD8 /* RoadTripViewController.m in Sources */,
 				4DBA58DD1BEFF1BD00668D63 /* main.m in Sources */,
 				5FE8B8571BF412DF00D1F557 /* ArtistInfoData.m in Sources */,
 				0B5421691C112A420046AA74 /* User.m in Sources */,
