@@ -75,6 +75,12 @@ AVAudioPlayerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //long touch
+    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
+    [gesture1 setDelegate:self];
+    [gesture1 setMinimumPressDuration:1];
+    [self.tableView addGestureRecognizer: gesture1];
+    
     // custom cell setup
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -178,6 +184,61 @@ AVAudioPlayerDelegate
     
     
 }
+
+#pragma mark - longPress Stuff
+-(void)celllongpressed:(UIGestureRecognizer *)longPress
+{
+    CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
+    HomeScreenTableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    if (longPress.state == UIGestureRecognizerStateBegan)
+    {
+        LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
+        ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
+
+        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+        
+        
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+        
+        if (error)
+        {
+            NSLog(@"Error in audioPlayer: %@",
+                  [error localizedDescription]);
+        } else {
+            self.audioPlayer.delegate = self;
+            [self.audioPlayer prepareToPlay];
+            [self.audioPlayer play];
+            if (cell.activityIndicatorView.hidden == YES) {
+                cell.activityIndicatorView.hidden = NO;
+                [cell.activityIndicator startAnimating];
+            } else {
+                [cell.activityIndicator startAnimating];
+            }
+        }
+        
+    }
+    else
+    {
+        if (longPress.state == UIGestureRecognizerStateCancelled
+            || longPress.state == UIGestureRecognizerStateFailed
+            || longPress.state == UIGestureRecognizerStateEnded)
+        {
+            // press ended
+            [self.audioPlayer stop];
+            [cell.activityIndicator stopAnimating];
+            cell.activityIndicatorView.hidden = YES;
+            [cell.activityIndicatorView reloadInputViews];
+        }
+    }
+    
+    
+    
+}
+
 
 - (void)routeButtonTapped {
     MKPlacemark *placeMarkStart = [[MKPlacemark alloc]initWithCoordinate:self.start.coordinate addressDictionary:nil];
@@ -345,42 +406,38 @@ AVAudioPlayerDelegate
             }];
         }
         
-    } else {
-        LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
-        
-        ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
-
-            NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-            
-            
-            NSError *error;
-            NSData *data = [NSData dataWithContentsOfURL:url];
-            self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-            
-            if (error)
-            {
-                NSLog(@"Error in audioPlayer: %@",
-                      [error localizedDescription]);
-            } else {
-                self.audioPlayer.delegate = self;
-                [self.audioPlayer prepareToPlay];
-                [self.audioPlayer play];
-            }
-        
     }
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    
-    [self.audioPlayer stop];
-    
-}
-
-//- (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
+//    else {
+//        LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
+//        
+//        ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
 //
-//    [self.activityIndicatorView stopAnimating];
-//    self.activityIndicatorView.hidden = YES;
+//            NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+//            
+//            
+//            NSError *error;
+//            NSData *data = [NSData dataWithContentsOfURL:url];
+//            self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+//            
+//            if (error)
+//            {
+//                NSLog(@"Error in audioPlayer: %@",
+//                      [error localizedDescription]);
+//            } else {
+//                self.audioPlayer.delegate = self;
+//                [self.audioPlayer prepareToPlay];
+//                [self.audioPlayer play];
+//            }
+//        
+//    }
+    
+}
+
+//- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+//
+//    
+//    [self.audioPlayer stop];
+//    
 //}
 
 
