@@ -59,17 +59,23 @@
 + (void)passArtistNameToSpotifyWithArtistObject:(ArtistInfoData*)artistObject completion:(void(^)())completion {
     // goal: pass in artist name - get artwork, album name, album number
     
-    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", artistObject.artistName];
-    
+//    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=album", artistObject.artistName];
+
+    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?query=%@&offset=0&limit=20&type=track", artistObject.artistName];
     NSString *encodedString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     AFHTTPRequestOperationManager *manager =[[AFHTTPRequestOperationManager alloc] init];
     
     [manager GET:encodedString parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
-        NSDictionary *albumResult = [[[responseObject objectForKey:@"albums"] objectForKey:@"items"] firstObject];
+        NSDictionary *firstResult = [[[responseObject objectForKey:@"tracks"] objectForKey:@"items"] firstObject];
+
+        NSDictionary *albumResult = [firstResult objectForKey:@"album"];
         artistObject.albumTitle = [albumResult objectForKey:@"name"];
         artistObject.albumID = [albumResult objectForKey: @"id"];
+        artistObject.songURI = [firstResult objectForKey:@"uri"];
+        artistObject.songPreview = [firstResult objectForKey:@"preview_url"];
+        artistObject.songTitle = [firstResult objectForKey:@"name"];
         
         NSArray *artistImages = [albumResult objectForKey:@"images"];
         
@@ -115,18 +121,17 @@
             [artistObject.spotifyImages addObject:artworkURL];
         }
         
-        if (artistObject.albumID) {
-            [self passAlbumIDToSpotifyWithArtistObject:artistObject completion:^{
-                completion();
-            }];
-        }
-        else{
-            completion();
-        }
+        completion();
+        
+//        if (artistObject.albumID) {
+//            [self passAlbumIDToSpotifyWithArtistObject:artistObject completion:^{
+//                completion();
+//            }];
+//        }
+//        else{
+//            completion();
+//        }
 
-        
-        
-        
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         completion();
@@ -135,43 +140,43 @@
 }
 
 
-#pragma mark - spotify api call #2
-
-+ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject completion:(void(^)())completion {
-    
-    // pass in album number - get song preview(url) + song name
-    // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
-    
-
-        
-        NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", artistObject.albumID];
-        
-        NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        
-        AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
-        
-        [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-            
-            NSArray *resultsSpotifySecondCall = responseObject[@"items"];
-            
-            for (NSDictionary *result in resultsSpotifySecondCall) {
-                
-                artistObject.songURI = [result objectForKey:@"uri"];
-                artistObject.songPreview = [result objectForKey:@"preview_url"];
-                artistObject.songTitle = [result objectForKey:@"name"];
-                artistObject.songURI = [result objectForKey:@"uri"];
-                
-            }
-            
-            completion();
-            
-        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-            completion();
-            NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
-        }];
-        
-    
-}
+//#pragma mark - spotify api call #2
+//
+//+ (void)passAlbumIDToSpotifyWithArtistObject:(ArtistInfoData*)artistObject completion:(void(^)())completion {
+//    
+//    // pass in album number - get song preview(url) + song name
+//    // https://api.spotify.com/v1/albums/4NnBDxnxiiXiMlssBi9Bsq/tracks?offset=0&limit=50
+//    
+//
+//        
+//        NSString *url2 = [NSString stringWithFormat:@"https://api.spotify.com/v1/albums/%@/tracks?offset=0&limit=50", artistObject.albumID];
+//        
+//        NSString *encodedString2 = [url2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//        
+//        AFHTTPRequestOperationManager *manager2 =[[AFHTTPRequestOperationManager alloc] init];
+//        
+//        [manager2 GET:encodedString2 parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//            
+//            NSArray *resultsSpotifySecondCall = responseObject[@"items"];
+//            
+//            for (NSDictionary *result in resultsSpotifySecondCall) {
+//                
+//                artistObject.songURI = [result objectForKey:@"uri"];
+//                artistObject.songPreview = [result objectForKey:@"preview_url"];
+//                artistObject.songTitle = [result objectForKey:@"name"];
+//                artistObject.songURI = [result objectForKey:@"uri"];
+//                
+//            }
+//            
+//            completion();
+//            
+//        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+//            completion();
+//            NSLog(@"Error - Spotify #2 API Call: %@", error.localizedDescription);
+//        }];
+//        
+//    
+//}
 
 
 @end

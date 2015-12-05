@@ -315,6 +315,7 @@ UISearchBarDelegate
     
 }
 
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (tableView == self.autoCompleteTableView) {
@@ -533,8 +534,8 @@ UISearchBarDelegate
     if (motion == UIEventSubtypeMotionShake)
     {
         
-        CLLocation *random = [self generateRandomCity];
-        [self getNearbyCitiesWithCoordinate:random];
+        
+        [self getNearbyCitiesWithCoordinate:[[CLLocation alloc]initWithLatitude:18.975 longitude:72.825]];
     }
 }
 
