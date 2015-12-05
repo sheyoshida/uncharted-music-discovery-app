@@ -34,15 +34,15 @@
                                     <constraint firstAttribute="height" constant="69.5" id="Lxr-Sf-sdt"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" misplaced="YES" text="artist name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
-                                <rect key="frame" x="90" y="5" width="162" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="artist name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
+                                <rect key="frame" x="90" y="5" width="91.5" height="20.5"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
-                                <rect key="frame" x="90" y="35" width="162" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
+                                <rect key="frame" x="90" y="35" width="152" height="25"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -53,35 +53,33 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a1F-HC-WaR" userLabel="View - visualizer" customClass="DGActivityIndicatorView">
                                         <rect key="frame" x="0.0" y="0.0" width="80" height="70"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
-                                                <rect key="frame" x="28" y="23" width="25" height="25"/>
-                                                <animations/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="25" id="o9q-Gn-APL"/>
-                                                    <constraint firstAttribute="width" constant="25" id="qHS-yx-T40"/>
-                                                </constraints>
-                                                <state key="normal" image="heart-selected"/>
-                                                <state key="disabled" image="heart-button"/>
-                                                <connections>
-                                                    <action selector="heartButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ize-ZA-b1f"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
                                         <animations/>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="Jgc-72-JaT"/>
                                             <constraint firstAttribute="height" constant="70" id="LDd-L2-ZSZ"/>
-                                            <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerX" secondItem="a1F-HC-WaR" secondAttribute="centerX" id="Wsi-70-afI"/>
-                                            <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerY" secondItem="a1F-HC-WaR" secondAttribute="centerY" id="pSh-b3-pKs"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
+                                        <rect key="frame" x="27" y="23" width="25" height="25"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="o9q-Gn-APL"/>
+                                            <constraint firstAttribute="width" constant="25" id="qHS-yx-T40"/>
+                                        </constraints>
+                                        <state key="normal" image="heart-selected"/>
+                                        <state key="disabled" image="heart-button"/>
+                                        <connections>
+                                            <action selector="heartButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ize-ZA-b1f"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerY" secondItem="wfM-e6-twI" secondAttribute="centerY" id="DO9-dD-OBH"/>
                                     <constraint firstItem="a1F-HC-WaR" firstAttribute="leading" secondItem="wfM-e6-twI" secondAttribute="leading" id="E6F-1F-qCt"/>
+                                    <constraint firstItem="Cm1-0Z-A8R" firstAttribute="centerX" secondItem="wfM-e6-twI" secondAttribute="centerX" id="N4v-bN-5aE"/>
                                     <constraint firstAttribute="height" constant="70" id="P5Q-ah-uxq"/>
                                     <constraint firstAttribute="width" constant="80" id="iuY-0x-kcL"/>
                                     <constraint firstItem="a1F-HC-WaR" firstAttribute="top" secondItem="wfM-e6-twI" secondAttribute="top" id="nav-k2-M0V"/>
