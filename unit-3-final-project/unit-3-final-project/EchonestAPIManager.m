@@ -20,7 +20,10 @@
     for (LocationInfoObject *city in cities) {
         [self getAristInfoForCity:city andGenre:genre completion:^(NSArray *artists) {
             
-            city.artists = artists;
+            if (artists) {
+                city.artists = artists;
+            }
+            
             received++;
             
             if (received == cities.count) {
@@ -64,6 +67,7 @@
         
     } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
         NSLog(@"Error: %@", error.localizedDescription);
+        completion(nil);
     }];
 }
 

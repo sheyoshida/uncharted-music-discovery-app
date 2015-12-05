@@ -173,16 +173,10 @@ UISearchBarDelegate
             [cell.activityIndicatorView reloadInputViews];
         }
     }
-    
-    
-    
 }
 
 
-
-#pragma mark - searchbar stuff
-
-
+#pragma mark - searchbar delegate methods
 
 - (void)viewWillAppear:(BOOL)animated { // for search bar
     
@@ -234,8 +228,7 @@ UISearchBarDelegate
 }
 
 
-#pragma mark - TableView Stuff
-
+#pragma mark - TableView delegate methods
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
@@ -288,7 +281,6 @@ UISearchBarDelegate
         HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
         cell.artistNameLabel.text = artist.artistName;
-        NSLog(@"*******%@*********", artist.songURI);
         cell.songURI = artist.songURI;
         cell.SongNameLabel.text = artist.songTitle;
         
@@ -323,14 +315,6 @@ UISearchBarDelegate
     
 }
 
-//- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    [self.audioPlayer stop];
-//    HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    [cell.activityIndicator stopAnimating];
-//    cell.activityIndicatorView.hidden = YES;
-//    [cell.activityIndicatorView reloadInputViews];
-//}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (tableView == self.autoCompleteTableView) {
@@ -343,7 +327,6 @@ UISearchBarDelegate
         [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
             weakSelf.searchBar.text = place.name;
             [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
-//            [weakSelf zoomIntoLocation:placemark.location andZoom:100000];
             [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
@@ -351,34 +334,6 @@ UISearchBarDelegate
 
         
     }
-
-//    else{
-//        HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//        
-//        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-//        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-//        
-//        
-//        NSError *error;
-//        NSData *data = [NSData dataWithContentsOfURL:url];
-//        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-//        
-//        if (error)
-//        {
-//            NSLog(@"Error in audioPlayer: %@",
-//                  [error localizedDescription]);
-//        } else {
-//            self.audioPlayer.delegate = self;
-//            [self.audioPlayer prepareToPlay];
-//            [self.audioPlayer play];
-//            if (cell.activityIndicatorView.hidden == YES) {
-//                cell.activityIndicatorView.hidden = NO;
-//                [cell.activityIndicator startAnimating];
-//            } else {
-//                [cell.activityIndicator startAnimating];
-//            }
-//        }
-//    }
 
 }
 
