@@ -75,6 +75,12 @@ AVAudioPlayerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //long touch
+    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
+    [gesture1 setDelegate:self];
+    [gesture1 setMinimumPressDuration:1];
+    [self.tableView addGestureRecognizer: gesture1];
+    
     // custom cell setup
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -178,6 +184,61 @@ AVAudioPlayerDelegate
     
     
 }
+
+#pragma mark - longPress Stuff
+-(void)celllongpressed:(UIGestureRecognizer *)longPress
+{
+    CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
+    HomeScreenTableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    if (longPress.state == UIGestureRecognizerStateBegan)
+    {
+        LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
+        ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
+
+        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+        
+        
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+        
+        if (error)
+        {
+            NSLog(@"Error in audioPlayer: %@",
+                  [error localizedDescription]);
+        } else {
+            self.audioPlayer.delegate = self;
+            [self.audioPlayer prepareToPlay];
+            [self.audioPlayer play];
+            if (cell.activityIndicatorView.hidden == YES) {
+                cell.activityIndicatorView.hidden = NO;
+                [cell.activityIndicator startAnimating];
+            } else {
+                [cell.activityIndicator startAnimating];
+            }
+        }
+        
+    }
+    else
+    {
+        if (longPress.state == UIGestureRecognizerStateCancelled
+            || longPress.state == UIGestureRecognizerStateFailed
+            || longPress.state == UIGestureRecognizerStateEnded)
+        {
+            // press ended
+            [self.audioPlayer stop];
+            [cell.activityIndicator stopAnimating];
+            cell.activityIndicatorView.hidden = YES;
+            [cell.activityIndicatorView reloadInputViews];
+        }
+    }
+    
+    
+    
+}
+
 
 - (void)routeButtonTapped {
     MKPlacemark *placeMarkStart = [[MKPlacemark alloc]initWithCoordinate:self.start.coordinate addressDictionary:nil];
@@ -330,10 +391,10 @@ AVAudioPlayerDelegate
         HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
         
         
-        
         if (self.startEdit) {
             self.startSearchBar.text = place.name;
             [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
+                
                 self.start = placemark.location;
             }];
             
@@ -344,45 +405,8 @@ AVAudioPlayerDelegate
                 self.end = placemark.location;
             }];
         }
-        
-    } else {
-        LocationInfoObject * currentCity = [self.modelData objectAtIndex:indexPath.section];
-        
-        ArtistInfoData *artist = [currentCity.artists objectAtIndex:indexPath.row];
-
-            NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-            
-            
-            NSError *error;
-            NSData *data = [NSData dataWithContentsOfURL:url];
-            self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-            
-            if (error)
-            {
-                NSLog(@"Error in audioPlayer: %@",
-                      [error localizedDescription]);
-            } else {
-                self.audioPlayer.delegate = self;
-                [self.audioPlayer prepareToPlay];
-                [self.audioPlayer play];
-            }
-        
     }
 }
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    
-    [self.audioPlayer stop];
-    
-}
-
-//- (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
-//
-//    [self.activityIndicatorView stopAnimating];
-//    self.activityIndicatorView.hidden = YES;
-//}
-
 
 
 #pragma mark - searchbar stuff
@@ -517,6 +541,35 @@ AVAudioPlayerDelegate
     
 }
 
+# pragma mark - indicator methods
+
+- (MBLoadingIndicator *)showLoadingIndicator {
+    
+    MBLoadingIndicator *indicator = [[MBLoadingIndicator alloc] init];
+    
+    [indicator setLoaderStyle:MBLoaderFullCircle];
+    [indicator setLoadedColor: [UIColor colorWithHexString:@"0099cc"]];
+    [indicator setWidth:20];
+    [indicator setLoaderSize:MBLoaderMedium];
+    [indicator setStartPosition:MBLoaderTop];
+    [indicator setAnimationSpeed:MBLoaderSpeedFast];
+    [indicator offsetCenterXBy:0.0f];
+    
+    [self.view addSubview:indicator];
+    [indicator start];
+    [indicator incrementPercentageBy:(arc4random_uniform(30) + 17)];
+    
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 4 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [weakSelf hideLoadingIndicator:indicator];
+    });
+    return indicator;
+}
+
+- (void)hideLoadingIndicator:(MBLoadingIndicator *)indicator {
+    [indicator finish];
+}
 
 
 
@@ -534,33 +587,51 @@ AVAudioPlayerDelegate
     [self.roadTripMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
     
     
+    MBLoadingIndicator *indicator = [self showLoadingIndicator];
     
-    //Start the loader
-    [self.loadview start];
-    [self.loadview incrementPercentageBy:17];
-    
-    //Add the loader to our view
-    [self.view addSubview:self.loadview];
     
     [NearbyLocationProcessor findCitiesInRoute:route completion:^(NSArray<LocationInfoObject *> *cities) {
         
         
         [EchonestAPIManager getArtistInfoForCities:cities andGenre:@" " completion:^{
+            
+
             NSArray *finalCities = [cities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
                 return evaluatedObject.artists.count > 0;
             }]];
             
+            
+            
             [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
-                [self dropPinsForCities:finalCities];
                 
-                [self setModel:finalCities];
-                [self.loadview finish];
+                if (finalCities.count>0) {
+                    
+                    NSArray *finalArtistCities = [finalCities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                        
+                        evaluatedObject.artists = [evaluatedObject.artists filteredArrayUsingPredicate:[ NSPredicate predicateWithBlock:^BOOL(ArtistInfoData* artistObjectEval, NSDictionary<NSString *,id> * _Nullable bindings) {
+                            
+                            return artistObjectEval.songURI;
+                        }]];
+                        
+                        return evaluatedObject.artists.count > 0;
+                    }]];
+
+                    [self dropPinsForCities:finalArtistCities];
+                    [self setModel:finalArtistCities];
+                    [self hideLoadingIndicator:indicator];
+
+                }
+                else{
+                    NSLog(@"please choose another city");
+                }
+
             }];
         }];
         
     }];
     
 }
+
 
 - (void)setModel:(NSArray <LocationInfoObject *> *)cities {
     [self.modelData removeAllObjects];

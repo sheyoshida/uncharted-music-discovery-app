@@ -60,7 +60,6 @@ UISearchBarDelegate
 @property (strong, nonatomic) HNKGooglePlacesAutocompleteQuery *searchQuery;
 
 @property (nonatomic) NSMutableArray *randomLocations; // array of cities
-@property (nonatomic) CLLocation *randomCity;
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
 
@@ -71,27 +70,14 @@ UISearchBarDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-
     
-    
-//    //CBZ Splashview
-//        __unused UIImage *icon = [UIImage imageNamed:kUnchartedIcon];
-//        UIColor *color = [UIColor colorWithHexString:kUnchartedColor];
-//    
-//        CBZSplashView *splashView = [CBZSplashView splashViewWithIcon:icon backgroundColor:color];
-//    
-//        splashView.animationDuration = 1.0;
-//    
-//        [self.view addSubview:splashView];
-//    
-//        self.splashView = splashView;
+    self.randomLocations = [[NSMutableArray alloc]initWithObjects: @{ @"latitude": @34.050, @"longitude": @118.250}, @{ @"latitude": @43.700, @"longitude": @79.400}, @{ @"latitude": @44.647, @"longitude": @63.571}, @{ @"latitude": @18.975, @"longitude": @72.825}, @{ @"latitude": @31.790, @"longitude": @106.423}, @{ @"latitude": @33.755, @"longitude": @84.390}, @{ @"latitude": @29.950, @"longitude": @90.066}, nil];
 
-//    //long touch
-//    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
-//    [gesture1 setDelegate:self];
-//    [gesture1 setMinimumPressDuration:1];
-//    [self.tableView addGestureRecognizer: gesture1];
+    //long touch
+    UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
+    [gesture1 setDelegate:self];
+    [gesture1 setMinimumPressDuration:1];
+    [self.tableView addGestureRecognizer: gesture1];
 
     
     self.currentCity = [[LocationInfoObject alloc]init];
@@ -139,28 +125,58 @@ UISearchBarDelegate
 
 }
 
-#pragma mark CBZ Splashview
+#pragma mark - longPress Stuff
+-(void)celllongpressed:(UIGestureRecognizer *)longPress
+{
+    CGPoint cellPostion = [longPress locationOfTouch:0 inView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:cellPostion];
+    HomeScreenTableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    if (longPress.state == UIGestureRecognizerStateBegan)
+    {
+        
+        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
+        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
+        
+        
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
+        
+        if (error)
+        {
+            NSLog(@"Error in audioPlayer: %@",
+                  [error localizedDescription]);
+        } else {
+            self.audioPlayer.delegate = self;
+            [self.audioPlayer prepareToPlay];
+            [self.audioPlayer play];
+            if (cell.activityIndicatorView.hidden == YES) {
+                cell.activityIndicatorView.hidden = NO;
+                [cell.activityIndicator startAnimating];
+            } else {
+                [cell.activityIndicator startAnimating];
+            }
+        }
+        
+    }
+    else
+    {
+        if (longPress.state == UIGestureRecognizerStateCancelled
+            || longPress.state == UIGestureRecognizerStateFailed
+            || longPress.state == UIGestureRecognizerStateEnded)
+        {
+            // press ended
+            [self.audioPlayer stop];
+            [cell.activityIndicator stopAnimating];
+            cell.activityIndicatorView.hidden = YES;
+            [cell.activityIndicatorView reloadInputViews];
+        }
+    }
+}
 
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//
-//    /* wait a beat before animating in */
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.splashView startAnimation];
-//    });
-//}
-//
-//- (BOOL)prefersStatusBarHidden
-//{
-//    return YES;
-//}
 
-
-
-#pragma mark - searchbar stuff
-
-
+#pragma mark - searchbar delegate methods
 
 - (void)viewWillAppear:(BOOL)animated { // for search bar
     
@@ -212,8 +228,7 @@ UISearchBarDelegate
 }
 
 
-#pragma mark - TableView Stuff
-
+#pragma mark - TableView delegate methods
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
@@ -262,10 +277,10 @@ UISearchBarDelegate
     }
     
     else{
+        
         HomeScreenTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeScreenTableViewCellIdentifier" forIndexPath:indexPath];
         ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
         cell.artistNameLabel.text = artist.artistName;
-        NSLog(@"*******%@*********", artist.songURI);
         cell.songURI = artist.songURI;
         cell.SongNameLabel.text = artist.songTitle;
         
@@ -300,14 +315,6 @@ UISearchBarDelegate
     
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self.audioPlayer stop];
-    HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [cell.activityIndicator stopAnimating];
-    cell.activityIndicatorView.hidden = YES;
-    [cell.activityIndicatorView reloadInputViews];
-}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (tableView == self.autoCompleteTableView) {
@@ -320,41 +327,12 @@ UISearchBarDelegate
         [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
             weakSelf.searchBar.text = place.name;
             [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
-            [weakSelf zoomIntoLocation:placemark.location andZoom:100000];
             [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
 
 
         
-    }
-
-    else{
-        HomeScreenTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        
-        ArtistInfoData *artist = [self.currentCity.artists objectAtIndex:indexPath.row];
-        NSURL *url = [[NSURL alloc]initWithString:artist.songPreview];
-        
-        
-        NSError *error;
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:&error];
-        
-        if (error)
-        {
-            NSLog(@"Error in audioPlayer: %@",
-                  [error localizedDescription]);
-        } else {
-            self.audioPlayer.delegate = self;
-            [self.audioPlayer prepareToPlay];
-            [self.audioPlayer play];
-            if (cell.activityIndicatorView.hidden == YES) {
-                cell.activityIndicatorView.hidden = NO;
-                [cell.activityIndicator startAnimating];
-            } else {
-                [cell.activityIndicator startAnimating];
-            }
-        }
     }
 
 }
@@ -416,8 +394,7 @@ UISearchBarDelegate
 
                         return evaluatedObject.artists.count > 0;
                     }]];
-                    
-                    NSLog(@"%@", finalArtistCities);
+                    [weakSelf zoomIntoLocation:userLocation andZoom:100000];
                     [weakSelf dropPinsForCities:finalArtistCities];
                     [weakSelf setModel:finalArtistCities];
                     [weakSelf hideLoadingIndicator:indicator];
@@ -555,8 +532,9 @@ UISearchBarDelegate
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        NSLog(@"shaaakiiing shake shake shakkkkiing");
-        [self generateRandoCity];
+        
+        CLLocation *random = [self generateRandomCity];
+        [self getNearbyCitiesWithCoordinate:random];
     }
 }
 
@@ -567,49 +545,15 @@ UISearchBarDelegate
 //    [alertView show];
 //}
 
-- (void)generateRandoCity {
+- (CLLocation * )generateRandomCity {
+    NSUInteger randomIndex = arc4random() % [self.randomLocations count];
+    NSDictionary * location = [self.randomLocations objectAtIndex:randomIndex];
+    double latitude = [[location objectForKey:@"latitude"] doubleValue];
+    double longitude = [[location objectForKey:@"longitude"] doubleValue];
     
-    self.randomLocations = [[NSMutableArray alloc] init];
-    [self.randomLocations addObject:@"Los Angeles, CA"]; // 34.050,	118.250
-    [self.randomLocations addObject:@"Halifax, NS"]; // 43.700,	79.400
-    [self.randomLocations addObject:@"Moscow, Russia"]; // 44.647, 63.571
-    [self.randomLocations addObject:@"Mumbai, India"]; // 18.975, 72.825
-    [self.randomLocations addObject:@"El Paso, TX"]; // 31.790, 106.423
-    [self.randomLocations addObject:@"Atlanta, GA"]; // 33.755, 84.390
-    [self.randomLocations addObject:@"New Orleans, LA"]; // 29.950, 90.066
     
-    NSString *generatedCity = [self.randomLocations objectAtIndex:arc4random_uniform([self.randomLocations count])];
+    return [[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
     
-    if ([generatedCity isEqual: @"Los Angeles, CA"]) {
-        self.latitude = 34.050;
-        self.longitude = -118.250;
-        
-    } else if ([generatedCity  isEqual: @"Halifax, NS"]) {
-        self.latitude = 43.700;
-        self.longitude = -79.400;
-        
-    } else if ([generatedCity isEqual: @"Moscow, Russia"]) {
-        self.latitude = 44.647;
-        self.longitude = 63.571;
-        
-    } else if ([generatedCity  isEqual: @"Mumbai, India"]) {
-        self.latitude = 18.975;
-        self.longitude = 72.825;
-        
-    } else if ([generatedCity isEqual: @"El Paso, TX"]) {
-        self.latitude = 31.790;
-        self.longitude = -106.423;
-        
-    } else if ([generatedCity  isEqual: @"Atlanta, GA"]) {
-        self.latitude = 33.755;
-        self.longitude = -84.390;
-        
-    } else if ([self.randomCity  isEqual: @"NewOrleans, LA"]) {
-        self.latitude = 29.950;
-        self.longitude = -90.066;
-    }
-    
-    self.randomCity = [[CLLocation alloc] initWithLatitude:self.latitude longitude:self.longitude];
 }
 
 @end
