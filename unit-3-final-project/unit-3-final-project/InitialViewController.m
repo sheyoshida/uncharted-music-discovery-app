@@ -343,7 +343,7 @@ UISearchBarDelegate
         [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
             weakSelf.searchBar.text = place.name;
             [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
-            [weakSelf zoomIntoLocation:placemark.location andZoom:100000];
+//            [weakSelf zoomIntoLocation:placemark.location andZoom:100000];
             [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
@@ -439,8 +439,7 @@ UISearchBarDelegate
 
                         return evaluatedObject.artists.count > 0;
                     }]];
-                    
-                    NSLog(@"%@", finalArtistCities);
+                    [weakSelf zoomIntoLocation:userLocation andZoom:100000];
                     [weakSelf dropPinsForCities:finalArtistCities];
                     [weakSelf setModel:finalArtistCities];
                     [weakSelf hideLoadingIndicator:indicator];
@@ -578,8 +577,9 @@ UISearchBarDelegate
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        NSLog(@"shaaakiiing shake shake shakkkkiing");
-        NSLog(@"%@", [self generateRandomCity]);
+        
+        CLLocation *random = [self generateRandomCity];
+        [self getNearbyCitiesWithCoordinate:random];
     }
 }
 
