@@ -71,7 +71,7 @@ UISearchBarDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.randomLocations = [[NSMutableArray alloc]initWithObjects: @{ @"latitude": @34.050, @"longitude": @118.250}, @{ @"latitude": @43.700, @"longitude": @79.400}, @{ @"latitude": @44.647, @"longitude": @63.571}, @{ @"latitude": @18.975, @"longitude": @72.825}, @{ @"latitude": @31.790, @"longitude": @106.423}, @{ @"latitude": @33.755, @"longitude": @84.390}, @{ @"latitude": @29.950, @"longitude": @90.066}, nil];
+    self.randomLocations = [[NSMutableArray alloc]initWithObjects: @{ @"latitude": @34.050, @"longitude": @-118.250}, @{ @"latitude": @43.700, @"longitude": @-79.400}, @{ @"latitude": @44.647, @"longitude": @-63.571}, @{ @"latitude": @18.975, @"longitude": @72.825}, @{ @"latitude": @31.790, @"longitude": @-106.423}, @{ @"latitude": @33.755, @"longitude": @-84.390}, @{ @"latitude": @29.950, @"longitude": @-90.066}, nil];
 
     //long touch
     UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
@@ -315,6 +315,7 @@ UISearchBarDelegate
     
 }
 
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (tableView == self.autoCompleteTableView) {
@@ -533,8 +534,8 @@ UISearchBarDelegate
     if (motion == UIEventSubtypeMotionShake)
     {
         
-        CLLocation *random = [self generateRandomCity];
-        [self getNearbyCitiesWithCoordinate:random];
+        
+        [self getNearbyCitiesWithCoordinate:[[CLLocation alloc]initWithLatitude:18.975 longitude:72.825]];
     }
 }
 

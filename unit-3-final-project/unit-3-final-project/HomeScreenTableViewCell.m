@@ -41,12 +41,22 @@
 
 }
 
-- (IBAction)heartButtonTapped:(id)sender {
 
+- (IBAction)heartButtonTapped:(id)sender {
+    
+    // animate
+    POPSpringAnimation *sprintAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    sprintAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(0.9, 0.9)];
+    sprintAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(2, 2)];
+    sprintAnimation.springBounciness = 30.f;
+    [self.buttonFavorite pop_addAnimation:sprintAnimation forKey:@"springAnimation"];
+    
     UIButton *btn = (UIButton *)sender;
     
     if( [[btn imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"heart-button.png"]]) {
         [btn setImage:[UIImage imageNamed:@"heart-selected.png"] forState:UIControlStateNormal];
+        
+
         
         __block NSString *uri = self.songURI;
         void (^addTrack)() = ^void() {
