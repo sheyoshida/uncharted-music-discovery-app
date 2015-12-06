@@ -34,14 +34,7 @@
                                     <constraint firstAttribute="height" constant="69.5" id="Lxr-Sf-sdt"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="artist name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
-                                <rect key="frame" x="90" y="5" width="91.5" height="20.5"/>
-                                <animations/>
-                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song title" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song title" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
                                 <rect key="frame" x="90" y="35" width="152" height="25"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="12"/>
@@ -61,7 +54,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cm1-0Z-A8R">
-                                        <rect key="frame" x="27.5" y="22.5" width="25" height="25"/>
+                                        <rect key="frame" x="27" y="22" width="25" height="25"/>
                                         <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="o9q-Gn-APL"/>
@@ -87,6 +80,13 @@
                                     <constraint firstAttribute="trailing" secondItem="a1F-HC-WaR" secondAttribute="trailing" id="zV5-WS-agT"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="artist name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
+                                <rect key="frame" x="90" y="5" width="152" height="20.5"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -95,6 +95,7 @@
                             <constraint firstItem="E80-fT-Hl3" firstAttribute="top" secondItem="O3T-vN-MI9" secondAttribute="top" id="B0V-VZ-ekU"/>
                             <constraint firstItem="E80-fT-Hl3" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="B0e-c6-zv1"/>
                             <constraint firstAttribute="bottom" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="20" symbolic="YES" id="FrB-Qv-ygK"/>
+                            <constraint firstItem="wfM-e6-twI" firstAttribute="leading" secondItem="E80-fT-Hl3" secondAttribute="trailing" constant="10" id="KUx-Wv-4L1"/>
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="leading" secondItem="6pY-Op-Kzy" secondAttribute="leading" constant="10" id="LE0-4l-4KT"/>
                             <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="E80-fT-Hl3" secondAttribute="bottom" constant="10" id="M5Q-WJ-NiV"/>
                             <constraint firstItem="wfM-e6-twI" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="O3d-IV-d8K"/>
