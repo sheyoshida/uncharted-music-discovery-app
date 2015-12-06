@@ -71,7 +71,7 @@ UISearchBarDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.randomLocations = [[NSMutableArray alloc]initWithObjects: @{ @"latitude": @34.050, @"longitude": @-118.250}, @{ @"latitude": @43.700, @"longitude": @-79.400}, @{ @"latitude": @44.647, @"longitude": @-63.571}, @{ @"latitude": @18.975, @"longitude": @72.825}, @{ @"latitude": @31.790, @"longitude": @-106.423}, @{ @"latitude": @33.755, @"longitude": @-84.390}, @{ @"latitude": @29.950, @"longitude": @-90.066}, nil];
+    self.randomLocations = [[NSMutableArray alloc]initWithObjects: @{ @"latitude": @18.975, @"longitude": @72.825}, @{ @"latitude": @33.755, @"longitude": @-84.390}, @{ @"latitude": @29.950, @"longitude": @-90.066}, nil];
 
     //long touch
     UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
@@ -327,7 +327,6 @@ UISearchBarDelegate
         __weak typeof(self) weakSelf = self;
         [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
             weakSelf.searchBar.text = place.name;
-            NSLog(@"%@", placemark.location);
             [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
@@ -385,6 +384,7 @@ UISearchBarDelegate
                 return evaluatedObject.artists.count > 0;
             }]];
             
+            
             if (finalCities.count > 0) {
                 
                 [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
@@ -412,7 +412,7 @@ UISearchBarDelegate
                         [alertController addAction:ok];
                         
                         [self presentViewController:alertController animated:YES completion:nil];
-                        NSLog(@"please choose another city");
+                        
                     }
                     
                 }];
@@ -425,7 +425,7 @@ UISearchBarDelegate
                 [alertController addAction:ok];
                 
                 [self presentViewController:alertController animated:YES completion:nil];
-                NSLog(@"please choose another city");
+                
             }
             
             
@@ -478,7 +478,7 @@ UISearchBarDelegate
     
     for (LocationInfoObject *city in cities) {
         if (city.artists.count == 0) {
-            NSLog(@"%@, %@", city.SubAdministrativeArea, city.State);
+            
         }
         else{
             CLLocation *location = city.location;
@@ -558,8 +558,8 @@ UISearchBarDelegate
     if (motion == UIEventSubtypeMotionShake)
     {
         
-        
-        [self getNearbyCitiesWithCoordinate:[[CLLocation alloc]initWithLatitude:18.975 longitude:72.825]];
+        CLLocation *rand = [self generateRandomCity];
+        [self getNearbyCitiesWithCoordinate: rand];
     }
 }
 
@@ -569,6 +569,7 @@ UISearchBarDelegate
 //    
 //    [alertView show];
 //}
+
 
 - (CLLocation * )generateRandomCity {
     NSUInteger randomIndex = arc4random() % [self.randomLocations count];
