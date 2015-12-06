@@ -327,7 +327,7 @@ UISearchBarDelegate
         __weak typeof(self) weakSelf = self;
         [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
             weakSelf.searchBar.text = place.name;
-            [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
+            NSLog(@"%@", placemark.location);
             [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
@@ -373,6 +373,9 @@ UISearchBarDelegate
     
     __weak typeof(self) weakSelf = self;
     
+    [weakSelf.annotation removeFromSuperview];
+    [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
+    
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
         
@@ -382,29 +385,50 @@ UISearchBarDelegate
                 return evaluatedObject.artists.count > 0;
             }]];
             
-            [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
+            if (finalCities.count > 0) {
                 
-                if (finalCities.count>0) {
+                [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
                     
-                    NSArray *finalArtistCities = [finalCities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                    if (finalCities.count>0) {
                         
-                         evaluatedObject.artists = [evaluatedObject.artists filteredArrayUsingPredicate:[ NSPredicate predicateWithBlock:^BOOL(ArtistInfoData* artistObjectEval, NSDictionary<NSString *,id> * _Nullable bindings) {
-                             
-                            return artistObjectEval.songURI;
+                        NSArray *finalArtistCities = [finalCities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                            
+                            evaluatedObject.artists = [evaluatedObject.artists filteredArrayUsingPredicate:[ NSPredicate predicateWithBlock:^BOOL(ArtistInfoData* artistObjectEval, NSDictionary<NSString *,id> * _Nullable bindings) {
+                                
+                                return artistObjectEval.songURI;
+                            }]];
+                            
+                            return evaluatedObject.artists.count > 0;
                         }]];
-
-                        return evaluatedObject.artists.count > 0;
-                    }]];
-                    [weakSelf zoomIntoLocation:userLocation andZoom:100000];
-                    [weakSelf dropPinsForCities:finalArtistCities];
-                    [weakSelf setModel:finalArtistCities];
-                    [weakSelf hideLoadingIndicator:indicator];
-                }
-                else{
-                    NSLog(@"please choose another city");
-                }
+                        [weakSelf zoomIntoLocation:userLocation andZoom:100000];
+                        [weakSelf dropPinsForCities:finalArtistCities];
+                        [weakSelf setModel:finalArtistCities];
+                        [weakSelf hideLoadingIndicator:indicator];
+                    }
+                    else{
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"No Songs Found" message:@"Sorry, we didn't find any songs for the artists in this city, try another one!" preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction* ok = [UIAlertAction actionWithTitle:@"okay" style:UIAlertActionStyleDefault handler:nil];
+                        [alertController addAction:ok];
+                        
+                        [self presentViewController:alertController animated:YES completion:nil];
+                        NSLog(@"please choose another city");
+                    }
+                    
+                }];
                 
-            }];
+            }
+            else {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"No Artists Found" message:@"Sorry, we didn't find any artists in this city, try another one!" preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* ok = [UIAlertAction actionWithTitle:@"okay" style:UIAlertActionStyleDefault handler:nil];
+                [alertController addAction:ok];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+                NSLog(@"please choose another city");
+            }
+            
+            
         }];
     }];
 }

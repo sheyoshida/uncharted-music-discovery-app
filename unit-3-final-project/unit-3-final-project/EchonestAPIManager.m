@@ -36,6 +36,8 @@
 + (void)getAristInfoForCity:(LocationInfoObject *)city
                    andGenre:(NSString*)genre
                  completion:(void(^)(NSArray *artists))completion {
+    
+    
     NSString *url = [[NSString alloc]init];
     
     if (![genre isEqualToString:@" "]) {
