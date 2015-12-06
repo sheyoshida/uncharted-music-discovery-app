@@ -356,7 +356,7 @@ UISearchBarDelegate
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
-    userLocation.title = @"Current location";
+    userLocation.title = @"";
 }
 
 - (void)zoomIntoLocation:(CLLocation *)location andZoom:(CLLocationDistance) distance {
