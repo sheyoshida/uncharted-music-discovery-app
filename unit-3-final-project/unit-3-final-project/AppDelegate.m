@@ -55,14 +55,14 @@ static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCo
     [[UINavigationBar appearance] setBarStyle:UIBarStyleDefault];
     [[UINavigationBar appearance] setTranslucent:NO]; // remove translucent layer on navigation items
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]]; // set font color
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSFontAttributeName: @"Varela"}];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSFontAttributeName: @"Varela Round"}];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor redColor]}];
     [UINavigationBar appearance].barTintColor = [UIColor colorWithRed:256/256.0 green:256/256.0 blue:256/256.0 alpha:1.0]; // set background color
     
-    // tab bar properties
-    
+    // tab bar properties - remove line
+    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
+    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-    
     // Add this code to change StateNormal text Color,
     [UITabBarItem.appearance setTitleTextAttributes:
      @{NSForegroundColorAttributeName : [UIColor colorWithRed:128/256.0 green:128/256.0 blue:128/256.0 alpha:1.0]}

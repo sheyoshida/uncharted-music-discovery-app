@@ -57,10 +57,10 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ASy-8Q-GTq" userLabel="map container view">
-                                            <rect key="frame" x="0.0" y="88" width="600" height="300"/>
+                                            <rect key="frame" x="0.0" y="88" width="600" height="275"/>
                                             <subviews>
                                                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SOI-xC-KXi">
-                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="275"/>
                                                     <animations/>
                                                     <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 </mapView>
@@ -70,7 +70,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="SOI-xC-KXi" secondAttribute="bottom" id="3Mm-8z-Q5L"/>
                                                 <constraint firstAttribute="height" constant="275" id="PNI-Aa-vH5"/>
-                                                <constraint firstAttribute="height" constant="300" id="d9e-jF-MQf"/>
+                                                <constraint firstAttribute="height" constant="275" id="d9e-jF-MQf"/>
                                                 <constraint firstAttribute="trailing" secondItem="SOI-xC-KXi" secondAttribute="trailing" id="nWf-dr-QsJ"/>
                                                 <constraint firstItem="SOI-xC-KXi" firstAttribute="top" secondItem="ASy-8Q-GTq" secondAttribute="top" id="sgr-xK-rwQ"/>
                                                 <constraint firstItem="SOI-xC-KXi" firstAttribute="leading" secondItem="ASy-8Q-GTq" secondAttribute="leading" id="tgp-8S-own"/>

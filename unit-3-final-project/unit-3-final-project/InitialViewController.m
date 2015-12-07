@@ -122,6 +122,7 @@ UISearchBarDelegate
             searchField.font = [UIFont fontWithName:@"Varela Round" size:16];
         }
     }
+    
 
 }
 
@@ -230,12 +231,21 @@ UISearchBarDelegate
 
 #pragma mark - TableView delegate methods
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (tableView == self.autoCompleteTableView) {
+        return 0;
+    }
+    else{
+        return 40;
+    }
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     
     // section text
     header.textLabel.textColor = [UIColor colorWithRed:(251/255.f) green:(66/255.f) blue:(7/255.f) alpha:1]; // orange color
-    header.textLabel.font = [UIFont fontWithName:@"Varela" size:16];
+    header.textLabel.font = [UIFont fontWithName:@"Varela Round" size:16];
     CGRect headerFrame = self.tableView.tableHeaderView.frame;
     headerFrame.size.height = self.tableView.frame.size.height;
     header.textLabel.frame = headerFrame;
@@ -272,6 +282,9 @@ UISearchBarDelegate
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"autocompleteCellIdentifier" forIndexPath:indexPath];
         HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
         cell.textLabel.text = place.name;
+    
+        cell.textLabel.textColor=[UIColor blackColor];
+        cell.detailTextLabel.font=[UIFont fontWithName:@"Varela Round" size:16.0];
         
         return cell;
     }

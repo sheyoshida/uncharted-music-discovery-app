@@ -35,7 +35,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song title" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-3E-VvA">
-                                <rect key="frame" x="90" y="35" width="152" height="25"/>
+                                <rect key="frame" x="90" y="35.5" width="152" height="39.5"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -81,7 +81,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="artist name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E80-fT-Hl3">
-                                <rect key="frame" x="90" y="5" width="152" height="20.5"/>
+                                <rect key="frame" x="90" y="10" width="152" height="20.5"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="VarelaRound-Regular" family="Varela Round" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -94,10 +94,12 @@
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="5" id="4px-id-Hx5"/>
                             <constraint firstItem="E80-fT-Hl3" firstAttribute="top" secondItem="O3T-vN-MI9" secondAttribute="top" id="B0V-VZ-ekU"/>
                             <constraint firstItem="E80-fT-Hl3" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="B0e-c6-zv1"/>
+                            <constraint firstItem="E80-fT-Hl3" firstAttribute="top" secondItem="6pY-Op-Kzy" secondAttribute="top" constant="10" id="CJO-RI-ILX"/>
+                            <constraint firstAttribute="bottom" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="5" id="DEM-to-uEK"/>
                             <constraint firstAttribute="bottom" secondItem="kfC-3E-VvA" secondAttribute="bottom" constant="20" symbolic="YES" id="FrB-Qv-ygK"/>
                             <constraint firstItem="wfM-e6-twI" firstAttribute="leading" secondItem="E80-fT-Hl3" secondAttribute="trailing" constant="10" id="KUx-Wv-4L1"/>
                             <constraint firstItem="O3T-vN-MI9" firstAttribute="leading" secondItem="6pY-Op-Kzy" secondAttribute="leading" constant="10" id="LE0-4l-4KT"/>
-                            <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="E80-fT-Hl3" secondAttribute="bottom" constant="10" id="M5Q-WJ-NiV"/>
+                            <constraint firstItem="kfC-3E-VvA" firstAttribute="top" secondItem="E80-fT-Hl3" secondAttribute="bottom" constant="5" id="M5Q-WJ-NiV"/>
                             <constraint firstItem="wfM-e6-twI" firstAttribute="leading" secondItem="O3T-vN-MI9" secondAttribute="trailing" constant="10" id="O3d-IV-d8K"/>
                             <constraint firstAttribute="bottom" secondItem="O3T-vN-MI9" secondAttribute="bottom" constant="5" id="SAK-1a-R95"/>
                             <constraint firstAttribute="trailing" secondItem="wfM-e6-twI" secondAttribute="trailing" constant="10" id="XA3-36-UiT"/>
@@ -107,6 +109,8 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="B0V-VZ-ekU"/>
+                                <exclude reference="FrB-Qv-ygK"/>
                                 <exclude reference="O3d-IV-d8K"/>
                             </mask>
                         </variation>

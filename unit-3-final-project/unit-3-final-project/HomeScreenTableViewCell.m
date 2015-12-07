@@ -19,8 +19,8 @@
    
     // slightly round borders
     self.artistImageView.clipsToBounds = YES;
-    self.artistImageView.layer.cornerRadius = 5.0;
-    self.artistContainerView.layer.cornerRadius = 5.0;
+    self.artistImageView.layer.cornerRadius = 10.0;
+    self.artistContainerView.layer.cornerRadius = 10.0;
     
     self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeLineScalePulseOutRapid tintColor:[UIColor colorWithRed:0.0f/255.0f green:153.0f/255.0f blue:204.0f/255.0f alpha:1.0f] size:50.0f];
     CGRect frame = self.activityIndicatorView.frame;

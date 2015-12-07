@@ -275,7 +275,7 @@ AVAudioPlayerDelegate
         return 0;
     }
     else{
-        return 80;
+        return 40;
     }
 }
 
@@ -284,7 +284,7 @@ AVAudioPlayerDelegate
         return nil;
     }
     else{
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 80)];
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 35)];
         [headerView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1]];
         
         //    UIButton *playlistButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, [UIScreen mainScreen].bounds.size.width - 80, 30)];
@@ -292,7 +292,7 @@ AVAudioPlayerDelegate
         //    [playlistButton setBackgroundColor:[UIColor blueColor]];
         //    [headerView addSubview:playlistButton];
         
-        UILabel *headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, [UIScreen mainScreen].bounds.size.width - 20, 30)];
+        UILabel *headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(15, 40, [UIScreen mainScreen].bounds.size.width - 30, -30)];
         if (self.modelData.count < 1 ){
             [headerTitle setText:@" "];
             
@@ -349,6 +349,8 @@ AVAudioPlayerDelegate
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mySearchCellIdentifierUniq"];
         HNKGooglePlacesAutocompletePlace *place = [self.autoCompleteSearchResults objectAtIndex:indexPath.row];
         cell.textLabel.text = place.name;
+        cell.textLabel.textColor=[UIColor blackColor];
+        cell.detailTextLabel.font=[UIFont fontWithName:@"Varela Round" size:16.0];
         return cell;
     }
     else{
