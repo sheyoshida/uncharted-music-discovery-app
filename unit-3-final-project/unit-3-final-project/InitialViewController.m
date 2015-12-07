@@ -71,7 +71,7 @@ UISearchBarDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.randomLocations = [[NSMutableArray alloc]initWithObjects: @{ @"latitude": @34.050, @"longitude": @-118.250}, @{ @"latitude": @43.700, @"longitude": @-79.400}, @{ @"latitude": @44.647, @"longitude": @-63.571}, @{ @"latitude": @18.975, @"longitude": @72.825}, @{ @"latitude": @31.790, @"longitude": @-106.423}, @{ @"latitude": @33.755, @"longitude": @-84.390}, @{ @"latitude": @29.950, @"longitude": @-90.066}, nil];
+    self.randomLocations = [[NSMutableArray alloc]initWithObjects: @{ @"latitude": @18.975, @"longitude": @72.825}, @{ @"latitude": @33.755, @"longitude": @-84.390}, @{ @"latitude": @29.950, @"longitude": @-90.066}, nil];
 
     //long touch
     UILongPressGestureRecognizer *gesture1 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(celllongpressed:)];
@@ -340,7 +340,6 @@ UISearchBarDelegate
         __weak typeof(self) weakSelf = self;
         [CLPlacemark hnk_placemarkFromGooglePlace:place apiKey:self.searchQuery.apiKey completion:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
             weakSelf.searchBar.text = place.name;
-            [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
             [weakSelf getNearbyCitiesWithCoordinate:placemark.location];
         }];
         
@@ -386,6 +385,9 @@ UISearchBarDelegate
     
     __weak typeof(self) weakSelf = self;
     
+    [weakSelf.annotation removeFromSuperview];
+    [weakSelf.mapView removeAnnotations:weakSelf.mapView.annotations];
+    
     [NearbyLocationProcessor findCitiesNearLocation:userLocation completion:^(NSArray *cities) {
         
         
@@ -395,29 +397,51 @@ UISearchBarDelegate
                 return evaluatedObject.artists.count > 0;
             }]];
             
-            [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
+            
+            if (finalCities.count > 0) {
                 
-                if (finalCities.count>0) {
+                [SpotifyApiManager getAlbumInfoForCities:finalCities completion:^{
                     
-                    NSArray *finalArtistCities = [finalCities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                    if (finalCities.count>0) {
                         
-                         evaluatedObject.artists = [evaluatedObject.artists filteredArrayUsingPredicate:[ NSPredicate predicateWithBlock:^BOOL(ArtistInfoData* artistObjectEval, NSDictionary<NSString *,id> * _Nullable bindings) {
-                             
-                            return artistObjectEval.songURI;
+                        NSArray *finalArtistCities = [finalCities filteredArrayUsingPredicate: [NSPredicate predicateWithBlock:^BOOL(LocationInfoObject* evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                            
+                            evaluatedObject.artists = [evaluatedObject.artists filteredArrayUsingPredicate:[ NSPredicate predicateWithBlock:^BOOL(ArtistInfoData* artistObjectEval, NSDictionary<NSString *,id> * _Nullable bindings) {
+                                
+                                return artistObjectEval.songURI;
+                            }]];
+                            
+                            return evaluatedObject.artists.count > 0;
                         }]];
-
-                        return evaluatedObject.artists.count > 0;
-                    }]];
-                    [weakSelf zoomIntoLocation:userLocation andZoom:100000];
-                    [weakSelf dropPinsForCities:finalArtistCities];
-                    [weakSelf setModel:finalArtistCities];
-                    [weakSelf hideLoadingIndicator:indicator];
-                }
-                else{
-                    NSLog(@"please choose another city");
-                }
+                        [weakSelf zoomIntoLocation:userLocation andZoom:100000];
+                        [weakSelf dropPinsForCities:finalArtistCities];
+                        [weakSelf setModel:finalArtistCities];
+                        [weakSelf hideLoadingIndicator:indicator];
+                    }
+                    else{
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"No Songs Found" message:@"Sorry, we didn't find any songs for the artists in this city, try another one!" preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction* ok = [UIAlertAction actionWithTitle:@"okay" style:UIAlertActionStyleDefault handler:nil];
+                        [alertController addAction:ok];
+                        
+                        [self presentViewController:alertController animated:YES completion:nil];
+                        
+                    }
+                    
+                }];
                 
-            }];
+            }
+            else {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"No Artists Found" message:@"Sorry, we didn't find any artists in this city, try another one!" preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* ok = [UIAlertAction actionWithTitle:@"okay" style:UIAlertActionStyleDefault handler:nil];
+                [alertController addAction:ok];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+                
+            }
+            
+            
         }];
     }];
 }
@@ -467,7 +491,7 @@ UISearchBarDelegate
     
     for (LocationInfoObject *city in cities) {
         if (city.artists.count == 0) {
-            NSLog(@"%@, %@", city.SubAdministrativeArea, city.State);
+            
         }
         else{
             CLLocation *location = city.location;
@@ -547,8 +571,8 @@ UISearchBarDelegate
     if (motion == UIEventSubtypeMotionShake)
     {
         
-        
-        [self getNearbyCitiesWithCoordinate:[[CLLocation alloc]initWithLatitude:18.975 longitude:72.825]];
+        CLLocation *rand = [self generateRandomCity];
+        [self getNearbyCitiesWithCoordinate: rand];
     }
 }
 
@@ -558,6 +582,7 @@ UISearchBarDelegate
 //    
 //    [alertView show];
 //}
+
 
 - (CLLocation * )generateRandomCity {
     NSUInteger randomIndex = arc4random() % [self.randomLocations count];
