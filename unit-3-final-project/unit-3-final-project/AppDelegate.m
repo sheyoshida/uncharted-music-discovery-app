@@ -9,10 +9,15 @@
 #import "AppDelegate.h"
 #import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocompleteQuery.h>
 #import "User.h"
+#import "OnboardingViewController.h"
+#import "OnboardingContentViewController.h"
 
-#define ClientID @"8cd3e645d1eb4d3d9040456cb98ce224"
+
+#define ClientID @"8cd3e645d1eb4d3d9040456cb98ce224" // spotify - artur
 
 static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCoTk_j7oZabHJkVZW0ULVFg5uZ0";
+static NSString * const kUserHasOnboardedKey = @"user_has_onboarded";
+
 
 @interface AppDelegate ()
 
@@ -43,6 +48,26 @@ static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCo
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // setup onboarding screens
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor colorWithRed:255/256.0 green:255/256.0 blue:255/256.0 alpha:1.0];
+
+    // determine if the user has onboarded yet or not
+    BOOL userHasOnboarded = [[NSUserDefaults standardUserDefaults] boolForKey:kUserHasOnboardedKey];
+    
+    // if the user has already onboarded, just set up the normal root view controller
+    // for the application
+    if (userHasOnboarded) {
+        [self setupNormalRootViewController];
+    }
+    // otherwise set the root view controller to the onboarding view controller
+    else {
+        self.window.rootViewController = [self generateFirstDemoVC];
+           }
+    
+    application.statusBarStyle = UIStatusBarStyleLightContent;
+    [self.window makeKeyAndVisible];
 
     // setup spotify
     [[SPTAuth defaultInstance] setClientID:ClientID];
@@ -73,11 +98,62 @@ static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCo
      @{NSForegroundColorAttributeName : [UIColor colorWithRed:255/256.0 green:92/256.0 blue:26/256.0 alpha:1.0]}
                                            forState:UIControlStateSelected]; // orange color
     
-   
-    
     [HNKGooglePlacesAutocompleteQuery setupSharedQueryWithAPIKey: kHNKDemoGooglePlacesAutocompleteApiKey];
     
     return YES;
+}
+
+- (void)setupNormalRootViewController {
+    // push to regular tab bar
+    self.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateInitialViewController];
+
+}
+- (void)handleOnboardingCompletion { 
+    // set that we have completed onboarding so we only do it once...
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserHasOnboardedKey];
+    // transition to the main application
+    [self setupNormalRootViewController];
+}
+
+- (OnboardingViewController *)generateFirstDemoVC {
+    OnboardingContentViewController *firstPage = [OnboardingContentViewController contentWithTitle:@"Welcome to Uncharted!" body:@"Here are a few things to help you get started... " image:nil buttonText:nil action:^{
+        // block here
+            }];
+    firstPage.titleFontName = @"Varela Round";
+    firstPage.titleFontSize = 50.0;
+    firstPage.bodyFontName = @"Varela Round";
+    firstPage.bodyFontSize = 25.0;
+    firstPage.titleTextColor = [UIColor colorWithRed:83/256.0 green:148/256.0 blue:196/256.0 alpha:1.0];
+    firstPage.bodyTextColor = [UIColor colorWithRed:83/256.0 green:148/256.0 blue:196/256.0 alpha:1.0];
+    
+    OnboardingContentViewController *secondPage = [OnboardingContentViewController contentWithTitle:nil body:@"1. To preview songs, long press on a cell.\n\n 2. You can add individual songs to your Spotify playlist by tapping on the heart button.\n\n 3. To navigate to a random location, just shake your phone." image:nil buttonText:@"OK!" action:^{
+        [self handleOnboardingCompletion];
+    }];
+    secondPage.bodyFontName = @"Varela Round";
+    secondPage.bodyFontSize = 25.0;
+    secondPage.topPadding = -15.0;
+    secondPage.bodyTextColor = [UIColor colorWithRed:83/256.0 green:148/256.0 blue:196/256.0 alpha:1.0];
+    
+
+    OnboardingViewController *onboardingVC = [OnboardingViewController onboardWithBackgroundImage:nil contents:@[firstPage, secondPage]];
+    onboardingVC.shouldFadeTransitions = YES;
+    onboardingVC.fadePageControlOnLastPage = YES;
+    onboardingVC.fadeSkipButtonOnLastPage = YES;
+    onboardingVC.shouldMaskBackground = NO;
+    onboardingVC.fontName = @"Varela Round";
+    onboardingVC.buttonTextColor = [UIColor colorWithRed:255/256.0 green:92/256.0 blue:26/256.0 alpha:1.0];
+    onboardingVC.buttonFontSize = 35.0;
+    onboardingVC.pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:83/256.0 green:148/256.0 blue:196/256.0 alpha:1.0];
+    onboardingVC.pageControl.pageIndicatorTintColor = [UIColor colorWithRed:144/256.0 green:144/256.0 blue:144/256.0 alpha:1.0];
+    
+    // Allow skipping the onboarding process, enable skipping and set a block to be executed
+    // when the user hits the skip button.
+    onboardingVC.allowSkipping = NO;
+    onboardingVC.skipHandler = ^{
+        [self handleOnboardingCompletion];
+    };
+    
+    return onboardingVC;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

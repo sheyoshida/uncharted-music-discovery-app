@@ -42,6 +42,7 @@ PODS:
     - Mantle/extobjc (= 2.0.5)
   - Mantle/extobjc (2.0.5)
   - MBSimpleLoadingIndicator (0.1.0)
+  - Onboard (2.1.7)
   - pop (1.0.8)
 
 DEPENDENCIES:
@@ -52,6 +53,7 @@ DEPENDENCIES:
   - DGActivityIndicatorView (~> 2.0)
   - HNKGooglePlacesAutocomplete (~> 1.1)
   - MBSimpleLoadingIndicator (~> 0.1)
+  - Onboard
   - pop (~> 1.0)
 
 SPEC CHECKSUMS:
@@ -63,6 +65,7 @@ SPEC CHECKSUMS:
   HNKServerFacade: 0fa3839353480b8862563a34903ad1406a38b4c9
   Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
   MBSimpleLoadingIndicator: bb386548fda4a75fd792b1793ac1cd8ff2862cf7
+  Onboard: 87648089e1b76d13b4f5bf8f7a1cdb144092f0af
   pop: bb773ae2c791ca2629de13b347e7a8b450fa6a57
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

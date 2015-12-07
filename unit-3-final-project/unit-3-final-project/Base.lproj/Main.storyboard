@@ -209,10 +209,10 @@
             </objects>
             <point key="canvasLocation" x="-712" y="858"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Main-->
         <scene sceneID="vMe-fm-Bs2">
             <objects>
-                <tabBarController id="Xvi-al-HPM" sceneMemberID="viewController">
+                <tabBarController title="Main" id="Xvi-al-HPM" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleAspectFit" translucent="NO" id="Llf-CJ-wbb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
