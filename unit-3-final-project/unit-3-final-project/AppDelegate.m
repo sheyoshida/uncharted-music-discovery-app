@@ -131,7 +131,7 @@ static NSString * const kUserHasOnboardedKey = @"user_has_onboarded";
     }];
     secondPage.bodyFontName = @"Varela Round";
     secondPage.bodyFontSize = 25.0;
-    secondPage.topPadding = -15.0;
+    secondPage.topPadding = -50.0;
     secondPage.bodyTextColor = [UIColor colorWithRed:83/256.0 green:148/256.0 blue:196/256.0 alpha:1.0];
     
 
