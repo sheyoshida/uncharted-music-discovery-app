@@ -15,7 +15,10 @@
 
 #define ClientID @"8cd3e645d1eb4d3d9040456cb98ce224" // spotify - artur
 
-static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCoTk_j7oZabHJkVZW0ULVFg5uZ0";
+// original Google Places key: @"AIzaSyAWnqNcCoTk_j7oZabHJkVZW0ULVFg5uZ0"
+
+static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyBsjev2ayvnZcPlaW41UY4RXCheVyAx3Ag"; // NEW key!
+
 static NSString * const kUserHasOnboardedKey = @"user_has_onboarded";
 
 
@@ -131,7 +134,7 @@ static NSString * const kUserHasOnboardedKey = @"user_has_onboarded";
     }];
     secondPage.bodyFontName = @"Varela Round";
     secondPage.bodyFontSize = 25.0;
-    secondPage.topPadding = -15.0;
+    secondPage.topPadding = -50.0;
     secondPage.bodyTextColor = [UIColor colorWithRed:83/256.0 green:148/256.0 blue:196/256.0 alpha:1.0];
     
 
