@@ -15,9 +15,10 @@
 
 #define ClientID @"8cd3e645d1eb4d3d9040456cb98ce224" // spotify - artur
 
-// original Google Places key: @"AIzaSyAWnqNcCoTk_j7oZabHJkVZW0ULVFg5uZ0"
+// original Google Places key: @"AIzaSyAWnqNcCoTk_j7oZabHJkVZW0ULVFg5uZ0" (henna)
+// new Google Places key: @"AIzaSyBsjev2ayvnZcPlaW41UY4RXCheVyAx3Ag" (shena)
 
-static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyBsjev2ayvnZcPlaW41UY4RXCheVyAx3Ag"; // NEW key!
+static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyAWnqNcCoTk_j7oZabHJkVZW0ULVFg5uZ0"; // NEW key!
 
 static NSString * const kUserHasOnboardedKey = @"user_has_onboarded";
 

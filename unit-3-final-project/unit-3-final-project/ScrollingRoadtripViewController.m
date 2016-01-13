@@ -299,7 +299,7 @@ AVAudioPlayerDelegate
         }
         else{
             LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
-            [headerTitle setText: [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State]];
+            [headerTitle setText: [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea.uppercaseString, currentCity.State]];
         }
         [headerTitle setTextColor:[UIColor colorWithRed:(251/255.f) green:(66/255.f) blue:(7/255.f) alpha:1]]; // orange color
         [headerTitle setBackgroundColor:[UIColor clearColor]];
@@ -319,7 +319,8 @@ AVAudioPlayerDelegate
     }
     else{
         LocationInfoObject * currentCity = [self.modelData objectAtIndex:section];
-        return [NSString stringWithFormat:@"%@, %@", currentCity.SubAdministrativeArea, currentCity.State];
+        NSString *cityData = currentCity.SubAdministrativeArea;
+        return [NSString stringWithFormat:@"%@, %@", cityData.uppercaseString, currentCity.State];
     }
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
